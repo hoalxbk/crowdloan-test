@@ -13,6 +13,8 @@ import LandingLayout from "../../components/Layout/LandingLayout";
 import BN from "bn.js";
 import {useDispatch} from "react-redux";
 import {alertFailure, alertSuccess} from "../../store/actions/alert";
+const { u8aConcat, u8aToHex } = require('@polkadot/util');
+const { blake2AsU8a, encodeAddress, decodeAddress } = require('@polkadot/util-crypto');
 
 const WAValidator = require('wallet-address-validator');
 const banner = 'images/polkasmith/banner.png';
@@ -23,7 +25,6 @@ const arrowUp = '/images/polkasmith/arrow_up.png';
 const polkaLogo = '/images/polkasmith/polka_logo.svg'
 const loading = '/images/polkasmith/Loading.gif'
 const provider = new WsProvider('wss://kusama.elara.patract.io');
-const receivedAddress = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
 const ratioReward = 1 / 350 //%
 const ksmDecimals = new BN(1_000_000).pow(new BN(2))
 const parachanID= 2009
@@ -54,7 +55,9 @@ const JoinPolkaSmith = (props: any) => {
     const [ksmReward, setKsmReward] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [contributionHash, setContributionHash] = useState("");
-    const [memoHash, setMemoHash] = useState("");
+    const [contributed, setContributed] = useState(0);
+    const [contributedList, setContributedList] = useState([]);
+    const [isLoadingContributed, setIsLoadingContributed] = useState(false);
 
     const countDown = (time: Date) => {
         setInterval(() => {
@@ -105,15 +108,23 @@ const JoinPolkaSmith = (props: any) => {
                     value={value}
                     size={32}
                     style={{marginTop: 10}}
+                    theme={"polkadot"}
                 /></div>
             <div style={{display: "inline-block", textAlign: "left", lineHeight: 1.2, margin: "auto 0px"}}>
                 <div style={{paddingLeft: 10, color: "#1d1d1d"}}>{label}</div>
                 <div style={{marginLeft: "10px", color: "#676767"}}>
-                    {truncateAddress(value)}
+                    {truncateAddress(convertToKSM(value))}
                 </div>
             </div>
         </div>
     )
+    const convertToKSM = (address: any) => {
+        if (!address) {
+            return null
+        }
+        let plk = decodeAddress(address)
+        return encodeAddress(plk, 2)
+    }
     const onchangePolWallet = (e: any) => {
         setSelectedAccount(e)
         setCurrentWallet(e.data.address)
@@ -191,9 +202,6 @@ const JoinPolkaSmith = (props: any) => {
         setIsSubmitting(true)
         // @ts-ignore
         const val = new BN(ksmDecimals * ksmAmount)
-        console.log(ksmDecimals)
-        console.log(ksmAmount)
-        console.log(val.toString())
 
         const api = await ApiPromise.create({provider})
         const crowdloanEntrinsic = api.tx.crowdloan.contribute(parachanID,  val.toString(), null)
@@ -218,7 +226,6 @@ const JoinPolkaSmith = (props: any) => {
             dispatch(alertFailure('Contribution failed:' + error.toString()));
         });
     }
-
     const setMax = () => {
         let max = parseFloat(ksmBalance.unlocked.toString())
         // @ts-ignore
@@ -226,13 +233,59 @@ const JoinPolkaSmith = (props: any) => {
         setKsmAmount(max)
         setKsmReward((max / ratioReward))
     }
-
     const agreePolicyChange = (event: any) => {
         setAgreePolicy(!agreePolicy)
     }
-
+    const createChildKey = (trieIndex: any) => {
+        return u8aToHex(
+            u8aConcat(
+                ':child_storage:default:',
+                blake2AsU8a(
+                    u8aConcat('crowdloan', trieIndex.toU8a())
+                )
+            )
+        );
+    }
+    const getContribution = async () => {
+        setIsLoadingContributed(true)
+        const api = await ApiPromise.create({provider})
+        const fund = await api.query.crowdloan.funds(parachanID);
+        // @ts-ignore
+        const trieIndex = fund.unwrap().trieIndex;
+        const childKey = createChildKey(trieIndex);
+        const keys = await api.rpc.childstate.getKeys(childKey, '0x');
+        const ss58Keys = keys.map(k => encodeAddress(k, 2));
+        const values = await Promise.all(keys.map(k => api.rpc.childstate.getStorage(childKey, k)));
+        let total = 0
+        // @ts-ignore
+        const contributions = values.map((v, idx) => ({from: ss58Keys[idx], data: api.createType('(Balance, Vec<u8>)', v.unwrap()).toJSON(),}));
+        // @ts-ignore
+        let buffList: any[] = []
+        const addr = convertToKSM(currentWallet)
+        contributions.map(val => {
+            let ex = false
+            buffList.map((ele, index) => {
+                if (val.from === ele.from) {
+                    ex =  true
+                    buffList[index].total += val.data[0]
+                }
+            })
+            if (!ex) {
+                buffList.push({from: val.from, total: val.data[0]})
+            }
+            if (currentWallet && addr === val.from) {
+                total += val.data[0]
+            }
+        })
+        buffList = buffList.sort((a, b) => (a.total < b.total) ? 1 : -1)
+        // @ts-ignore
+        setContributedList(buffList.slice(0,10))
+        setContributed(total)
+        setIsLoadingContributed(false)
+    }
     useEffect(() => {
-        let endDate = new Date("7/14/2021, 12:00:00 AM")
+        getContribution()
+        let endDate = new Date("6/21/2021, 11:59:59 PM")
         countDown(endDate)
         if (currentWallet) {
             setIsWalletLoading(true)
@@ -315,7 +368,7 @@ const JoinPolkaSmith = (props: any) => {
                         </div>
                         <div className={styles.label} style={{textAlign: "center"}}>
                             <h3 style={{color: "#aeaeae"}}>Rewards Rate</h3>
-                            <h2>100 PKS/ 1 KSM</h2>
+                            <h2>350+ PKS/ 1 KSM</h2>
                         </div>
                         <div className={styles.label} style={{textAlign: "right"}}>
                             <h3 style={{color: "#aeaeae"}}>Rewards Pool</h3>
@@ -506,8 +559,7 @@ const JoinPolkaSmith = (props: any) => {
                                         { !isSubmitting ? "Submit Contribution"  : <img src={loading} width={30} height={30}/>}
                                     </button>
                                     <div style={{width: "100%", textAlign: "left", lineHeight: 2}}>
-                                    { contributionHash ? <h4 >Contribution Hash: <a target={"_blank"} href={"https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama.elara.patract.io#/explorer/query/" + contributionHash} style={{color: "#6398FF"}}> { truncateAddress(contributionHash) } </a></h4> : ""}
-                                    { memoHash ? <h4 >Memo wallet Hash: <a target={"_blank"} href={"https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama.elara.patract.io#/explorer/query/" + memoHash} style={{color: "#6398FF"}}>{ truncateAddress(contributionHash) }</a></h4> : ""}
+                                    { contributionHash ? <h4 >Contribution Hash: <a target={"_blank"} href={"https://kusama.subscan.io/block/" + contributionHash} style={{color: "#6398FF"}}> { truncateAddress(contributionHash) } </a></h4> : ""}
                                     </div>
                                 </div>
                             </div>
@@ -539,48 +591,16 @@ const JoinPolkaSmith = (props: any) => {
                             </div>
                         </div>
                         <div className={styles.leaderBoardContainer}>
-                            <h2>Referral Leaderboard</h2>
+                            <h2>Contribute Leaderboard</h2>
                             <div className={styles.leaderBoardTable}>
-                                <div className={styles.leaderBoardRow}>
-                                    <div className={styles.leaderBoardItem} style={{paddingRight: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                    <div className={styles.leaderBoardItem} style={{paddingLeft: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                </div>
-                                <div className={styles.leaderBoardRow}>
-                                    <div className={styles.leaderBoardItem} style={{paddingRight: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                    <div className={styles.leaderBoardItem} style={{paddingLeft: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                </div>
-                                <div className={styles.leaderBoardRow}>
-                                    <div className={styles.leaderBoardItem} style={{paddingRight: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                    <div className={styles.leaderBoardItem} style={{paddingLeft: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                </div>
-                                <div className={styles.leaderBoardRow}>
-                                    <div className={styles.leaderBoardItem} style={{paddingRight: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                    <div className={styles.leaderBoardItem} style={{paddingLeft: 30}}>
-                                        <h3>0xe87bca1a47884a2ac5ddcbc10711...</h3>
-                                        <h2 style={{color: "#6398FF", textAlign: "right"}}>4568 PKS</h2>
-                                    </div>
-                                </div>
+                                {
+                                    !isLoadingContributed ?
+                                    contributedList.map((val, idx)=> {
+                                        // @ts-ignore
+                                        return (<div key={idx} className={styles.leaderBoardItem} style={{padding: 10}}><h3>{ val.from.substring(0, 24) + "..." }</h3><h2 style={{color: "#6398FF", textAlign: "right"}}>{ (350 * val.total / ksmDecimals).toFixed(0).toLocaleString(navigator.language, { minimumFractionDigits: 0 }) } PKS</h2></div>)
+                                    }) :
+                                        <div style={{marginTop: 50, width: "100%", textAlign: "center"}} ><img src={loading} width={30} height={30}/></div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -588,7 +608,7 @@ const JoinPolkaSmith = (props: any) => {
                         <h1>PolkaSmith Auction Plan</h1>
                         <div className={styles.auctionPlanContainer}>
                             <div className={styles.auctionPlanDetail} style={{borderTopLeftRadius: 10}}>
-                                <h1>1st - 8th</h1>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>1st - 8th</span></p>
                                 <div className={styles.auctionKeyword}>Parachain Slot</div>
                                 <p className={styles.auctionDes}>PolkaSmith will participate in 1st-8th slot auctions to
                                     win. In other words, we aim to lease a parachain slot for 48 weeks (each lease
@@ -599,8 +619,7 @@ const JoinPolkaSmith = (props: any) => {
                                     after N rounds (TBA).</p>
                             </div>
                             <div className={styles.auctionPlanDetail1}>
-                                <div style={{display: "flex"}}><h1 style={{display: "inline-block"}}>100 PKS</h1><span>/ 1 KSM</span>
-                                </div>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>350+ PKS</span><span>/ 1 KSM</span></p>
                                 <div className={styles.auctionKeyword}>Winning reward</div>
                                 <p className={styles.auctionDes}>If PolkaSmith wins, every KSM that supports PolkaSmith
                                     in
@@ -612,8 +631,7 @@ const JoinPolkaSmith = (props: any) => {
                                     significantly. </p>
                             </div>
                             <div className={styles.auctionPlanDetail} style={{borderTopRightRadius: 10}}>
-                                <div style={{display: "flex"}}><h1 style={{display: "inline-block"}}>50 ePKF</h1><span>/ 1 KSM</span>
-                                </div>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>500 ePKF</span><span>/ 1 KSM</span></p>
                                 <div className={styles.auctionKeyword}>Whether Win or Lose</div>
                                 <p className={styles.auctionDes}>ePKF is the “equivalent PKF” token on our launchpad,
                                     Red
@@ -626,9 +644,8 @@ const JoinPolkaSmith = (props: any) => {
                                     This reward only applies to crowdloan on Red Kite.</p>
                             </div>
                             <div className={styles.auctionPlanDetail1} style={{borderBottomLeftRadius: 10}}>
-                                <div style={{display: "flex"}}><h1 style={{display: "inline-block"}}>0.5</h1><h4
-                                    style={{display: "inline-block"}}>%</h4></div>
-                                <div className={styles.auctionKeyword}>Referrals Rewards</div>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>0.5</span><span>%</span></p>
+                                <div className={styles.auctionKeyword}>Early bird</div>
                                 <p className={styles.auctionDes}>The reward is also exclusive for crowdloan on Red Kite.
                                     Community members of PolkaFoundry/PolkaSmith can earn some PKF directly by referring
                                     friends to join the project’s crowdloan on Red Kite. Each referrer and the referred
@@ -636,7 +653,7 @@ const JoinPolkaSmith = (props: any) => {
                                     auction incentives.</p>
                             </div>
                             <div className={styles.auctionPlanDetail}>
-                                <h1>7,000,000 PKS</h1>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>10,500,000 PKS</span></p>
                                 <div className={styles.auctionKeyword}>Prize Pool</div>
                                 <p className={styles.auctionDes}>The PolkaSmith’s prize tool for Kusama Parachain Slot
                                     Auction is worth 7,000,000 PKS, equivalent to 7,000,000 PKF, 3.5% of PKF’s total
@@ -648,7 +665,7 @@ const JoinPolkaSmith = (props: any) => {
                                     contributions.</p>
                             </div>
                             <div className={styles.auctionPlanDetail1} style={{borderBottomRightRadius: 10}}>
-                                <h1>Rewards <br/> Distribution</h1>
+                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 1.5, fontWeight: "bold"}}>Rewards<br/>Distribution</span></p>
                                 <p className={styles.auctionDes}>As soon as contributors join the PolkaSmith crowdloan,
                                     100%
                                     ePKF rewards will be delivered immediately. After PolkaSmith wins a parachain slot,
