@@ -1,0 +1,26 @@
+diff --git a/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.cjs.development.js b/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.cjs.development.js
+index 54c6c8d..fbbe265 100644
+--- a/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.cjs.development.js
++++ b/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.cjs.development.js
+@@ -55,7 +55,7 @@ function _setPrototypeOf(o, p) {
+   return _setPrototypeOf(o, p);
+ }
+ 
+-var CHAIN_ID = 1;
++var CHAIN_ID = 5;
+ var WalletLinkConnector = /*#__PURE__*/function (_AbstractConnector) {
+   _inheritsLoose(WalletLinkConnector, _AbstractConnector);
+ 
+diff --git a/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.esm.js b/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.esm.js
+index 656bff0..97d3897 100644
+--- a/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.esm.js
++++ b/node_modules/@web3-react/walletlink-connector/dist/walletlink-connector.esm.js
+@@ -34,7 +34,7 @@ function _setPrototypeOf(o, p) {
+   return _setPrototypeOf(o, p);
+ }
+ 
+-var CHAIN_ID = 1;
++var CHAIN_ID = 5;
+ var WalletLinkConnector = /*#__PURE__*/function (_AbstractConnector) {
+   _inheritsLoose(WalletLinkConnector, _AbstractConnector);
+ 

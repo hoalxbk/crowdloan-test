@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+
+@font-face {
+  font-family: 'Roboto-Regular';
+  src: local('Roboto-Regular'), url(./styles/fonts/Roboto-Regular.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto-Bold';
+  src: local('Roboto-Bold'), url(./styles/fonts/Roboto-Bold.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Roboto-Italic';
+  src: local('Roboto-Italic'), url(./styles/fonts/Roboto-Italic.woff) format('woff');
+}
+
+
+@font-face {
+  font-family: 'Roboto-Medium';
+  src: local('Roboto-Medium'), url(./styles/fonts/Roboto-Medium.woff) format('woff');
+}
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+
+@font-face {
+  font-family: 'icons';
+  src:  url('./styles/fonts/icons/icons.eot?hoymjw');
+  src:  url('./styles/fonts/icons/icons.eot?hoymjw#iefix') format('embedded-opentype'),
+    url('./styles/fonts/icons/icons.ttf?hoymjw') format('truetype'),
+    url('./styles/fonts/icons/icons.woff?hoymjw') format('woff'),
+    url('./styles/fonts/icons/icons.svg?hoymjw#icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="custom-icon-"], [class*=" custom-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-icon-facebook:before {
+  content: "\e900";
+  color: #9f9f9f;
+}
+.custom-icon-github:before {
+  content: "\e901";
+  color: #9f9f9f;
+}
+.custom-icon-telegram:before {
+  content: "\e902";
+  color: #d01f36;
+}
+.custom-icon-twitter:before {
+  content: "\e903";
+  color: #9f9f9f;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #FFFFFF;
+  font-size: 14px;
+  margin: 0px;
+}
+
+main {
+  background-color: #F7F8FA;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+a,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: #4A4A4A;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+input[type=text][disabled], input:disabled {
+  cursor: not-allowed;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+input[type=number] {
+  -moz-appearance: textfield,
+}
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+button:disabled {
+  background-color: #5d5d5d !important;
+  border-color: #5d5d5d !important;
+  cursor: not-allowed ;
+}
+
+.collapse-css-transition {
+  transition: height 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
