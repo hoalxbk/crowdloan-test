@@ -203,9 +203,10 @@ const JoinPolkaSmith = (props: any) => {
             event.target.value = 0
             value = 0
         }
-        setKsmAmount(parseFloat(value))
+        event.target.value = Math.floor(parseFloat(value) * 100) / 100
+        setKsmAmount(parseFloat(event.target.value))
         // @ts-ignore
-        setKsmReward((value * ratioReward))
+        setKsmReward((event.target.value * ratioReward))
     }
     const changeERC20 = (event: any) => {
         if (WAValidator.validate(event.target.value, 'ETH')) {
@@ -252,7 +253,7 @@ const JoinPolkaSmith = (props: any) => {
         });
     }
     const setMax = () => {
-        let max = parseFloat(ksmBalance.unlocked.toString())
+        let max = Math.floor(ksmBalance.unlocked.toNumber() * 100) / 100
         if (max < 0.1) {
             max = 0.1
         }
