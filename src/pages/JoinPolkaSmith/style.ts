@@ -1,5 +1,7 @@
 import { makeStyles } from '@material-ui/core';
+import {isMobile} from 'react-device-detect';
 
+// @ts-ignore
 const useStyles = makeStyles((theme: any) => {
   return {
     polkaSmithMain: {
@@ -11,7 +13,7 @@ const useStyles = makeStyles((theme: any) => {
     polkaSmithContainer: {
       maxWidth: 1280,
       alignItems: "center",
-      padding: 60,
+      padding: isMobile ? 20 : 60,
       fontFamily: 'DM Sans',
       margin: "auto",
       color: "white",
@@ -22,10 +24,10 @@ const useStyles = makeStyles((theme: any) => {
     },
     headerText: {
       display: "inline-block",
-      width: "45%"
+      width: !isMobile ? "45%" : "100%"
     },
     headerImg: {
-      display: "inline-block",
+      display: !isMobile ? "inline-block" : "none",
       width: "55%",
       paddingLeft: 50
     },
@@ -42,14 +44,17 @@ const useStyles = makeStyles((theme: any) => {
       width: "100%",
       marginTop: 60,
       display: "flex",
+      flexWrap: "wrap",
       borderWidth: 1,
       borderStyle: "solid",
       borderColor: "#ffffff36"
     },
      label: {
-      width: "25%",
+      width: isMobile ? "100%" : "25%",
        padding: 20,
        lineHeight: 1.8,
+       border: isMobile ? "inherit" : "unset",
+       textAlign: isMobile ? "center !important" : "unset",
        borderRight: "inherit"
      },
     introMain: {
@@ -64,6 +69,7 @@ const useStyles = makeStyles((theme: any) => {
     introContainer: {
       display: "flex",
       width: "100%",
+      flexWrap: "wrap"
     },
     introCounting: {
       marginTop: 50,
@@ -73,26 +79,26 @@ const useStyles = makeStyles((theme: any) => {
     },
     introBlock: {
       display: "inline-block",
-      width: "50%",
+      width: isMobile ? "100%" : "50%",
       alignContent: "center",
       textAlign: "center",
       lineHeight: 2
     },
     timeContainer: {
       borderRadius: 10,
-      width: 70,
-      height: 70,
-      lineHeight: 2,
+      width: isMobile ? 55 : 70,
+      height: isMobile ? 55 : 70,
+      lineHeight: isMobile ? 1.5 : 2,
       backgroundColor: "#ffffff16",
       textAlign: "center",
     },
     introContribute: {
       borderWidth: 3,
-      padding: 30,
-      margin: 30,
+      padding: isMobile ? 20 : 30,
+      margin: isMobile ? 0 : 30,
       borderStyle: "solid",
       borderRadius: 5,
-      borderColor: "#6398FF"
+      borderColor: "#6398FF",
     },
     joinBTN: {
       height: '42px',
@@ -144,21 +150,26 @@ const useStyles = makeStyles((theme: any) => {
     },
     additionalContainer: {
       textAlign: "center",
-      padding: 100,
+      padding: isMobile ? 10 : 100,
       lineHeight: 1.8
     },
     additionalInfo: {
       display: "flex",
+      flexWrap: "wrap",
       marginTop: 40
     },
     additionalLabelContainer: {
       display: "inline-block",
-      width: "33.333%",
+      width: isMobile ? "100%" : "33.333%",
+      paddingLeft: isMobile ? "0 !important" : 0,
+      paddingRight: isMobile ? "0 !important" : 0,
+      padding: isMobile ? 10 : 0,
     },
     additionalLabel: {
       width: "100%",
       borderRadius: 5,
       backgroundColor: "#ffffff16",
+      margin: isMobile ? "10" : "unset",
       padding: 10,
       "& h2" : {
         fontSize: 24
@@ -177,7 +188,7 @@ const useStyles = makeStyles((theme: any) => {
     },
     leaderBoardItem: {
       display: "inline-flex",
-      width: "50%",
+      width: isMobile ? "100%" : "50%",
       "& h3": {
         display: "inline-block",
         width: "70%",
@@ -208,13 +219,13 @@ const useStyles = makeStyles((theme: any) => {
     auctionPlanDetail: {
       display: "inline-block",
       background: "linear-gradient(#481845, #080C33)",
-      width: "33.333%",
+      width: isMobile ? "100%" : "33.333%",
       padding: '50px 20px'
     },
     auctionPlanDetail1: {
       display: "inline-block",
       background: "linear-gradient(#E6447D90, #080C3380)",
-      width: "33.333%",
+      width: isMobile ? "100%" : "33.333%",
       textAlign: "center",
       padding: '50px 20px'
     },
@@ -334,7 +345,6 @@ const useStyles = makeStyles((theme: any) => {
       right: 5,
       zIndex: 9999
     }
-
   };
 });
 

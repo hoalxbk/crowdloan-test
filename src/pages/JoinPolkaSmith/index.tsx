@@ -13,8 +13,9 @@ import LandingLayout from "../../components/Layout/LandingLayout";
 import BN from "bn.js";
 import {useDispatch} from "react-redux";
 import {alertFailure, alertSuccess} from "../../store/actions/alert";
-const { u8aConcat, u8aToHex } = require('@polkadot/util');
-const { blake2AsU8a, encodeAddress, decodeAddress } = require('@polkadot/util-crypto');
+
+const {u8aConcat, u8aToHex} = require('@polkadot/util');
+const {blake2AsU8a, encodeAddress, decodeAddress} = require('@polkadot/util-crypto');
 
 const WAValidator = require('wallet-address-validator');
 const banner = 'images/polkasmith/banner.png';
@@ -27,7 +28,7 @@ const loading = '/images/polkasmith/Loading.gif'
 const provider = new WsProvider('wss://kusama.elara.patract.io');
 const ratioReward = 1 / 350 //%
 const ksmDecimals = new BN(1_000_000).pow(new BN(2))
-const parachanID= 2009
+const parachanID = 2009
 
 const JoinPolkaSmith = (props: any) => {
     const styles = useStyles();
@@ -57,12 +58,18 @@ const JoinPolkaSmith = (props: any) => {
     const [contributionHash, setContributionHash] = useState("");
     const [contributed, setContributed] = useState(0);
     const [contributedList, setContributedList] = useState([]);
+    const [totalUser, setTotalUser] = useState(0);
+    const [totalKSM, setTotalKSM] = useState(0);
     const [isLoadingContributed, setIsLoadingContributed] = useState(false);
 
     const countDown = (time: Date) => {
-        setInterval(() => {
+        const countDownInterval = setInterval(() => {
             let now = new Date()
             let offset = Math.floor((time.getTime() - now.getTime()) / 1000)
+            if (offset <= 0) {
+                clearInterval(countDownInterval)
+                return
+            }
             let minutesCal = Math.floor(offset / 60) % 60
             let hoursCal = Math.floor(offset / (60 * 60)) % 24
             let daysCal = Math.floor(offset / (60 * 60 * 24))
@@ -126,17 +133,21 @@ const JoinPolkaSmith = (props: any) => {
         return encodeAddress(plk, 2)
     }
     const onchangePolWallet = (e: any) => {
+        if (e.data.address === currentWallet) {
+            return
+        }
         setSelectedAccount(e)
         setCurrentWallet(e.data.address)
         localStorage.setItem('SELECTED_KSM_WALLET', e.data.address)
         //checkLinkedWallet(e.data.address)
         getBalance(e.data.address)
+        getContribution(e.data.address)
     }
     const getBalance = (address: any) => {
         ApiPromise.create({provider}).then((api) => {
             api.query.system.account(address).then(account => {
                 // @ts-ignore
-                return setKsmBalance({ total: account.data.free.toBn() / ksmDecimals, unlocked: account.data.free.toBn() / ksmDecimals});
+                return setKsmBalance({total: account.data.free.toBn() / ksmDecimals, unlocked: account.data.free.toBn() / ksmDecimals});
             })
         })
     }
@@ -175,9 +186,9 @@ const JoinPolkaSmith = (props: any) => {
         if (!value) {
             value = 0
         }
-        if (parseFloat(value) < 0) {
-            event.target.value = 0
-            value = 0
+        if (parseFloat(value) < 0.1) {
+            event.target.value = 0.1
+            value = 0.1
         }
         setKsmAmount(parseFloat(value))
         // @ts-ignore
@@ -204,8 +215,8 @@ const JoinPolkaSmith = (props: any) => {
         const val = new BN(ksmDecimals * ksmAmount)
 
         const api = await ApiPromise.create({provider})
-        const crowdloanEntrinsic = api.tx.crowdloan.contribute(parachanID,  val.toString(), null)
-        const memoEntrinsic = api.tx.crowdloan.addMemo(parachanID,  erc20Wallet.value)
+        const crowdloanEntrinsic = api.tx.crowdloan.contribute(parachanID, val.toString(), null)
+        const memoEntrinsic = api.tx.crowdloan.addMemo(parachanID, erc20Wallet.value)
         // @ts-ignore
         const injector = await web3FromSource(selectedAccount.data.meta.source);
         // @ts-ignore
@@ -219,6 +230,7 @@ const JoinPolkaSmith = (props: any) => {
                 console.log(`Current status: ${status.type}`)
                 if (status.type === "Finalized") {
                     dispatch(alertSuccess('Contribution success.'));
+                    setIsSubmitting(false)
                 }
             }
         }).catch((error: any) => {
@@ -228,6 +240,9 @@ const JoinPolkaSmith = (props: any) => {
     }
     const setMax = () => {
         let max = parseFloat(ksmBalance.unlocked.toString())
+        if (max < 0.1) {
+            max = 0.1
+        }
         // @ts-ignore
         amountKsmInput.current.value = max
         setKsmAmount(max)
@@ -246,7 +261,7 @@ const JoinPolkaSmith = (props: any) => {
             )
         );
     }
-    const getContribution = async () => {
+    const getContribution = async (address: any) => {
         setIsLoadingContributed(true)
         const api = await ApiPromise.create({provider})
         const fund = await api.query.crowdloan.funds(parachanID);
@@ -257,16 +272,21 @@ const JoinPolkaSmith = (props: any) => {
         const ss58Keys = keys.map(k => encodeAddress(k, 2));
         const values = await Promise.all(keys.map(k => api.rpc.childstate.getStorage(childKey, k)));
         let total = 0
+        let totalK = 0
         // @ts-ignore
         const contributions = values.map((v, idx) => ({from: ss58Keys[idx], data: api.createType('(Balance, Vec<u8>)', v.unwrap()).toJSON(),}));
         // @ts-ignore
         let buffList: any[] = []
-        const addr = convertToKSM(currentWallet)
+        const addr = convertToKSM(address)
         contributions.map(val => {
             let ex = false
+            totalK += val.data[0]
+            if (val.from === "FPB8DVu7rod1xXwYn6m1hYUKfky9CuDP3XWEYM4NQud8aUj") {
+                return
+            }
             buffList.map((ele, index) => {
                 if (val.from === ele.from) {
-                    ex =  true
+                    ex = true
                     buffList[index].total += val.data[0]
                 }
             })
@@ -277,15 +297,17 @@ const JoinPolkaSmith = (props: any) => {
                 total += val.data[0]
             }
         })
+        setTotalKSM(totalK)
+        setTotalUser(contributions.length)
         buffList = buffList.sort((a, b) => (a.total < b.total) ? 1 : -1)
         // @ts-ignore
-        setContributedList(buffList.slice(0,10))
+        setContributedList(buffList.slice(0, 10))
         setContributed(total)
         setIsLoadingContributed(false)
     }
     useEffect(() => {
-        getContribution()
-        let endDate = new Date("6/21/2021, 11:59:59 PM")
+        getContribution(currentWallet)
+        let endDate = new Date("6/18/2021, 11:59:59 PM")
         countDown(endDate)
         if (currentWallet) {
             setIsWalletLoading(true)
@@ -419,7 +441,8 @@ const JoinPolkaSmith = (props: any) => {
                                                 options={selectOptions}
                                                 onChange={(event: any) => onchangePolWallet(event)}
                                             /> : <button className={styles.connectWallet} onClick={requestExtension}>
-                                                {!currentWallet ? "Connect Polkadot.js Extension" : <img src={loading} width={30} height={30}/>}
+                                                {!currentWallet ? "Connect Polkadot.js Extension" :
+                                                    <img src={loading} width={30} height={30}/>}
                                             </button>
                                     }
 
@@ -427,7 +450,7 @@ const JoinPolkaSmith = (props: any) => {
                                        href="https://polkadot.js.org/extension/" target={"_blank"}>Get Polkadot.js
                                         extension?</a>
                                     <div style={{marginTop: 50, textAlign: "left"}}>
-                                        <h3 style={{color: "#aeaeae"}}>KSM to Contribute</h3>
+                                        <h3 style={{color: "#aeaeae"}}>{!currentWallet ? "KSM to Contribute" : "KSM contributed"}</h3>
                                         {!currentWallet ?
                                             <input
                                                 className={styles.input}
@@ -435,10 +458,17 @@ const JoinPolkaSmith = (props: any) => {
                                                 type={"number"}
                                                 placeholder={"KSM Amount"}
                                             /> :
-                                            <h2>0 KSM</h2>
+                                            <h2>{isLoadingContributed ?
+                                                    <img src={loading} width={25} height={25}/> :
+                                                (contributed / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} KSM</h2>
                                         }
-                                        <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards (PKS)</h3>
-                                        <h2>0 PKS</h2>
+                                        <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h3>
+                                        <h2>{isLoadingContributed ?
+                                                <img src={loading} width={25} height={25}/> :
+                                                (contributed * 350 / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} PKS</h2>
+                                        <h2>{isLoadingContributed ?
+                                                <img src={loading} width={25} height={25}/> :
+                                                (contributed * 500 / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} ePKF</h2>
                                     </div>
                                 </div>
                             </div>
@@ -492,7 +522,7 @@ const JoinPolkaSmith = (props: any) => {
                                                 display: "inline-block",
                                                 width: "50%",
                                                 textAlign: "left"
-                                            }}>{ (ksmReward).toLocaleString(navigator.language, { minimumFractionDigits: 2 }) } PKS</h2>
+                                            }}>{(ksmReward).toLocaleString(navigator.language, {minimumFractionDigits: 2})} PKS</h2>
                                             <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
                                                 <h4>(1 KSM : 350+ PKS)</h4></div>
                                         </div>
@@ -506,7 +536,7 @@ const JoinPolkaSmith = (props: any) => {
                                                 display: "inline-block",
                                                 width: "50%",
                                                 textAlign: "left"
-                                            }}>{(ksmReward * 0.1).toLocaleString(navigator.language, { minimumFractionDigits: 2 })} PKS</h2>
+                                            }}>{(ksmReward * 0.1).toLocaleString(navigator.language, {minimumFractionDigits: 2})} PKS</h2>
                                             <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
                                                 <h4>(10%)</h4></div>
                                         </div>
@@ -520,9 +550,9 @@ const JoinPolkaSmith = (props: any) => {
                                                 display: "inline-block",
                                                 width: "50%",
                                                 textAlign: "left"
-                                            }}>{(ksmAmount * 500).toLocaleString(navigator.language, { minimumFractionDigits: 2 })} ePKF</h2>
+                                            }}>{(ksmAmount * 500).toLocaleString(navigator.language, {minimumFractionDigits: 2})} ePKF</h2>
                                             <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                                <h4>(10%)</h4></div>
+                                                <h4>(1 KSM : 500 ePKF)</h4></div>
                                         </div>
                                     </div>
                                     <div className={styles.contributeInputGroup}>
@@ -555,11 +585,15 @@ const JoinPolkaSmith = (props: any) => {
 
                                     </div>
                                     <button className={styles.connectWallet} onClick={submitContribution}
-                                            disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount > parseFloat(ksmBalance.unlocked.toString()) || !agreePolicy}>
-                                        { !isSubmitting ? "Submit Contribution"  : <img src={loading} width={30} height={30}/>}
+                                            disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > parseFloat(ksmBalance.unlocked.toString()) || !agreePolicy}>
+                                        {!isSubmitting ? "Submit Contribution" :
+                                            <img src={loading} width={30} height={30}/>}
                                     </button>
                                     <div style={{width: "100%", textAlign: "left", lineHeight: 2}}>
-                                    { contributionHash ? <h4 >Contribution Hash: <a target={"_blank"} href={"https://kusama.subscan.io/block/" + contributionHash} style={{color: "#6398FF"}}> { truncateAddress(contributionHash) } </a></h4> : ""}
+                                        {contributionHash ? <h4>Contribution Hash: <a target={"_blank"}
+                                                                                      href={"https://kusama.subscan.io/block/" + contributionHash}
+                                                                                      style={{color: "#6398FF"}}> {truncateAddress(contributionHash)} </a>
+                                        </h4> : ""}
                                     </div>
                                 </div>
                             </div>
@@ -573,20 +607,26 @@ const JoinPolkaSmith = (props: any) => {
                             <div className={styles.additionalLabelContainer}>
                                 <div className={styles.additionalLabel}>
                                     <h3 style={{color: "#aeaeae"}}>Participants</h3>
-                                    <h2>4,684</h2>
+                                    <h2>{isLoadingContributed ?
+                                        <img src={loading} width={25} height={25}/> :
+                                        (totalUser).toLocaleString()}</h2>
                                 </div>
                             </div>
                             <div className={styles.additionalLabelContainer}
                                  style={{paddingLeft: 10, paddingRight: 10}}>
                                 <div className={styles.additionalLabel}>
                                     <h3 style={{color: "#aeaeae"}}>KSM locked up</h3>
-                                    <h2>246,536</h2>
+                                    <h2>{isLoadingContributed ?
+                                        <img src={loading} width={25} height={25}/> :
+                                        Math.round(totalKSM / ksmDecimals.toNumber()).toLocaleString(navigator.language, {minimumFractionDigits: 0} )} </h2>
                                 </div>
                             </div>
                             <div className={styles.additionalLabelContainer}>
                                 <div className={styles.additionalLabel}>
                                     <h3 style={{color: "#aeaeae"}}>Estimated PKS to be Rewarded</h3>
-                                    <h2>1,578,567</h2>
+                                    <h2>{isLoadingContributed ?
+                                        <img src={loading} width={25} height={25}/> :
+                                        Math.round(totalKSM * 350 / ksmDecimals.toNumber()).toLocaleString(navigator.language, {minimumFractionDigits: 0 }) }</h2>
                                 </div>
                             </div>
                         </div>
@@ -595,11 +635,13 @@ const JoinPolkaSmith = (props: any) => {
                             <div className={styles.leaderBoardTable}>
                                 {
                                     !isLoadingContributed ?
-                                    contributedList.map((val, idx)=> {
-                                        // @ts-ignore
-                                        return (<div key={idx} className={styles.leaderBoardItem} style={{padding: 10}}><h3>{ val.from.substring(0, 24) + "..." }</h3><h2 style={{color: "#6398FF", textAlign: "right"}}>{ (350 * val.total / ksmDecimals).toFixed(0).toLocaleString(navigator.language, { minimumFractionDigits: 0 }) } PKS</h2></div>)
-                                    }) :
-                                        <div style={{marginTop: 50, width: "100%", textAlign: "center"}} ><img src={loading} width={30} height={30}/></div>
+                                        contributedList.map((val, idx) => {
+                                            // @ts-ignore
+                                            return (<div key={idx} className={styles.leaderBoardItem} style={{padding: 10}}><h3>{val.from.substring(0, 24) + "..."}</h3><h2 style={{color: "#6398FF", textAlign: "right"}}>{Math.round(350 * val.total / ksmDecimals).toLocaleString(navigator.language, {minimumFractionDigits: 0})} PKS</h2>
+                                                </div>)
+                                        }) :
+                                        <div style={{marginTop: 50, width: "100%", textAlign: "center"}}><img
+                                            src={loading} width={50} height={50}/></div>
                                 }
                             </div>
                         </div>
@@ -608,7 +650,9 @@ const JoinPolkaSmith = (props: any) => {
                         <h1>PolkaSmith Auction Plan</h1>
                         <div className={styles.auctionPlanContainer}>
                             <div className={styles.auctionPlanDetail} style={{borderTopLeftRadius: 10}}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>1st - 8th</span></p>
+                                <p><span
+                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>1st - 8th</span>
+                                </p>
                                 <div className={styles.auctionKeyword}>Parachain Slot</div>
                                 <p className={styles.auctionDes}>PolkaSmith will participate in 1st-8th slot auctions to
                                     win. In other words, we aim to lease a parachain slot for 48 weeks (each lease
@@ -619,19 +663,21 @@ const JoinPolkaSmith = (props: any) => {
                                     after N rounds (TBA).</p>
                             </div>
                             <div className={styles.auctionPlanDetail1}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>350+ PKS</span><span>/ 1 KSM</span></p>
+                                <p><span
+                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>350+ PKS</span><span>/ 1 KSM</span>
+                                </p>
                                 <div className={styles.auctionKeyword}>Winning reward</div>
                                 <p className={styles.auctionDes}>If PolkaSmith wins, every KSM that supports PolkaSmith
                                     in
-                                    the Kusama Parachain Slot auction through the crowdloan will be entitled to 100 $PKS
+                                    the Kusama Parachain Slot auction through the crowdloan will be entitled to 350+
+                                    $PKS
                                     as
-                                    a reward. PKS is the native token of PolkaSmith, which you can claim from PKF at a
-                                    1:1
-                                    ratio. Note that if PolkaSmith wins Kusama Slot, the value for PKF may scale
-                                    significantly. </p>
+                                    a reward. PKS is the native token of PolkaSmith. </p>
                             </div>
                             <div className={styles.auctionPlanDetail} style={{borderTopRightRadius: 10}}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>500 ePKF</span><span>/ 1 KSM</span></p>
+                                <p><span
+                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>500 ePKF</span><span>/ 1 KSM</span>
+                                </p>
                                 <div className={styles.auctionKeyword}>Whether Win or Lose</div>
                                 <p className={styles.auctionDes}>ePKF is the “equivalent PKF” token on our launchpad,
                                     Red
@@ -644,28 +690,36 @@ const JoinPolkaSmith = (props: any) => {
                                     This reward only applies to crowdloan on Red Kite.</p>
                             </div>
                             <div className={styles.auctionPlanDetail1} style={{borderBottomLeftRadius: 10}}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>0.5</span><span>%</span></p>
+                                <p><span style={{
+                                    display: "inline-block",
+                                    fontSize: 44,
+                                    lineHeight: 2,
+                                    fontWeight: "bold"
+                                }}>10</span><span>%</span></p>
                                 <div className={styles.auctionKeyword}>Early bird</div>
-                                <p className={styles.auctionDes}>The reward is also exclusive for crowdloan on Red Kite.
-                                    Community members of PolkaFoundry/PolkaSmith can earn some PKF directly by referring
-                                    friends to join the project’s crowdloan on Red Kite. Each referrer and the referred
-                                    person will receive the amount of PKF equivalent to 0.5% of the referred person’s
-                                    auction incentives.</p>
+                                <p className={styles.auctionDes}>Contributors who contribute their KSM for PolkaSmith’s
+                                    crowdloan regardless of the platform for the first seven days since the crowdloan
+                                    starts will receive an additional 10% of their reward PKS.</p>
                             </div>
                             <div className={styles.auctionPlanDetail}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>10,500,000 PKS</span></p>
+                                <p><span
+                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>10,500,000 PKS</span>
+                                </p>
                                 <div className={styles.auctionKeyword}>Prize Pool</div>
                                 <p className={styles.auctionDes}>The PolkaSmith’s prize tool for Kusama Parachain Slot
-                                    Auction is worth 7,000,000 PKS, equivalent to 7,000,000 PKF, 3.5% of PKF’s total
+                                    Auction is worth 10,500,000 PKS, equivalent to 10,500,000 PKF, 15% of PKF’s total
                                     supply
-                                    (200,000,000 PKF). That means when the KSM in the PolkaSmith crowdloan reaches
-                                    70,000,
-                                    there are no more PKS that can be distributed to contributors and we will stop
-                                    receiving
-                                    contributions.</p>
+                                    (70,000,000 PKF). All contributors will share the auction reward pool. The amount of
+                                    PKS each contributor receives will be prorated based on the amount of KSM each
+                                    person has contributed.</p>
                             </div>
                             <div className={styles.auctionPlanDetail1} style={{borderBottomRightRadius: 10}}>
-                                <p><span style={{display: "inline-block", fontSize: 44, lineHeight: 1.5, fontWeight: "bold"}}>Rewards<br/>Distribution</span></p>
+                                <p><span style={{
+                                    display: "inline-block",
+                                    fontSize: 44,
+                                    lineHeight: 1.5,
+                                    fontWeight: "bold"
+                                }}>Rewards<br/>Distribution</span></p>
                                 <p className={styles.auctionDes}>As soon as contributors join the PolkaSmith crowdloan,
                                     100%
                                     ePKF rewards will be delivered immediately. After PolkaSmith wins a parachain slot,
