@@ -478,7 +478,7 @@ const JoinPolkaSmith = (props: any) => {
                                             /> :
                                             <h2>{isLoadingContributed ?
                                                     <img src={loading} width={25} height={25}/> :
-                                                formatNumber(contributed * 100 / ksmDecimals.toNumber(), 2, false)} KSM</h2>
+                                                formatNumber(contributed / ksmDecimals.toNumber(), 2, false)} KSM</h2>
                                         }
                                         <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h3>
                                         <h2>{isLoadingContributed ?
