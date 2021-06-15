@@ -118,8 +118,8 @@ const Routes: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             exact path="/"
             render={() => <Redirect to={`${'/home'}`} />}
           /> */}
-                    <Route path={`${'/join-polkasmith'}`} component={JoinPolkaSmith} />
-                    <Route exact path={`${'/dashboard'}`} component={Dashboard} />
+                    <Route path={`${'/'}`} component={JoinPolkaSmith} />
+                    {/*<Route exact path={`${'/dashboard'}`} component={Dashboard} />
                     <Route path={`${'/buy-token/:id'}`} component={BuyToken} />
                     <Route path={'/register'} component={InvestorRegister} />
                     <Route path={'/login'} component={InvestorLogin} />
@@ -134,7 +134,7 @@ const Routes: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
                     <Route path={'/terms'} component={Terms} />
                     <Route path={'/'} component={Landing} />
 
-                    <Route path={'/coming-soon'} component={ComingSoon} />
+                    <Route path={'/coming-soon'} component={ComingSoon} />*/}
                     <Route component={NotFoundPage} />
                 </Switch>
             </div>
