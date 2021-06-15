@@ -50,12 +50,19 @@ const useStyles = makeStyles((theme: any) => {
       borderColor: "#ffffff36"
     },
      label: {
-      width: isMobile ? "100%" : "25%",
+      width: isMobile ? "100%" : "20%",
        padding: 20,
        lineHeight: 1.8,
        border: isMobile ? "inherit" : "unset",
        textAlign: isMobile ? "center !important" : "unset",
-       borderRight: "inherit"
+       borderRight: "inherit",
+       "& h3": {
+        fontSize: 16,
+       },
+       "& span": {
+         fontSize: 16,
+         fontWeight: "bold"
+       }
      },
     introMain: {
       marginTop: 100,
@@ -305,6 +312,14 @@ const useStyles = makeStyles((theme: any) => {
     contributeInputGroup: {
       display: "flex",
       margin: "20px 0px"
+    },
+    errorMessage: {
+      width: "100%",
+      textAlign: "right",
+      minHeight: 20,
+      marginTop: -15,
+      color: "#ff5151",
+      fontSize: 15
     },
     contributeInputLabel: {
       display: "inline-block",

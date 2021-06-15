@@ -66,7 +66,7 @@ const JoinPolkaSmith = (props: any) => {
     const [totalUser, setTotalUser] = useState(0);
     const [totalKSM, setTotalKSM] = useState(0);
     const [isLoadingContributed, setIsLoadingContributed] = useState(false);
-    const [ratioReward, setRatioReward] = useState(0);
+    const [ratioReward, setRatioReward] = useState(1);
 
     const countDown = (time: Date) => {
         const countDownInterval = setInterval(() => {
@@ -153,7 +153,7 @@ const JoinPolkaSmith = (props: any) => {
         ApiPromise.create({provider}).then((api) => {
             api.query.system.account(address).then(account => {
                 // @ts-ignore
-                return setKsmBalance({total: account.data.free.toBn() / ksmDecimals, unlocked: account.data.free.toBn() / ksmDecimals});
+                return setKsmBalance({total: new BN(account.data.free.toBn() / ksmDecimals), unlocked: new BN(account.data.free.toBn() / ksmDecimals)});
             })
         })
     }
@@ -193,13 +193,9 @@ const JoinPolkaSmith = (props: any) => {
         if (!value) {
             value = 0
         }
-        if (parseFloat(value) < 0.1) {
-            event.target.value = 0.1
-            value = 0.1
-        }
         setKsmAmount(parseFloat(value))
         // @ts-ignore
-        setKsmReward((value / ratioReward))
+        setKsmReward((value * ratioReward))
     }
     const changeERC20 = (event: any) => {
         if (WAValidator.validate(event.target.value, 'ETH')) {
@@ -253,7 +249,7 @@ const JoinPolkaSmith = (props: any) => {
         // @ts-ignore
         amountKsmInput.current.value = max
         setKsmAmount(max)
-        setKsmReward((max / ratioReward))
+        setKsmReward((max * ratioReward))
     }
     const agreePolicyChange = (event: any) => {
         setAgreePolicy(!agreePolicy)
@@ -356,6 +352,7 @@ const JoinPolkaSmith = (props: any) => {
         //isSigning: false})
     }, [])
     // @ts-ignore
+    // @ts-ignore
     return (
         <LandingLayout>
             <div className={styles.polkaSmithMain}>
@@ -366,16 +363,11 @@ const JoinPolkaSmith = (props: any) => {
                               <b>Join <img width={40} height={40} src={polkaLogo}/> Polka</b>Smith<b> on Kusama Parachain Auction</b>
                             </span></p>
                             <p className={styles.headerContent}>
-                                PolkaSmith is the canary network of PolkaFoundry on Kusama. PolkaSmith’s native token is
-                                PKS, which we
-                                migrated from PolkaFoundry’s PKF at a 1:1 ratio.
+                                PolkaSmith is the canary network of PolkaFoundry on Kusama.  It is more suitable for early-stage startups that need to grow quickly and easily experiment with bold new ideas. Once Kusama is bridged to Polkadot, PolkaSmith and PolkaFoundry will also be fully interoperable.
                             </p>
                             <p className={styles.headerContent}>
                                 Participants who support PolkaSmith to win the Kusama auction will earn worthy rewards
-                                in PKS. In
-                                addition, there are an extra 5% PKS for participants on Red Kite, 0.5% for referrals,
-                                and 10% for
-                                early birds.
+                                in PKS. In addition, there are an extra 10% PKS for early birds who contribute in first 7 days
                             </p>
                             <button className={styles.joinBTN} style={{float: "left"}} onClick={() => {
                                 executeScroll()
@@ -394,12 +386,16 @@ const JoinPolkaSmith = (props: any) => {
                             <h2>KSM</h2>
                         </div>
                         <div className={styles.label} style={{textAlign: "center"}}>
-                            <h3 style={{color: "#aeaeae"}}>Lockup Period</h3>
-                            <h2>336 days</h2>
+                            <h3 style={{color: "#aeaeae"}}>Lockup Period (WIN)</h3>
+                            <h2>48 Weeks</h2>
+                        </div>
+                        <div className={styles.label} style={{textAlign: "center"}}>
+                            <h3 style={{color: "#aeaeae"}}>Lockup Period (LOSE)</h3>
+                            <h2>6 Weeks</h2>
                         </div>
                         <div className={styles.label} style={{textAlign: "center"}}>
                             <h3 style={{color: "#aeaeae"}}>Estimated Reward Rate</h3>
-                            <h2>~350 PKS/ 1 KSM</h2>
+                            <p><h2 style={{display: "inline-block"}}>~350 PKS </h2><span> \ KMS</span></p>
                         </div>
                         <div className={styles.label} style={{textAlign: "right"}}>
                             <h3 style={{color: "#aeaeae"}}>Rewards Pool</h3>
@@ -511,7 +507,7 @@ const JoinPolkaSmith = (props: any) => {
                                                 className={styles.input}
                                                 name="KSM Amount"
                                                 type={"number"}
-                                                style={{borderColor: ksmAmount > parseFloat(ksmBalance.unlocked.toString()) ? "red" : "#fff"}}
+                                                style={{borderColor: ksmAmount > ksmBalance.unlocked.toNumber() ? "red" : "#fff"}}
                                                 placeholder={"KSM Amount"}
                                                 autoComplete={"off"}
                                                 ref={amountKsmInput}
@@ -522,6 +518,16 @@ const JoinPolkaSmith = (props: any) => {
                                             </button>
                                         </div>
                                     </div>
+                                    <div className={styles.errorMessage}>
+                                        {
+                                            ksmReward > 0 && ksmAmount < 0.1 ?
+                                                <span>the contribution amount can not be less than 0.1 KSM</span>
+                                                : <span >{ ksmReward > 0 && ksmAmount > ksmBalance.unlocked.toNumber() ?
+                                                    <span>the maximum contribution is no more than unlocked balance
+                                                    </span> : ""
+                                                }</span>
+                                        }
+                                        </div>
                                     <div className={styles.contributeInputGroup}>
                                         <div className={styles.contributeInputLabel}>
                                             <h4>Estimated Reward</h4>
