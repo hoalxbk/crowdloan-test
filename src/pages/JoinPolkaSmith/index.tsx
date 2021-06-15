@@ -51,7 +51,7 @@ const JoinPolkaSmith = (props: any) => {
     const [selectOptions, setSelectOptions] = useState([]);
     const [showScrollTop, setShowScrollTop] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
-    const [ksmBalance, setKsmBalance] = useState({free: null, total: new BN(0), unlocked: new BN(0)});
+    const [ksmBalance, setKsmBalance] = useState({free: null, total: 0, unlocked: 0});
     const [isRejected, setIsRejected] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [ksmAmount, setKsmAmount] = useState(0);
@@ -158,7 +158,12 @@ const JoinPolkaSmith = (props: any) => {
         ApiPromise.create({provider}).then((api) => {
             api.query.system.account(address).then(account => {
                 // @ts-ignore
-                return setKsmBalance({total: new BN(account.data.free.toBn() / ksmDecimals), unlocked: new BN(account.data.free.toBn() / ksmDecimals)});
+                let val = new BN(account.data.free.toNumber() / ksmDecimals.toNumber())
+                console.log(account.data.free.toString())
+                console.log(ksmDecimals.toString())
+                console.log(val.toString())
+                // @ts-ignore
+                return setKsmBalance({total: account.data.free.toNumber() / ksmDecimals.toNumber(), unlocked: account.data.free.toNumber() / ksmDecimals.toNumber()});
             })
         })
     }
@@ -216,7 +221,7 @@ const JoinPolkaSmith = (props: any) => {
         }
     }
     const submitContribution = async () => {
-        if (!ksmAmount || ksmAmount < 0 || ksmAmount > parseFloat(ksmBalance.unlocked.toString())) {
+        if (!ksmAmount || ksmAmount < 0 || ksmAmount > ksmBalance.unlocked) {
             dispatch(alertFailure('Invalid KSM amount or insufficient balance'));
             return
         }
@@ -253,7 +258,7 @@ const JoinPolkaSmith = (props: any) => {
         });
     }
     const setMax = () => {
-        let max = Math.floor(ksmBalance.unlocked.toNumber() * 100) / 100
+        let max = Math.floor(ksmBalance.unlocked * 100) / 100
         if (max < 0.1) {
             max = 0.1
         }
@@ -501,14 +506,14 @@ const JoinPolkaSmith = (props: any) => {
                                              style={{width: "50%", paddingRight: 10}}>
                                             <div className={styles.additionalLabel}>
                                                 <h3 style={{color: "#aeaeae"}}>Your KSM Balance</h3>
-                                                <h2>{ formatNumber(ksmBalance.total.toNumber(), 2 , false) } KSM</h2>
+                                                <h2>{ formatNumber(ksmBalance.total, 2 , false) } KSM</h2>
                                             </div>
                                         </div>
                                         <div className={styles.additionalLabelContainer}
                                              style={{width: "50%", paddingLeft: 10}}>
                                             <div className={styles.additionalLabel}>
                                                 <h3 style={{color: "#aeaeae"}}>Unlocked KSM Balance</h3>
-                                                <h2>{ formatNumber(ksmBalance.unlocked.toNumber(), 2, false) } KSM</h2>
+                                                <h2>{ formatNumber(ksmBalance.unlocked, 2, false) } KSM</h2>
                                             </div>
                                         </div>
                                     </div>
@@ -521,7 +526,7 @@ const JoinPolkaSmith = (props: any) => {
                                                 className={styles.input}
                                                 name="KSM Amount"
                                                 type={"number"}
-                                                style={{borderColor: ksmAmount > ksmBalance.unlocked.toNumber() ? "red" : "#fff"}}
+                                                style={{borderColor: ksmAmount > ksmBalance.unlocked ? "red" : "#fff"}}
                                                 placeholder={"KSM Amount"}
                                                 autoComplete={"off"}
                                                 ref={amountKsmInput}
@@ -536,7 +541,7 @@ const JoinPolkaSmith = (props: any) => {
                                         {
                                             ksmReward > 0 && ksmAmount < 0.1 ?
                                                 <span>the contribution amount can not be less than 0.1 KSM</span>
-                                                : <span >{ ksmReward > 0 && ksmAmount > ksmBalance.unlocked.toNumber() ?
+                                                : <span >{ ksmReward > 0 && ksmAmount > ksmBalance.unlocked ?
                                                     <span>the maximum contribution is no more than unlocked balance
                                                     </span> : ""
                                                 }</span>
@@ -614,7 +619,7 @@ const JoinPolkaSmith = (props: any) => {
 
                                     </div>
                                     <button className={styles.connectWallet} onClick={submitContribution}
-                                            disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > parseFloat(ksmBalance.unlocked.toString()) || !agreePolicy}>
+                                            disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > ksmBalance.unlocked || !agreePolicy}>
                                         {!isSubmitting ? "Submit Contribution" :
                                             <img src={loading} width={30} height={30}/>}
                                     </button>
