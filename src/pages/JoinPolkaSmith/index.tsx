@@ -657,10 +657,9 @@ const JoinPolkaSmith = (props: any) => {
                             </div>
                             <div className={styles.additionalLabelContainer}>
                                 <div className={styles.additionalLabel}>
-                                    <h3 style={{color: "#aeaeae"}}>Estimated PKS to be Rewarded</h3>
-                                    <h2>{isLoadingContributed ?
-                                        <img src={loading} width={25} height={25}/> :
-                                        formatNumber(totalKSM * ratioReward / ksmDecimals.toNumber(), 0, true) }</h2>
+                                    <h3 style={{color: "#aeaeae"}}>Prize pool</h3>
+                                    <h2>{
+                                        formatNumber(10500000, 0, true) } PKS</h2>
                                 </div>
                             </div>
                         </div>
