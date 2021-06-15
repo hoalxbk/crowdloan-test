@@ -26,9 +26,14 @@ const arrowUp = '/images/polkasmith/arrow_up.png';
 const polkaLogo = '/images/polkasmith/polka_logo.svg'
 const loading = '/images/polkasmith/Loading.gif'
 const provider = new WsProvider('wss://kusama.elara.patract.io');
-const ratioReward = 1 / 350 //%
 const ksmDecimals = new BN(1_000_000).pow(new BN(2))
 const parachanID = 2009
+const whiteListContribute = [
+    "FPB8DVu7rod1xXwYn6m1hYUKfky9CuDP3XWEYM4NQud8aUj",
+    "Dd911qucscnXvz1gKdhLK2WCnRG1JgorWLnc9SdMvW6Jcza",
+    "F2W4AjLp1mKiMJfp5yEoPg8ymqP4xa5e8x5G5sbqA47oTeQ"
+]
+const poolSize = 10_500_000
 
 const JoinPolkaSmith = (props: any) => {
     const styles = useStyles();
@@ -61,6 +66,7 @@ const JoinPolkaSmith = (props: any) => {
     const [totalUser, setTotalUser] = useState(0);
     const [totalKSM, setTotalKSM] = useState(0);
     const [isLoadingContributed, setIsLoadingContributed] = useState(false);
+    const [ratioReward, setRatioReward] = useState(0);
 
     const countDown = (time: Date) => {
         const countDownInterval = setInterval(() => {
@@ -282,7 +288,8 @@ const JoinPolkaSmith = (props: any) => {
         contributions.map(val => {
             let ex = false
             totalK += val.data[0]
-            if (val.from === "FPB8DVu7rod1xXwYn6m1hYUKfky9CuDP3XWEYM4NQud8aUj") {
+            const check = whiteListContribute.find(item => item.includes(val.from))
+            if (check) {
                 return
             }
             buffList.map((ele, index) => {
@@ -300,6 +307,7 @@ const JoinPolkaSmith = (props: any) => {
         })
         setTotalKSM(totalK)
         setTotalUser(contributions.length)
+        setRatioReward(Math.round(poolSize / (totalK / ksmDecimals.toNumber())))
         buffList = buffList.sort((a, b) => (a.total < b.total) ? 1 : -1)
         // @ts-ignore
         setContributedList(buffList.slice(0, 10))
@@ -390,8 +398,8 @@ const JoinPolkaSmith = (props: any) => {
                             <h2>336 days</h2>
                         </div>
                         <div className={styles.label} style={{textAlign: "center"}}>
-                            <h3 style={{color: "#aeaeae"}}>Rewards Rate</h3>
-                            <h2>350+ PKS/ 1 KSM</h2>
+                            <h3 style={{color: "#aeaeae"}}>Estimated Reward Rate</h3>
+                            <h2>~350 PKS/ 1 KSM</h2>
                         </div>
                         <div className={styles.label} style={{textAlign: "right"}}>
                             <h3 style={{color: "#aeaeae"}}>Rewards Pool</h3>
@@ -466,7 +474,7 @@ const JoinPolkaSmith = (props: any) => {
                                         <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h3>
                                         <h2>{isLoadingContributed ?
                                                 <img src={loading} width={25} height={25}/> :
-                                                (contributed * 350 / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} PKS</h2>
+                                                (contributed * ratioReward / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} PKS</h2>
                                         <h2>{isLoadingContributed ?
                                                 <img src={loading} width={25} height={25}/> :
                                                 (contributed * 500 / ksmDecimals.toNumber()).toFixed(2).toLocaleString()} ePKF</h2>
@@ -525,7 +533,7 @@ const JoinPolkaSmith = (props: any) => {
                                                 textAlign: "left"
                                             }}>{(ksmReward).toLocaleString(navigator.language, {minimumFractionDigits: 2})} PKS</h2>
                                             <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                                <h4>(1 KSM : 350+ PKS)</h4></div>
+                                                <h4>(1 KSM : {ratioReward.toLocaleString(navigator.language, {minimumFractionDigits: 0})} PKS)</h4></div>
                                         </div>
                                     </div>
                                     <div className={styles.contributeInputGroup}>
@@ -627,7 +635,7 @@ const JoinPolkaSmith = (props: any) => {
                                     <h3 style={{color: "#aeaeae"}}>Estimated PKS to be Rewarded</h3>
                                     <h2>{isLoadingContributed ?
                                         <img src={loading} width={25} height={25}/> :
-                                        Math.round(totalKSM * 350 / ksmDecimals.toNumber()).toLocaleString(navigator.language, {minimumFractionDigits: 0 }) }</h2>
+                                        Math.round(totalKSM * ratioReward / ksmDecimals.toNumber()).toLocaleString(navigator.language, {minimumFractionDigits: 0 }) }</h2>
                                 </div>
                             </div>
                         </div>
@@ -638,7 +646,7 @@ const JoinPolkaSmith = (props: any) => {
                                     !isLoadingContributed ?
                                         contributedList.map((val, idx) => {
                                             // @ts-ignore
-                                            return (<div key={idx} className={styles.leaderBoardItem} style={{padding: 10}}><h3>{val.from.substring(0, 24) + "..."}</h3><h2 style={{color: "#6398FF", textAlign: "right"}}>{Math.round(350 * val.total / ksmDecimals).toLocaleString(navigator.language, {minimumFractionDigits: 0})} PKS</h2>
+                                            return (<div key={idx} className={styles.leaderBoardItem} style={{padding: 10}}><h3>{val.from.substring(0, 24) + "..."}</h3><h2 style={{color: "#6398FF", textAlign: "right"}}>{Math.round(ratioReward * val.total / ksmDecimals).toLocaleString(navigator.language, {minimumFractionDigits: 0})} PKS</h2>
                                                 </div>)
                                         }) :
                                         <div style={{marginTop: 50, width: "100%", textAlign: "center"}}><img
@@ -665,12 +673,12 @@ const JoinPolkaSmith = (props: any) => {
                             </div>
                             <div className={styles.auctionPlanDetail1}>
                                 <p><span
-                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>350+ PKS</span><span>/ 1 KSM</span>
+                                    style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>~350 PKS</span><span>/ 1 KSM</span>
                                 </p>
                                 <div className={styles.auctionKeyword}>Winning reward</div>
                                 <p className={styles.auctionDes}>If PolkaSmith wins, every KSM that supports PolkaSmith
                                     in
-                                    the Kusama Parachain Slot auction through the crowdloan will be entitled to 350+
+                                    the Kusama Parachain Slot auction through the crowdloan will be entitled to ~350
                                     $PKS
                                     as
                                     a reward. PKS is the native token of PolkaSmith. </p>
