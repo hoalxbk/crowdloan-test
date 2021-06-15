@@ -158,11 +158,6 @@ const JoinPolkaSmith = (props: any) => {
         ApiPromise.create({provider}).then((api) => {
             api.query.system.account(address).then(account => {
                 // @ts-ignore
-                let val = new BN(account.data.free.toNumber() / ksmDecimals.toNumber())
-                console.log(account.data.free.toString())
-                console.log(ksmDecimals.toString())
-                console.log(val.toString())
-                // @ts-ignore
                 return setKsmBalance({total: account.data.free.toNumber() / ksmDecimals.toNumber(), unlocked: account.data.free.toNumber() / ksmDecimals.toNumber()});
             })
         })
