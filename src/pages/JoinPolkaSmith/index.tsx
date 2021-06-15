@@ -23,6 +23,7 @@ const headerImg = '/images/polkasmith/header_img.png';
 const arrowRightIcon = '/images/icons/arrow-right.svg';
 
 const polkaLogo = '/images/polkasmith/polka_logo.svg'
+const success = '/images/polkasmith/success.png'
 const loading = '/images/polkasmith/Loading.gif'
 const provider = new WsProvider('wss://kusama.elara.patract.io');
 const ksmDecimals = new BN(1_000_000).pow(new BN(2))
@@ -53,6 +54,7 @@ const JoinPolkaSmith = (props: any) => {
     const [isRejected, setIsRejected] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [ksmAmount, setKsmAmount] = useState(0);
+    const [ksmAmountCal, setKsmAmountCal] = useState(0);
     const [erc20Wallet, setErc20Wallet] = useState({value: "", isValid: false});
     const [email, setEmail] = useState({value: "", isValid: false});
     const [agreePolicy, setAgreePolicy] = useState(false);
@@ -65,6 +67,9 @@ const JoinPolkaSmith = (props: any) => {
     const [totalKSM, setTotalKSM] = useState(0);
     const [isLoadingContributed, setIsLoadingContributed] = useState(false);
     const [ratioReward, setRatioReward] = useState(1);
+    const [successStatus, setSuccessStatus] = useState(false)
+    const [isLoadingBalance, setIsLoadingBalance] = useState(false)
+
     const formatNumber = (value: any, faction: number, isRound: boolean) => {
         if (isRound) {
             return parseFloat(value.toFixed(faction)).toLocaleString(navigator.language, {minimumFractionDigits: faction})
@@ -135,8 +140,10 @@ const JoinPolkaSmith = (props: any) => {
         getContribution(e.data.address)
     }
     const getBalance = (address: any) => {
+        setIsLoadingBalance(true)
         ApiPromise.create({provider}).then((api) => {
             api.query.system.account(address).then(account => {
+                setIsLoadingBalance(false)
                 // @ts-ignore
                 return setKsmBalance({total: account.data.free.toNumber() / ksmDecimals.toNumber(), unlocked: account.data.free.toNumber() / ksmDecimals.toNumber()});
             })
@@ -225,6 +232,9 @@ const JoinPolkaSmith = (props: any) => {
                 if (status.type === "Finalized") {
                     dispatch(alertSuccess('Contribution success.'));
                     setIsSubmitting(false)
+                    setSuccessStatus(true)
+                    getBalance(currentWallet)
+                    getContribution(currentWallet)
                 }
             }
         }).catch((error: any) => {
@@ -311,6 +321,23 @@ const JoinPolkaSmith = (props: any) => {
         setContributed(total)
         setIsLoadingContributed(false)
     }
+    const contributeMore = () => {
+        window.location.reload();
+    }
+    const calculatorKSMChange = (event: any) => {
+        let value = event.target.value
+        if (!value) {
+            value = 0
+        }
+        if (parseFloat(value) < 0) {
+            // @ts-ignore
+            event.target.value = 0
+            value = 0
+        }
+        event.target.value = Math.floor(parseFloat(value) * 100) / 100
+        setKsmAmountCal(parseFloat(event.target.value))
+    }
+
     useEffect(() => {
         getContribution(currentWallet)
         let endDate = new Date("6/18/2021, 11:59:59 PM")
@@ -458,167 +485,234 @@ const JoinPolkaSmith = (props: any) => {
                                     <a style={{float: "right", color: "#6398FF", fontSize: 16}}
                                        href="https://polkadot.js.org/extension/" target={"_blank"}>Get Polkadot.js
                                         extension?</a>
+                                    { !currentWallet ?
                                     <div style={{marginTop: 50, textAlign: "left"}}>
-                                        <h3 style={{color: "#aeaeae"}}>{!currentWallet ? "KSM to Contribute" : "KSM contributed"}</h3>
-                                        {!currentWallet ?
+                                        <h4 style={{color: "#aeaeae"}}>KSM to Contribute</h4>
                                             <input
                                                 className={styles.input}
                                                 name="KSM Amount"
                                                 type={"number"}
                                                 placeholder={"KSM Amount"}
-                                            /> :
-                                            <h2>{isLoadingContributed ?
+                                                onChange={calculatorKSMChange}
+                                            />
+                                        <h4 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h4>
+                                        <h3>{formatNumber(ksmAmountCal * ratioReward , 2, false)} PKS</h3>
+                                        <h3>{formatNumber(ksmAmountCal * 500,2 , false)} ePKF</h3>
+                                    </div> :
+
+                                    <div style={{marginTop: 50, textAlign: "left", display: "flex", flexWrap: "wrap"}}>
+                                        <div className={styles.detailInfo}>
+                                                <h3 style={{color: "#aeaeae"}}>Your KSM Balance</h3>
+                                                <h2>{isLoadingBalance ?
                                                     <img src={loading} width={25} height={25}/> :
+                                                    formatNumber(ksmBalance.total, 2 , false) } KSM</h2>
+                                                <h3 style={{color: "#aeaeae", marginTop: 20}}>Unlocked KSM Balance</h3>
+                                                <h2>{isLoadingBalance ?
+                                                    <img src={loading} width={25} height={25}/> :
+                                                    formatNumber(ksmBalance.unlocked, 2, false) } KSM</h2>
+                                        </div>
+                                        <div className={styles.detailInfo}>
+                                            <h3 style={{color: "#aeaeae"}}>KSM contributed</h3>
+                                            <h2>{isLoadingContributed ?
+                                                <img src={loading} width={25} height={25}/> :
                                                 formatNumber(contributed / ksmDecimals.toNumber(), 2, false)} KSM</h2>
-                                        }
-                                        <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h3>
-                                        <h2>{isLoadingContributed ?
+                                            <h3 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h3>
+                                            <h2>{isLoadingContributed ?
                                                 <img src={loading} width={25} height={25}/> :
                                                 formatNumber(contributed * ratioReward / ksmDecimals.toNumber(), 2, false)} PKS</h2>
-                                        <h2>{isLoadingContributed ?
+                                            <h2>{isLoadingContributed ?
                                                 <img src={loading} width={25} height={25}/> :
-                                            formatNumber(contributed * 500 / ksmDecimals.toNumber(),2 , false)} ePKF</h2>
-                                    </div>
+                                                formatNumber(contributed * 500 / ksmDecimals.toNumber(),2 , false)} ePKF</h2>
+                                        </div>
+
+                                    </div> }
+
                                 </div>
                             </div>
                         </div>
                         <Collapse isOpen={currentWallet !== null}>
                             <div className={styles.contributeContainer}>
-                                <div className={styles.contributeForm}>
-                                    <h1>Contribute Additional KSM</h1>
-                                    <div style={{display: "flex", margin: "20px 0"}}>
-                                        <div className={styles.additionalLabelContainer}
-                                             style={{width: "50%", paddingRight: 10}}>
-                                            <div className={styles.additionalLabel}>
-                                                <h3 style={{color: "#aeaeae"}}>Your KSM Balance</h3>
-                                                <h2>{ formatNumber(ksmBalance.total, 2 , false) } KSM</h2>
+                                {
+                                    successStatus ?
+                                    <div className={styles.contributeForm}>
+                                        <h1><img src={success} width={30} height={30}/> You have successfully contributed</h1>
+                                        <div className={styles.contributeInputGroup}>
+                                            <div className={styles.contributeInputLabel}>
+                                                <h4>KSM to Contribute</h4>
+                                            </div>
+                                            <div className={styles.contributeInput}>
+                                                <h2 style={{
+                                                    display: "inline-block",
+                                                    width: "100%",
+                                                    textAlign: "left"
+                                                }}>{formatNumber(ksmAmount, 2, false)} KSM</h2>
                                             </div>
                                         </div>
-                                        <div className={styles.additionalLabelContainer}
-                                             style={{width: "50%", paddingLeft: 10}}>
-                                            <div className={styles.additionalLabel}>
-                                                <h3 style={{color: "#aeaeae"}}>Unlocked KSM Balance</h3>
-                                                <h2>{ formatNumber(ksmBalance.unlocked, 2, false) } KSM</h2>
+                                        <div className={styles.contributeInputGroup}>
+                                            <div className={styles.contributeInputLabel}>
+                                                <h4>Estimated Reward (PKS)</h4>
+                                            </div>
+                                            <div className={styles.contributeInput}>
+                                                <h2 style={{
+                                                    display: "inline-block",
+                                                    width: "50%",
+                                                    textAlign: "left"
+                                                }}>{formatNumber(ksmReward, 2, false)} PKS</h2>
+                                                <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                    <h4>(1 KSM : {formatNumber(ratioReward, 0, false)} PKS)</h4></div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className={styles.contributeInputGroup}>
-                                        <div className={styles.contributeInputLabel}>
-                                            <h4>KSM to Contribute</h4>
+                                        <div className={styles.contributeInputGroup}>
+                                            <div className={styles.contributeInputLabel}>
+                                                <h4>Early Bird Grant</h4>
+                                            </div>
+                                            <div className={styles.contributeInput}>
+                                                <h2 style={{
+                                                    display: "inline-block",
+                                                    width: "50%",
+                                                    textAlign: "left"
+                                                }}>{ formatNumber(ksmReward * 0.1, 2, false) } PKS</h2>
+                                                <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                    <h4>(10%)</h4></div>
+                                            </div>
                                         </div>
-                                        <div className={styles.contributeInput}>
-                                            <input
-                                                className={styles.input}
-                                                name="KSM Amount"
-                                                type={"number"}
-                                                style={{borderColor: ksmAmount > ksmBalance.unlocked ? "red" : "#fff"}}
-                                                placeholder={"KSM Amount"}
-                                                autoComplete={"off"}
-                                                ref={amountKsmInput}
-                                                onChange={changeAmount}
-                                            />
-                                            <button className={styles.maxBtn} onClick={setMax}>
-                                                MAX
-                                            </button>
+                                        <div className={styles.contributeInputGroup}>
+                                            <div className={styles.contributeInputLabel}>
+                                                <h4>Red Kite Grant</h4>
+                                            </div>
+                                            <div className={styles.contributeInput}>
+                                                <h2 style={{
+                                                    display: "inline-block",
+                                                    width: "50%",
+                                                    textAlign: "left"
+                                                }}>{ formatNumber(ksmAmount * 500, 2, false) } ePKF</h2>
+                                                <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                    <h4>(1 KSM : 500 ePKF)</h4></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className={styles.errorMessage}>
-                                        {
-                                            ksmReward > 0 && ksmAmount < 0.1 ?
-                                                <span>the contribution amount can not be less than 0.1 KSM</span>
-                                                : <span >{ ksmReward > 0 && ksmAmount > ksmBalance.unlocked ?
-                                                    <span>the maximum contribution is no more than unlocked balance
+                                        <button className={styles.connectWallet} onClick={contributeMore}>CONTRIBUTE MORE <img src={arrowRightIcon} style={{marginLeft: 5}}/></button>
+                                        </div> :
+                                        <div className={styles.contributeForm}>
+                                            <h1>Contribute KSM</h1>
+                                            <div className={styles.contributeInputGroup}>
+                                                <div className={styles.contributeInputLabel}>
+                                                    <h4>KSM to Contribute</h4>
+                                                </div>
+                                                <div className={styles.contributeInput}>
+                                                    <input
+                                                        className={styles.input}
+                                                        name="KSM Amount"
+                                                        type={"number"}
+                                                        style={{borderColor: ksmAmount > ksmBalance.unlocked ? "red" : "#fff"}}
+                                                        placeholder={"KSM Amount"}
+                                                        autoComplete={"off"}
+                                                        ref={amountKsmInput}
+                                                        onChange={changeAmount}
+                                                    />
+                                                    <button className={styles.maxBtn} onClick={setMax}>
+                                                        MAX
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className={styles.errorMessage}>
+                                                {
+                                                    ksmReward > 0 && ksmAmount < 0.1 ?
+                                                        <span>the contribution amount can not be less than 0.1 KSM</span>
+                                                        : <span >{ ksmReward > 0 && ksmAmount > ksmBalance.unlocked ?
+                                                        <span>the maximum contribution is no more than unlocked balance
                                                     </span> : ""
-                                                }</span>
-                                        }
-                                        </div>
-                                    <div className={styles.contributeInputGroup}>
-                                        <div className={styles.contributeInputLabel}>
-                                            <h4>Estimated Reward</h4>
-                                        </div>
-                                        <div className={styles.contributeInput}>
-                                            <h2 style={{
-                                                display: "inline-block",
-                                                width: "50%",
-                                                textAlign: "left"
-                                            }}>{formatNumber(ksmReward, 2, false)} PKS</h2>
-                                            <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                                <h4>(1 KSM : {formatNumber(ratioReward, 0, false)} PKS)</h4></div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.contributeInputGroup}>
-                                        <div className={styles.contributeInputLabel}>
-                                            <h4>Early Bird Grant</h4>
-                                        </div>
-                                        <div className={styles.contributeInput}>
-                                            <h2 style={{
-                                                display: "inline-block",
-                                                width: "50%",
-                                                textAlign: "left"
-                                            }}>{ formatNumber(ksmReward * 0.1, 2, false) } PKS</h2>
-                                            <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                                <h4>(10%)</h4></div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.contributeInputGroup}>
-                                        <div className={styles.contributeInputLabel}>
-                                            <h4>Red Kite Grant</h4>
-                                        </div>
-                                        <div className={styles.contributeInput}>
-                                            <h2 style={{
-                                                display: "inline-block",
-                                                width: "50%",
-                                                textAlign: "left"
-                                            }}>{ formatNumber(ksmAmount * 500, 2, false) } ePKF</h2>
-                                            <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                                <h4>(1 KSM : 500 ePKF)</h4></div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.contributeInputGroup}>
-                                        <div className={styles.contributeInputLabel}>
-                                            <h4>Your ERC20 Wallet</h4>
-                                        </div>
-                                        <div className={styles.contributeInput}>
-                                            <input
-                                                className={styles.input}
-                                                name="ERC20 Wallet"
-                                                type={"text"}
-                                                placeholder={"Wallet to receive rewards"}
-                                                style={{borderColor: erc20Wallet.value && !erc20Wallet.isValid ? "red" : "#fff"}}
-                                                onChange={changeERC20}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={styles.policyConfirm}>
-                                        <input
-                                            name="approvePolicy"
-                                            type="checkbox"
-                                            style={{width: 50, height: 50}}
-                                            checked={agreePolicy}
-                                            onChange={agreePolicyChange}
-                                        />
-                                        <div style={{display: "inline-block", marginLeft: 20}}>
+                                                        }</span>
+                                                }
+                                            </div>
+                                            <div className={styles.contributeInputGroup}>
+                                                <div className={styles.contributeInputLabel}>
+                                                    <h4>Estimated Reward</h4>
+                                                </div>
+                                                <div className={styles.contributeInput}>
+                                                    <h2 style={{
+                                                        display: "inline-block",
+                                                        width: "50%",
+                                                        textAlign: "left"
+                                                    }}>{formatNumber(ksmReward, 2, false)} PKS</h2>
+                                                    <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                        <h4>(1 KSM : {formatNumber(ratioReward, 0, false)} PKS)</h4></div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.contributeInputGroup}>
+                                                <div className={styles.contributeInputLabel}>
+                                                    <h4>Early Bird Grant</h4>
+                                                </div>
+                                                <div className={styles.contributeInput}>
+                                                    <h2 style={{
+                                                        display: "inline-block",
+                                                        width: "50%",
+                                                        textAlign: "left"
+                                                    }}>{ formatNumber(ksmReward * 0.1, 2, false) } PKS</h2>
+                                                    <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                        <h4>(10%)</h4></div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.contributeInputGroup}>
+                                                <div className={styles.contributeInputLabel}>
+                                                    <h4>Red Kite Grant</h4>
+                                                </div>
+                                                <div className={styles.contributeInput}>
+                                                    <h2 style={{
+                                                        display: "inline-block",
+                                                        width: "50%",
+                                                        textAlign: "left"
+                                                    }}>{ formatNumber(ksmAmount * 500, 2, false) } ePKF</h2>
+                                                    <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
+                                                        <h4>(1 KSM : 500 ePKF)</h4></div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.contributeInputGroup}>
+                                                <div className={styles.contributeInputLabel}>
+                                                    <h4>Your ERC20 Wallet</h4>
+                                                </div>
+                                                <div className={styles.contributeInput}>
+                                                    <input
+                                                        className={styles.input}
+                                                        name="ERC20 Wallet"
+                                                        type={"text"}
+                                                        placeholder={"Wallet to receive rewards"}
+                                                        style={{borderColor: erc20Wallet.value && !erc20Wallet.isValid ? "red" : "#fff"}}
+                                                        onChange={changeERC20}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className={styles.policyConfirm}>
+                                                <input
+                                                    name="approvePolicy"
+                                                    type="checkbox"
+                                                    style={{width: 50, height: 50}}
+                                                    checked={agreePolicy}
+                                                    onChange={agreePolicyChange}
+                                                />
+                                                <div style={{display: "inline-block", marginLeft: 20}}>
                                         <span>I have read and accepted the <a href={"/#/polkasmith-privacy"} target={"_blank"} style={{color: "#6398FF"}}><b>Term and Conditions</b></a> as well as the Privacy Policy.
                                         I agree to receive email communications about PolkaSmith and PolkaFoundry, including exclusive launch updates and liquidity provider programs.</span>
-                                        </div>
+                                                </div>
 
-                                    </div>
-                                    <button className={styles.connectWallet} onClick={submitContribution}
-                                            disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > ksmBalance.unlocked || !agreePolicy}>
-                                        {!isSubmitting ? "Submit Contribution" :
-                                            <img src={loading} width={30} height={30}/>}
-                                    </button>
-                                    <div style={{width: "100%", textAlign: "left", lineHeight: 2}}>
-                                        {contributionHash ? <h4>Contribution Hash: <a target={"_blank"}
-                                                                                      href={"https://kusama.subscan.io/block/" + contributionHash}
-                                                                                      style={{color: "#6398FF"}}> {truncateAddress(contributionHash)} </a>
-                                        </h4> : ""}
-                                    </div>
-                                </div>
+                                            </div>
+                                            <button className={styles.connectWallet} onClick={submitContribution}
+                                                    disabled={isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > ksmBalance.unlocked || !agreePolicy}>
+                                                {!isSubmitting ? "Submit Contribution" :
+                                                    <img src={loading} width={30} height={30}/>}
+                                            </button>
+                                            <div style={{width: "100%", textAlign: "left", lineHeight: 2}}>
+                                                {contributionHash ? <h4>Contribution Hash: <a target={"_blank"}
+                                                                                              href={"https://kusama.subscan.io/block/" + contributionHash}
+                                                                                              style={{color: "#6398FF"}}> {truncateAddress(contributionHash)} </a>
+                                                </h4> : ""}
+                                            </div>
+                                        </div>
+                                }
+
                             </div>
                         </Collapse>
-                        <h3>📌 Note: If your KSM are bonded, you will need to unbond your KSM at least seven days before
-                            the crowdloan start date</h3>
+                        <h3>📌 100% Red Kite point and 35% of PKS  delivered immediately</h3>
+                        <h3>📌 65% PKS locked the first month and vested over 10 months</h3>
                     </div>
                     <div className={styles.additionalContainer}>
                         <h1>Contribute Additional KSM</h1>

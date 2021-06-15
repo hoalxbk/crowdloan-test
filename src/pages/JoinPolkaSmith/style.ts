@@ -309,6 +309,16 @@ const useStyles = makeStyles((theme: any) => {
       margin: "20px 0 40px 0",
       padding: "20px 0 40px 0"
     },
+    detailInfo: {
+      display: "inline-block",
+      width: isMobile ? "100%" : "50%",
+      "& h3" :{
+        fontSize: 16
+      },
+      "& h2" : {
+        fontSize: 22
+      }
+    },
     contributeForm: {
       maxWidth: 630,
       margin: "20px auto",

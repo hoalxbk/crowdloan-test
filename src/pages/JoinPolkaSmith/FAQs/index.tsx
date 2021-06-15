@@ -162,7 +162,7 @@ const FAQs = (props: any) => {
                 {
                     fqaList.map((value, index) => {
                         return (
-                            <div className={styles.questionItem}>
+                            <div className={styles.questionItem} key={index}>
                                 <div onClick={() => {
                                     selectQuestion(index +1)
                                 }} className={styles.questionTitle}>
@@ -174,7 +174,7 @@ const FAQs = (props: any) => {
                                 </div>
                                 <div className={styles.questionContent}>
                                     <Collapse isOpen={question === index + 1}>
-                                        <p>{value.content}</p></Collapse>
+                                        {value.content}</Collapse>
                                 </div>
                             </div>
                         )
