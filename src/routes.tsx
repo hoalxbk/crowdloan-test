@@ -20,6 +20,7 @@ import ConfirmEmail from './pages/ConfirmEmail';
 import AppContainer from "./AppContainer";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
+import PolkaSmithPrivacyPolicy from "./pages/PolkaSmithPrivacyPolicy";
 
 import InvestorRegister from "./pages/Register/InvestorRegister";
 import InvestorForgotPassword from "./pages/ForgotPassword/InvestorForgotPassword";
@@ -118,6 +119,7 @@ const Routes: React.FC<RouteComponentProps> = (props: RouteComponentProps) => {
             exact path="/"
             render={() => <Redirect to={`${'/home'}`} />}
           /> */}
+                    <Route path={`${'/polkasmith-privacy'}`} component={PolkaSmithPrivacyPolicy} />
                     <Route path={`${'/'}`} component={JoinPolkaSmith} />
                     {/*<Route exact path={`${'/dashboard'}`} component={Dashboard} />
                     <Route path={`${'/buy-token/:id'}`} component={BuyToken} />

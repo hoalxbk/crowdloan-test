@@ -407,7 +407,7 @@ const JoinPolkaSmith = (props: any) => {
                             <h3 style={{color: "#aeaeae"}}>Current Reward Rate</h3>
                             <p>{ isLoadingContributed ?
                                 <img src={loading} width={25} height={25}/> :
-                                <span><span style={{fontSize: 24}}>{ formatNumber(ratioReward, 0, false) } PKS </span><span> \ KMS</span></span>}
+                                <span><span style={{fontSize: 24}}>{ formatNumber(ratioReward, 0, false) } PKS </span><span> \ KSM</span></span>}
                             </p>
                         </div>
                         <div className={styles.label} style={{textAlign: "right"}}>
@@ -607,7 +607,7 @@ const JoinPolkaSmith = (props: any) => {
                                             onChange={agreePolicyChange}
                                         />
                                         <div style={{display: "inline-block", marginLeft: 20}}>
-                                        <span>I have read and accepted the <a href={"#"} style={{color: "#6398FF"}}><b>Term and Conditions</b></a> as well as the Privacy Policy.
+                                        <span>I have read and accepted the <a href={"/#/polkasmith-privacy"} target={"_blank"} style={{color: "#6398FF"}}><b>Term and Conditions</b></a> as well as the Privacy Policy.
                                         I agree to receive email communications about PolkaSmith and PolkaFoundry, including exclusive launch updates and liquidity provider programs.</span>
                                         </div>
 
