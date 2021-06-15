@@ -286,7 +286,11 @@ const useStyles = makeStyles((theme: any) => {
       color: "#D9DAF2",
       height: "fit-content",
       transition: "height 600ms ease-out",
-      margin: '15px 0'
+      marginBottom: '15px',
+      lineHeight: 1.5,
+      "& a" : {
+        color: "#4e5bf1"
+      }
     },
     navQuestion: {
       marginTop: 20,

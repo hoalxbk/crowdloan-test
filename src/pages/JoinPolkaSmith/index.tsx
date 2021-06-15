@@ -13,7 +13,7 @@ import LandingLayout from "../../components/Layout/LandingLayout";
 import BN from "bn.js";
 import {useDispatch} from "react-redux";
 import {alertFailure, alertSuccess} from "../../store/actions/alert";
-
+import FAQs from "./FAQs";
 const {u8aConcat, u8aToHex} = require('@polkadot/util');
 const {blake2AsU8a, encodeAddress, decodeAddress} = require('@polkadot/util-crypto');
 
@@ -21,8 +21,7 @@ const WAValidator = require('wallet-address-validator');
 const banner = 'images/polkasmith/banner.png';
 const headerImg = '/images/polkasmith/header_img.png';
 const arrowRightIcon = '/images/icons/arrow-right.svg';
-const iconUP = '/images/polkasmith/icon_up.png';
-const arrowUp = '/images/polkasmith/arrow_up.png';
+
 const polkaLogo = '/images/polkasmith/polka_logo.svg'
 const loading = '/images/polkasmith/Loading.gif'
 const provider = new WsProvider('wss://kusama.elara.patract.io');
@@ -40,7 +39,7 @@ const JoinPolkaSmith = (props: any) => {
     const amountKsmInput = useRef(null)
     const myRef = useRef(null)
     const dispatch = useDispatch();
-    const [question, setQuestion] = useState(0);
+
     const [countDays, setCountDays] = useState("00");
     const [countHours, setCountHours] = useState("00");
     const [countMinutes, setCountMinutes] = useState("00");
@@ -49,7 +48,6 @@ const JoinPolkaSmith = (props: any) => {
     const [isWalletLoading, setIsWalletLoading] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState({data: null});
     const [selectOptions, setSelectOptions] = useState([]);
-    const [showScrollTop, setShowScrollTop] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [ksmBalance, setKsmBalance] = useState({free: null, total: 0, unlocked: 0});
     const [isRejected, setIsRejected] = useState(false);
@@ -90,28 +88,10 @@ const JoinPolkaSmith = (props: any) => {
             setCountSeconds(offset % 60 >= 10 ? String(offset % 60) : "0" + offset % 60)
         }, 1000)
     }
-    const selectQuestion = (index: React.SetStateAction<number>) => {
-        if (index === question) {
-            setQuestion(0)
-        } else {
-            setQuestion(index)
-        }
-    }
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
-    }
+
     // @ts-ignore
     const executeScroll = () => myRef.current.scrollIntoView()
-    document.addEventListener("scroll", (e) => {
-        if (window.pageYOffset > 600) {
-            setShowScrollTop(true)
-        } else {
-            setShowScrollTop(false)
-        }
-    });
+
     const truncateAddress = (address: string) => {
         if (!address) {
             return null
@@ -312,12 +292,22 @@ const JoinPolkaSmith = (props: any) => {
                 total += val.data[0]
             }
         })
+
         setTotalKSM(totalK)
         setTotalUser(contributions.length)
         setRatioReward(Math.round(poolSize / (totalK / ksmDecimals.toNumber())))
         buffList = buffList.sort((a, b) => (a.total < b.total) ? 1 : -1)
+        let showList: any[] = []
+        buffList.map(val => {
+            if (val.total / ksmDecimals.toNumber() > 500) {
+                return
+            }
+            if (showList.length < 10) {
+                showList?.push(val)
+            }
+        })
         // @ts-ignore
-        setContributedList(buffList.slice(0, 10))
+        setContributedList(showList)
         setContributed(total)
         setIsLoadingContributed(false)
     }
@@ -760,179 +750,7 @@ const JoinPolkaSmith = (props: any) => {
                             </div>
                         </div>
                     </div>
-                    <div className={styles.askedQuestions}>
-                        <h1 style={{fontSize: 44}}>Frequently Asked Questions</h1>
-                        <div className={styles.questionList}>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(1)
-                                }} className={styles.questionTitle}>
-                                    <h3>When is the PolkaSmith (PolkaFoundry on Kusama) Crowdloan?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 1) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 1}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(2)
-                                }} className={styles.questionTitle}>
-                                    <h3>What does it mean to unbond my KSM, and how do I do it?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 2) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 2}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(3)
-                                }} className={styles.questionTitle}>
-                                    <h3>Do I have to unbond my KSM if they are on an exchange?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 3) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 3}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(4)
-                                }} className={styles.questionTitle}>
-                                    <h3>My friend filled out my referral code. Will we both get $PKF?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 4) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 4}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(5)
-                                }} className={styles.questionTitle}>
-                                    <h3>Can the pledged KSM be withdrawn at any time?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 5) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 5}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(6)
-                                }} className={styles.questionTitle}>
-                                    <h3>Will my KSM be returned after the parachain lease ends?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 6) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 6}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(7)
-                                }} className={styles.questionTitle}>
-                                    <h3>What if PolkaSmith doesn’t win the parachain auction - what happens to my
-                                        KSM?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 7) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 7}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                            <div className={styles.questionItem}>
-                                <div onClick={() => {
-                                    selectQuestion(8)
-                                }} className={styles.questionTitle}>
-                                    <h3>Where to trade my $PKF reward?</h3>
-                                    <div style={{display: "inline-block", textAlign: "right"}}>
-                                        <img className={styles.navQuestion} src={iconUP} width={15} height={8}
-                                             style={(question === 8) ? {transform: "rotate(180deg)"} : {}}/>
-                                    </div>
-                                </div>
-                                <div className={styles.questionContent}>
-                                    <Collapse isOpen={question === 8}>
-                                        <p>Not necessarily. You need to contact your exchange to find out how to
-                                            participate
-                                            directly on the exchange. In case it is not supported on your exchange, you
-                                            would need to unbound, transfer your KSM to polkadot-js extension wallet and
-                                            use
-                                            one of the aforementioned methods to participate.</p></Collapse>
-                                </div>
-                            </div>
-                        </div>
-                        <div onClick={() => {
-                            scrollToTop()
-                        }} className={styles.scrollTop}
-                             style={(showScrollTop) ? {display: "block"} : {display: "none"}}>
-                            <img width={32} height={32} src={arrowUp}/>
-                            <h3>Back to top</h3>
-                        </div>
-                    </div>
+                    <FAQs />
                 </div>
             </div>
         </LandingLayout>
