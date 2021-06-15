@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import {isMobile} from 'react-device-detect';
 
 const useStyles = makeStyles((theme: any) => {
   return {
@@ -120,6 +121,21 @@ const useStyles = makeStyles((theme: any) => {
         }
       },
     },
+    mainContent: {
+      '& h2': {
+        padding: '0 32px',
+        textAlign: 'center',
+        color: '#FFFFFF',
+        marginBottom: '8px',
+        minHeight: '64px'
+      },
+
+      '& p': {
+        padding: '0 12px',
+        textAlign: 'center',
+        color: 'rgba(255, 255, 255, 0.6)'
+      }
+    },
     cardContainer: {
       margin: '80px 0',
 
@@ -151,6 +167,54 @@ const useStyles = makeStyles((theme: any) => {
           gap: '25px',
         },
       },
+    },
+    projectMain: {
+      display: "flex",
+      flexWrap: "wrap",
+      width: "90%",
+      margin: '0 auto',
+      color: "white"
+    },
+    projectContainer: {
+      width: isMobile ? "100%" : "50%",
+      padding: "20px 20px",
+      display: "inline-block",
+      textAlign: "center",
+    },
+    projectDetail: {
+      borderRadius: 20,
+      padding: 40,
+      background: isMobile ? "linear-gradient(#1e225d, #030925)" : "#020618",
+      "& img": {
+        marginTop: 20
+      },
+      "& h1": {
+        fontSize: isMobile ? 20 : 24
+      },
+      "& h3": {
+        color: "#ffffff90",
+        fontSize: isMobile ? 14 : 16
+      },
+      lineHeight: 2
+    },
+    btn: {
+      height: '42px',
+      fontFamily: 'DM Sans',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      fontSize: '14px',
+      lineHeight: '18px',
+      color: '#FFFFFF',
+      border: 'none',
+      outline: 'none',
+      padding: '0 27px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '60px',
+      backgroundColor: '#d01f36',
+      margin: '40px auto 0',
+      cursor: 'pointer'
     },
   };
 });

@@ -49,14 +49,10 @@ const JoinPolkaSmith = (props: any) => {
     const [isWalletLoading, setIsWalletLoading] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState({data: null});
     const [selectOptions, setSelectOptions] = useState([]);
-    const [isConnected, setIsConnected] = useState(false);
     const [ksmBalance, setKsmBalance] = useState({free: null, total: 0, unlocked: 0});
-    const [isRejected, setIsRejected] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
     const [ksmAmount, setKsmAmount] = useState(0);
     const [ksmAmountCal, setKsmAmountCal] = useState(0);
     const [erc20Wallet, setErc20Wallet] = useState({value: "", isValid: false});
-    const [email, setEmail] = useState({value: "", isValid: false});
     const [agreePolicy, setAgreePolicy] = useState(false);
     const [ksmReward, setKsmReward] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -97,11 +93,11 @@ const JoinPolkaSmith = (props: any) => {
     // @ts-ignore
     const executeScroll = () => myRef.current.scrollIntoView()
 
-    const truncateAddress = (address: string) => {
+    const truncateAddress = (address: string, digit: number) => {
         if (!address) {
             return null
         }
-        return address.slice(0, 10) + "..." + address.slice(-10)
+        return address.slice(0, digit) + "..." + address.slice(-digit)
     }
     // @ts-ignore
     const formatOptionLabel = ({value, label}) => (
@@ -116,7 +112,7 @@ const JoinPolkaSmith = (props: any) => {
             <div style={{display: "inline-block", textAlign: "left", lineHeight: 1.2, margin: "auto 0px"}}>
                 <div style={{paddingLeft: 10, color: "#1d1d1d"}}>{label}</div>
                 <div style={{marginLeft: "10px", color: "#676767"}}>
-                    {truncateAddress(convertToKSM(value))}
+                    {truncateAddress(convertToKSM(value), 10)}
                 </div>
             </div>
         </div>
@@ -152,12 +148,12 @@ const JoinPolkaSmith = (props: any) => {
     const requestExtension = () => {
         web3Enable('PolkaSmith Auction').then((extensions: any) => {
             if (extensions.length === 0) {
-                setErrorMessage("Polkadot.js Extension is not installed!")
+                dispatch(alertFailure("Polkadot.js Extension is not installed!"))
                 return
             }
             web3Accounts().then((allAccounts) => {
                 if (allAccounts.length === 0) {
-                    setErrorMessage("KSM wallet list is empty. Please create or import your wallet!")
+                    dispatch(alertFailure("KSM wallet list is empty. Please create or import your wallet!"))
                     return
                 }
                 let options: { data: { address: any; }; }[] = []
@@ -176,8 +172,7 @@ const JoinPolkaSmith = (props: any) => {
             });
         }).catch(reject => {
             localStorage.setItem('IS_REJECTED', String(true))
-            setErrorMessage("You have denied access to Polkadot.js Extension. Please accept access to Polkadot.js Extension at \"Manage Website Access\" then reload this page.")
-            setIsRejected(true)
+            dispatch(alertFailure("You have denied access to Polkadot.js Extension. Please accept access to Polkadot.js Extension"))
         })
     }
     const changeAmount = (event: any) => {
@@ -348,7 +343,7 @@ const JoinPolkaSmith = (props: any) => {
             //this.listenBalanceChanged(this.state.currentWallet)
             web3Enable('Polkafoundry Crowdloan').then((extensions) => {
                 if (extensions.length === 0) {
-                    setErrorMessage('Polkadot.js Extension not installed or denied access. Please install or accept access to Polkadot.js Extension at "Manage Website Access" then reload this page.')
+                    dispatch(alertFailure('Polkadot.js Extension not installed or denied access. Please install or accept access to Polkadot.js Extension at "Manage Website Access" then reload this page.'))
                     return
                 }
                 web3Accounts().then((allAccounts) => {
@@ -590,6 +585,15 @@ const JoinPolkaSmith = (props: any) => {
                                                     <h4>(1 KSM : 500 ePKF)</h4></div>
                                             </div>
                                         </div>
+                                        <div className={styles.contributeInputGroup}>
+                                            <div className={styles.contributeInputLabel}>
+                                                <h4>Contribution Hash:</h4>
+                                            </div>
+                                            <div className={styles.contributeInput}>
+                                                <h3><a target={"_blank"} href={"https://kusama.subscan.io/block/" + contributionHash}
+                                                       style={{color: "#6398FF"}}> {truncateAddress(contributionHash, 13)} </a></h3>
+                                            </div>
+                                        </div>
                                         <button className={styles.connectWallet} onClick={contributeMore}>CONTRIBUTE MORE <img src={arrowRightIcon} style={{marginLeft: 5}}/></button>
                                         </div> :
                                         <div className={styles.contributeForm}>
@@ -700,12 +704,6 @@ const JoinPolkaSmith = (props: any) => {
                                                 {!isSubmitting ? "Submit Contribution" :
                                                     <img src={loading} width={30} height={30}/>}
                                             </button>
-                                            <div style={{width: "100%", textAlign: "left", lineHeight: 2}}>
-                                                {contributionHash ? <h4>Contribution Hash: <a target={"_blank"}
-                                                                                              href={"https://kusama.subscan.io/block/" + contributionHash}
-                                                                                              style={{color: "#6398FF"}}> {truncateAddress(contributionHash)} </a>
-                                                </h4> : ""}
-                                            </div>
                                         </div>
                                 }
 
