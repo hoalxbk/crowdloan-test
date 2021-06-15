@@ -173,7 +173,8 @@ const JoinPolkaSmith = (props: any) => {
                 // @ts-ignore
                 setSelectedAccount(options[0])
                 setCurrentWallet(options[0].data.address)
-                getBalance(currentWallet)
+                getBalance(options[0].data.address)
+                getContribution(options[0].data.address)
             });
         }).catch(reject => {
             localStorage.setItem('IS_REJECTED', String(true))
