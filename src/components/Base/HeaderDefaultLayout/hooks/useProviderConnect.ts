@@ -77,11 +77,11 @@ const useProviderConnect = (
         const chainId = Number(updated.chainId).toString();
 
         if (APP_NETWORKS_ID.indexOf(chainId.toString()) >= 0) {
-          // dispatch(
-          //   settingAppNetwork(
-          //   NetworkUpdateType.App,
-          //   APP_NETWORKS_ID[APP_NETWORKS_ID.indexOf(chainId.toString())] as string
-          // ));
+          dispatch(
+            settingAppNetwork(
+            NetworkUpdateType.App,
+            APP_NETWORKS_ID[APP_NETWORKS_ID.indexOf(chainId.toString())] as string
+          ));
         }
 
         chainId && dispatch(settingAppNetwork(NetworkUpdateType.Wallet, chainId.toString()))

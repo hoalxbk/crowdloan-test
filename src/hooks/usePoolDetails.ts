@@ -49,6 +49,7 @@ export type PoolDetails = {
   priceUsdt: string;
   isPrivate: string;
   campaignClaimConfig: any;
+  whitelistCountry: any;
 }
 
 export type PoolDetailsReturnType ={
@@ -143,6 +144,7 @@ const usePoolDetails = (poolId : number): PoolDetailsReturnType => {
         campaignClaimConfig,
         whitelistBannerSetting: data.whitelistBannerSetting,
         isPrivate: data.is_private,
+        whitelistCountry: data.whitelist_country
       }
     }
 

@@ -29,7 +29,7 @@ const CountDown = (props: any) => {
         }, 1000)
     }
     useEffect(() => {
-        let endDate = new Date("2021-06-19T23:59:59Z")
+        let endDate = new Date("2021-06-18T23:59:59Z")
         countDown(endDate)
     }, [])
     return (

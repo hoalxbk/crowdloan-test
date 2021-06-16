@@ -41,6 +41,7 @@ import PoolInfoTable from "./PoolInfoTable/PoolInfoTable";
 import WhiteListUserGuideBanner from "./WhiteListUserGuideBanner/WhiteListUserGuideBanner";
 import {getEtherscanName, getEtherscanTransactionAddress} from "../../utils/network";
 import PoolIsEndMessage from "./PoolIsEndMessage/PoolIsEndMessage";
+import WhitelistCountryModal from "./ApplyWhitelistModal/WhitelistCountryModal";
 
 const copyImage = "/images/copy.svg";
 const poolImage = "/images/pool_circle.svg";
@@ -80,7 +81,7 @@ const BuyToken: React.FC<any> = (props: any) => {
       poolDetails?.networkAvailable,
       poolDetails,
   );
-  const { joinPool, poolJoinLoading, joinPoolSuccess } = usePoolJoinAction({ poolId: poolDetails?.id });
+  const { joinPool, poolJoinLoading, joinPoolSuccess } = usePoolJoinAction({ poolId: poolDetails?.id, poolDetails });
   const { data: existedWinner } = useFetch<Array<any>>(
     poolDetails ? `/pool/${poolDetails?.id}/check-exist-winner?wallet_address=${connectedAccount}`: undefined,
     poolDetails?.method !== "whitelist"
@@ -236,6 +237,9 @@ const BuyToken: React.FC<any> = (props: any) => {
       dispatch(pushMessage(''));
     }
   }, [appChainID, poolDetails])
+
+
+  const [showWhitelistCountryModal, setShowWhitelistCountryModal] = useState(false);
 
   const render = () => {
     if (loadingPoolDetail)  {
@@ -425,18 +429,52 @@ const BuyToken: React.FC<any> = (props: any) => {
                     <div className={styles.btnGroup}>
                       {
                         (availableJoin && !alreadyJoinPool && !joinPoolSuccess && !disableAllButton) &&
-                        <Button
-                          text={(!alreadyJoinPool && !joinPoolSuccess) ? 'Apply Whitelist': 'Applied Whitelist '}
-                          // text={(!joinPoolSuccess) ? 'Apply Whitelist': 'Applied Whitelist '}
-                          backgroundColor={'#D01F36'}
-                          // disabled={!availableJoin || alreadyJoinPool || joinPoolSuccess || disableAllButton}
-                          loading={poolJoinLoading}
-                          onClick={joinPool}
-                          style={{
-                            minWidth: 125,
-                            padding: '0 20px',
-                          }}
-                        />
+                        <>
+
+                          {showWhitelistCountryModal &&
+                            <WhitelistCountryModal
+                              handleOk={() => {
+                                joinPool();
+                                setShowWhitelistCountryModal(false);
+                              }}
+                              handleCancel={() => {
+                                setShowWhitelistCountryModal(false);
+                              }}
+                              textWhitelist={poolDetails?.whitelistCountry}
+                            />
+                          }
+
+                          {poolDetails?.whitelistCountry &&
+                            <Button
+                              text={(!alreadyJoinPool && !joinPoolSuccess) ? 'Apply Whitelist': 'Applied Whitelist '}
+                              backgroundColor={'#D01F36'}
+                              loading={poolJoinLoading}
+                              onClick={() => {
+                                setShowWhitelistCountryModal(true);
+                              }}
+                              style={{
+                                minWidth: 125,
+                                padding: '0 20px',
+                              }}
+                            />
+                          }
+
+                          {!poolDetails?.whitelistCountry &&
+                            <Button
+                              text={(!alreadyJoinPool && !joinPoolSuccess) ? 'Apply Whitelist': 'Applied Whitelist '}
+                              // text={(!joinPoolSuccess) ? 'Apply Whitelist': 'Applied Whitelist '}
+                              backgroundColor={'#D01F36'}
+                              // disabled={!availableJoin || alreadyJoinPool || joinPoolSuccess || disableAllButton}
+                              loading={poolJoinLoading}
+                              onClick={joinPool}
+                              style={{
+                                minWidth: 125,
+                                padding: '0 20px',
+                              }}
+                            />
+                          }
+
+                        </>
                       }
 
                       <Button

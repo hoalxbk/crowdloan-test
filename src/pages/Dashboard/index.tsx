@@ -9,6 +9,7 @@ import {BUY_TYPE, POOL_TYPE} from '../../constants';
 import {convertFromWei, getPoolContract} from '../../services/web3';
 import {getPoolStatusByPoolDetail} from "../../utils/getPoolStatusByPoolDetail";
 import {PoolStatus} from "../../utils/getPoolStatus";
+import BigNumber from 'bignumber.js';
 
 const arrowRightIcon = '/images/icons/arrow-right.svg';
 const background = '/images/icons/background2.svg';
@@ -71,7 +72,33 @@ const Dashboard = (props: any) => {
     //   console.log('Status Pool:', status);
     //   pool.status = status;
     // });
-    setUpcomingPools(pools.filter((pool: any) => pool?.status != PoolStatus.Claimable && pool?.status != PoolStatus.Closed && pool?.is_display == 1))
+
+    let bunniPool = null;
+    let bunniIndex = 0;
+    let upCommingPools = pools.filter((pool: any) => pool?.status != PoolStatus.Claimable && pool?.status != PoolStatus.Closed && pool?.is_display == 1)
+      .sort((poolA: any, poolB: any) => {
+        return ((poolA?.start_join_pool_time - poolB?.start_join_pool_time < 0) || (poolA.id - poolB.id < 0))
+          ? 1 : -1;
+      });
+
+    for (let i = 0; i < upCommingPools.length; i++) {
+      // @ts-ignore
+      if (upCommingPools[i]?.id == 28) {
+        bunniPool = upCommingPools[i];
+        bunniIndex = i;
+        break;
+      }
+    }
+
+    if (bunniPool) {
+      const poolA = upCommingPools[1];
+      upCommingPools[1] = bunniPool;
+      upCommingPools[bunniIndex] = poolA;
+    }
+
+    setUpcomingPools(
+      upCommingPools
+    );
     setFeaturePools(pools.filter((pool: any) => (pool?.status == PoolStatus.Claimable || pool?.status == PoolStatus.Closed) && pool?.is_display == 1))
   };
 

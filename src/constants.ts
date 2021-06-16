@@ -77,6 +77,14 @@ export const CONVERSION_RATE = [
     key: 'sPKF',
     keyMainnet: 'sPKF'
   },
+  {
+    name: 'ePKF',
+    rate: 1,
+    symbol: 'ePKF',
+    address: '',
+    key: 'ePKF',
+    keyMainnet: 'ePKF'
+  },
   // {
   //   name: 'NFT',
   //   rate: 100

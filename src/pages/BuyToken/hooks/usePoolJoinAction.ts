@@ -9,9 +9,10 @@ import useWalletSignature from '../../../hooks/useWalletSignature';
 type PoolDepositActionParams = {
   poolId?: number;
   connectedAccount?: string;
+  poolDetails?: any
 }
 
-const usePoolJoinAction = ({ poolId }: PoolDepositActionParams) => {
+const usePoolJoinAction = ({ poolId, poolDetails }: PoolDepositActionParams) => {
   const dispatch = useDispatch();
   const { account, library } = useWeb3React();
   const [joinPoolSuccess, setJoinPoolSuccess] = useState<boolean>(false);

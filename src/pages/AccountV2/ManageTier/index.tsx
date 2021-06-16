@@ -115,7 +115,8 @@ const ManageTier = (props: any) => {
           <div className={styles.tableBody}>
             {renderToken('PKF', balance?.pkf, userInfo?.pkfStaked)}
             {renderToken(CONVERSION_RATE[0]?.symbol, balance?.uni, userInfo?.uniStaked)}
-            {renderToken(CONVERSION_RATE[1]?.symbol, balance?.mantra, userInfo?.mantraStaked)}
+            {/*{renderToken(CONVERSION_RATE[1]?.symbol, balance?.mantra, userInfo?.mantraStaked)}*/}
+            {renderToken(CONVERSION_RATE[2]?.symbol, balance?.ePkf, userInfo?.mantraStaked)}
           </div>
         </div>
         <div className="button-area">

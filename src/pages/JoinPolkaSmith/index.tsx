@@ -9,7 +9,7 @@ import {ApiPromise, WsProvider} from '@polkadot/api';
 import Select from "react-select";
 import {web3Accounts, web3Enable, web3FromSource} from '@polkadot/extension-dapp';
 import Identicon from '@polkadot/react-identicon';
-import LandingLayout from "../../components/Layout/LandingLayout";
+import DefaultLayout from "../../components/Layout/DefaultLayout";
 import BN from "bn.js";
 import {useDispatch} from "react-redux";
 import {alertFailure, alertSuccess} from "../../store/actions/alert";
@@ -349,7 +349,7 @@ const JoinPolkaSmith = (props: any) => {
     }, [])
     // @ts-ignore
     return (
-        <LandingLayout>
+        <DefaultLayout>
             <div className={styles.polkaSmithMain}>
                 <div className={styles.polkaSmithContainer}>
                     <div className={styles.headerContainer}>
@@ -685,7 +685,7 @@ const JoinPolkaSmith = (props: any) => {
                     <FAQs/>
                 </div>
             </div>
-        </LandingLayout>
+        </DefaultLayout>
     );
 };
 
