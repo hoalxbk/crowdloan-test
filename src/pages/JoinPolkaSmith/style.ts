@@ -87,33 +87,12 @@ const useStyles = makeStyles((theme: any) => {
       flexWrap: "wrap",
 
     },
-    introCounting: {
-      marginTop: 50,
-      marginBottom: 50,
-      display: "flex",
-      justifyContent: "center",
-      "& h1" :{
-        fontSize: isMobile ? "28px !important" : "36px",
-      },
-      "& span" :{
-        fontSize: isMobile ? "14px !important" : "16px",
-      }
-    },
     introBlock: {
       display: "inline-block",
       width: isMobile ? "100%" : "50%",
       alignContent: "center",
       textAlign: "center",
       lineHeight: 2
-    },
-    timeContainer: {
-      borderRadius: 10,
-      width: isMobile ? 45 : 70,
-      height: isMobile ? 45 : 70,
-      lineHeight: isMobile ? 1.5 : 2,
-      backgroundColor: "#ffffff16",
-      textAlign: "center",
-
     },
     introContribute: {
       borderWidth: 3,
@@ -234,47 +213,6 @@ const useStyles = makeStyles((theme: any) => {
         lineHeight: 2,
         fontSize: 44
       }
-    },
-    auctionPlanContainer: {
-      marginTop: 30,
-      display: "flex",
-      flexWrap: "wrap",
-    },
-    auctionPlanDetail: {
-      display: "inline-block",
-      background: "linear-gradient(#481845, #080C33)",
-      width: isMobile ? "100%" : "33.333%",
-      padding: isMobile ? "50px 10px" : '50px 20px'
-    },
-    auctionPlanDetail1: {
-      display: "inline-block",
-      background: "linear-gradient(#E6447D90, #080C3380)",
-      width: isMobile ? "100%" : "33.333%",
-      textAlign: "center",
-      padding: isMobile ? "50px 10px" : '50px 20px'
-    },
-    auctionKeyword: {
-      height: '32px',
-      width: 180,
-      fontFamily: 'DM Sans',
-      fontStyle: 'normal',
-      fontWeight: 'bold',
-      fontSize: 16,
-      lineHeight: '18px',
-      color: '#FFFFFF',
-      border: 'none',
-      outline: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: '60px',
-      backgroundColor: '#DA366E',
-      margin: '10px auto 0',
-    },
-    auctionDes: {
-      color: "#D9DAF2",
-      marginTop: 20,
-      lineHeight: 1.5
     },
     askedQuestions : {
       textAlign: "center",

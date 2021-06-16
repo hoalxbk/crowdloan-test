@@ -190,6 +190,6 @@ const FAQs = (props: any) => {
             </div>
         </div>
     );
-};
+}
 // @ts-ignore
 export default FAQs;
