@@ -302,7 +302,7 @@ const JoinPolkaSmith = (props: any) => {
         buffList = buffList.sort((a, b) => (a.total < b.total) ? 1 : -1)
         let showList: any[] = []
         buffList.map(val => {
-            if (val.total / ksmDecimals.toNumber() > 500) {
+            if (val.total / ksmDecimals.toNumber() > 400) {
                 return
             }
             if (showList.length < 10) {
