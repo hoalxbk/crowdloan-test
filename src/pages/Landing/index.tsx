@@ -124,7 +124,7 @@ const Dashboard = (props: any) => {
                       </a>
                     </Fade>
                     <Fade bottom delay={500}>
-                      <a href="/#/join-polkasmith"><img width={"75%"} src={contributeBg}/></a>
+                      <div style={{padding: 50}}><a href="/#/join-polkasmith"><img width={"90%"} src={contributeBg}/></a></div>
                     </Fade>
                   </div>
                 </Fade>
