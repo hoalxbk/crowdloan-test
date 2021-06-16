@@ -98,7 +98,7 @@ const fqaList = [
     },
     {
         title: "If we staked other platform (not Red Kite), can I get the same rewards? ",
-        content: <p>You can obtain the same PKS rewards no matter what platform you use to contribute. But you need to use the Polkadot.js Browser Extension if you want to claim the Red Kite’s ePKF rewards.</p>
+        content: <p>You can obtain the same PKS rewards no matter what platform you use to contribute. But you need to use the Polkadot.js Browser Extension if you want to claim the Red Kite’s Point rewards.</p>
     },
     {
         title: "Is it better to join crowdloan on Red kite or better to do it now on the other platforms?",
@@ -122,8 +122,8 @@ const fqaList = [
             Winning KSM parachain will validate our technology and thus bring trust and value to PolkaFoundry. Therefore, it will benefit PKF token holders.</p>
     },
     {
-        title: "What is ePKF or Red Kite points?",
-        content: <p>"ePKF or Red kite point is not token, it is just a special point on our launchpad, Red Kite.<br/><br/>
+        title: "What is Red Kite Point?",
+        content: <p>"Red Kite Point or Red kite point is not token, it is just a special point on our launchpad, Red Kite.<br/><br/>
             Each Red Kite point is equivalent to 1 PKF staked on Red Kite. Even if you don’t stake any PKF on Red Kite, you can get the same tier benefits.<br/><br/>
             Not: Red Kite points is only meaningful in red kite, it no longer exists when KSM unlock.</p>
     },

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import useStyles from './style';
 import {formatNumber} from "../index";
 
-const banner = 'images/polkasmith/banner.png';
+const banner = 'images/polkasmith/BannerLanding.png';
 
 
 const AuctionPlan = (props: any) => {
@@ -32,14 +32,14 @@ const AuctionPlan = (props: any) => {
                 </div>
                 <div className={styles.auctionPlanDetail} style={{borderTopRightRadius: 10}}>
                     <p><span
-                        style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>500 ePKF</span><span>/ 1 KSM</span>
+                        style={{display: "inline-block", fontSize: 44, lineHeight: 2, fontWeight: "bold"}}>500 </span><span> Red Kite Point/1 KSM</span>
                     </p>
                     <div className={styles.auctionKeyword}>Whether Win or Lose</div>
-                    <p className={styles.auctionDes}>ePKF is the “equivalent PKF” token on our launchpad,
+                    <p className={styles.auctionDes}>Red Kite Point is the “equivalent PKF” token on our launchpad,
                         Red
                         Kite, which means even if you don't stake any PKF on Red Kite, you can get the same
                         tier
-                        benefits when owning a corresponding amount of ePKF. For example, owning 500 ePKFs
+                        benefits when owning a corresponding amount of Red Kite Point. For example, owning 500 Red Kite Points
                         gives
                         you all the Dove tier benefits (including joining IDOs) without staking 500 PKFs.
                     </p>
@@ -77,7 +77,7 @@ const AuctionPlan = (props: any) => {
                     }}>Rewards<br/>Distribution</span></p>
                     <p className={styles.auctionDes}>As soon as contributors join the PolkaSmith crowdloan,
                         100%
-                        ePKF rewards will be delivered immediately. After PolkaSmith wins a parachain slot,
+                        Red Kite Point rewards will be delivered immediately. After PolkaSmith wins a parachain slot,
                         35%
                         of the PKS tokens in the reward pool will go to the contributors' wallet addresses.
                         The

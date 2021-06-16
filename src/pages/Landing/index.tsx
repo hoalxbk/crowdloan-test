@@ -8,6 +8,7 @@ import withWidth, {isWidthDown, isWidthUp} from '@material-ui/core/withWidth';
 //@ts-ignore
 import {Fade, LightSpeed} from 'react-reveal';
 import ModalContent from './ModalContent';
+import BannerLanding from "../JoinPolkaSmith/BannerLanding";
 
 const cardImage = '/images/icons/card-image.jpg';
 const arrowRightIcon = '/images/icons/arrow-right.svg';
@@ -62,6 +63,7 @@ const Dashboard = (props: any) => {
 
   return (
       <LandingLayout>
+        <BannerLanding />
         <div className={styles.container + ' ' + styles.animation} style={{height: '600px'}}>
           {isWidthUp('sm', props.width) && <img src={landingBackground} alt=""/>}
           {isWidthDown('xs', props.width) && <img src={landingBackgroundXs} alt=""/>}

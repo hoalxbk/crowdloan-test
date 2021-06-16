@@ -443,7 +443,7 @@ const JoinPolkaSmith = (props: any) => {
                                             />
                                             <h4 style={{marginTop: 20, color: "#aeaeae"}}>Estimated Rewards</h4>
                                             <h3>{formatNumber(ksmAmountCal * ratioReward, 2, false)} PKS</h3>
-                                            <h3>{formatNumber(ksmAmountCal * 500, 2, false)} ePKF</h3>
+                                            <h3>{formatNumber(ksmAmountCal * 500, 2, false)} Red Kite Point</h3>
                                         </div> :
 
                                         <div style={{
@@ -473,7 +473,7 @@ const JoinPolkaSmith = (props: any) => {
                                                     formatNumber(contributed * ratioReward / ksmDecimals.toNumber(), 2, false)} PKS</h2>
                                                 <h2>{isLoadingContributed ?
                                                     <img src={loading} width={25} height={25}/> :
-                                                    formatNumber(contributed * 500 / ksmDecimals.toNumber(), 2, false)} ePKF</h2>
+                                                    formatNumber(contributed * 500 / ksmDecimals.toNumber(), 2, false)} RK Point</h2>
                                             </div>
 
                                         </div>}
@@ -566,16 +566,16 @@ const JoinPolkaSmith = (props: any) => {
                                 </div>
                                 <div className={styles.contributeInputGroup}>
                                     <div className={styles.contributeInputLabel}>
-                                        <h4>Red Kite Grant</h4>
+                                        <h4>Red Kite Point Grant</h4>
                                     </div>
                                     <div className={styles.contributeInput}>
                                         <h2 style={{
                                             display: "inline-block",
                                             width: "50%",
                                             textAlign: "left"
-                                        }}>{formatNumber(ksmAmount * 500, 2, false)} ePKF</h2>
+                                        }}>{formatNumber(ksmAmount * 500, 2, false)} Point</h2>
                                         <div style={{display: "inline-block", width: "50%", textAlign: "right"}}>
-                                            <h4>(1 KSM : 500 ePKF)</h4></div>
+                                            <h4>(1 KSM : 500 Point)</h4></div>
                                     </div>
                                 </div>
                                 <div className={styles.contributeInputGroup}>

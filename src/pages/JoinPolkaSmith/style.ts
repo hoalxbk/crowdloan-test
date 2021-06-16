@@ -336,7 +336,8 @@ const useStyles = makeStyles((theme: any) => {
       position: "absolute",
       top: 15,
       right: 5,
-      zIndex: 9999
+      zIndex: 9999,
+      margin: "auto"
     }
   };
 });
