@@ -9,11 +9,12 @@ const useStyles = makeStyles((theme: any) => {
       height: "auto",
       paddingTop: 20,
       fontSize: 16,
+      padding: isMobile ? 20 : 0
     },
     polkaSmithContainer: {
       maxWidth: 1280,
       alignItems: "center",
-      padding: isMobile ? 20 : 60,
+      padding: isMobile ? 0 : 60,
       fontFamily: 'DM Sans',
       margin: "auto",
       color: "white",
@@ -32,7 +33,11 @@ const useStyles = makeStyles((theme: any) => {
       paddingLeft: 50
     },
     headerText1: {
-      fontSize: 48,
+      fontSize: isMobile ? 36 : 48,
+      "& img": {
+        width: isMobile ? 32 : 40,
+        height: isMobile ? 32 : 40
+      }
     },
     headerContent :{
       marginTop: 20,
@@ -71,18 +76,24 @@ const useStyles = makeStyles((theme: any) => {
       width: "100%",
       borderRadius: 10,
       textAlign: "center",
-      padding: 20,
+      padding: isMobile ? 10 : 20,
     },
     introContainer: {
       display: "flex",
       width: "100%",
-      flexWrap: "wrap"
+      flexWrap: "wrap",
     },
     introCounting: {
       marginTop: 50,
       marginBottom: 50,
       display: "flex",
-      justifyContent: "center"
+      justifyContent: "center",
+      "& h1" :{
+        fontSize: isMobile ? "28px !important" : "36px",
+      },
+      "& span" :{
+        fontSize: isMobile ? "14px !important" : "16px",
+      }
     },
     introBlock: {
       display: "inline-block",
@@ -93,15 +104,16 @@ const useStyles = makeStyles((theme: any) => {
     },
     timeContainer: {
       borderRadius: 10,
-      width: isMobile ? 55 : 70,
-      height: isMobile ? 55 : 70,
+      width: isMobile ? 45 : 70,
+      height: isMobile ? 45 : 70,
       lineHeight: isMobile ? 1.5 : 2,
       backgroundColor: "#ffffff16",
       textAlign: "center",
+
     },
     introContribute: {
       borderWidth: 3,
-      padding: isMobile ? 20 : 30,
+      padding: isMobile ? 10 : 30,
       margin: isMobile ? 0 : 30,
       borderStyle: "solid",
       borderRadius: 5,
@@ -157,7 +169,8 @@ const useStyles = makeStyles((theme: any) => {
     },
     additionalContainer: {
       textAlign: "center",
-      padding: isMobile ? 10 : 100,
+      marginTop: isMobile ? 50 : 100,
+      padding: isMobile ? 0 : 100,
       lineHeight: 1.8
     },
     additionalInfo: {
@@ -199,12 +212,12 @@ const useStyles = makeStyles((theme: any) => {
       "& h3": {
         display: "inline-block",
         width: "70%",
-        fontSize: 16,
+        fontSize: isMobile ? 14: 16,
         margin: "auto",
         fontWeight: 500,
       },
       "& h2": {
-        fontSize: 18,
+        fontSize: isMobile ? 14: 18,
         display: "inline-block",
         width: "30%",
         margin: "auto",
@@ -227,14 +240,14 @@ const useStyles = makeStyles((theme: any) => {
       display: "inline-block",
       background: "linear-gradient(#481845, #080C33)",
       width: isMobile ? "100%" : "33.333%",
-      padding: '50px 20px'
+      padding: isMobile ? "50px 10px" : '50px 20px'
     },
     auctionPlanDetail1: {
       display: "inline-block",
       background: "linear-gradient(#E6447D90, #080C3380)",
       width: isMobile ? "100%" : "33.333%",
       textAlign: "center",
-      padding: '50px 20px'
+      padding: isMobile ? "50px 10px" : '50px 20px'
     },
     auctionKeyword: {
       height: '32px',
@@ -322,6 +335,15 @@ const useStyles = makeStyles((theme: any) => {
     contributeForm: {
       maxWidth: 630,
       margin: "20px auto",
+      "& h1" :{
+        fontSize: isMobile ? "28px !important" : "36px",
+      },
+      "& h2" :{
+        fontSize: isMobile ? "22px !important" : "24px",
+      },
+      "& h4" :{
+        fontSize: isMobile ? "14px !important" : "16px",
+      }
     },
     contributeInputGroup: {
       display: "flex",

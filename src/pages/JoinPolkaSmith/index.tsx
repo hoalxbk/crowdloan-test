@@ -14,6 +14,8 @@ import BN from "bn.js";
 import {useDispatch} from "react-redux";
 import {alertFailure, alertSuccess} from "../../store/actions/alert";
 import FAQs from "./FAQs";
+import {isMobile} from 'react-device-detect';
+
 const {u8aConcat, u8aToHex} = require('@polkadot/util');
 const {blake2AsU8a, encodeAddress, decodeAddress} = require('@polkadot/util-crypto');
 
@@ -53,6 +55,7 @@ const JoinPolkaSmith = (props: any) => {
     const [ksmAmount, setKsmAmount] = useState(0);
     const [ksmAmountCal, setKsmAmountCal] = useState(0);
     const [erc20Wallet, setErc20Wallet] = useState({value: "", isValid: false});
+    const [oldWallet, setOldWallet] = useState("");
     const [agreePolicy, setAgreePolicy] = useState(false);
     const [ksmReward, setKsmReward] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -91,7 +94,7 @@ const JoinPolkaSmith = (props: any) => {
     }
 
     // @ts-ignore
-    const executeScroll = () => myRef.current.scrollIntoView()
+    const executeScroll = () => myRef.current.scrollIntoView({behavior: "smooth"})
 
     const truncateAddress = (address: string, digit: number) => {
         if (!address) {
@@ -177,18 +180,17 @@ const JoinPolkaSmith = (props: any) => {
     }
     const changeAmount = (event: any) => {
         let value = event.target.value
-        if (!value) {
+        if (!event.target.value) {
             value = 0
         }
         if (parseFloat(value) < 0) {
             // @ts-ignore
             event.target.value = 0
-            value = 0
+            value = event.target.value
         }
-        event.target.value = Math.floor(parseFloat(value) * 100) / 100
-        setKsmAmount(parseFloat(event.target.value))
+        setKsmAmount(parseFloat(value))
         // @ts-ignore
-        setKsmReward((event.target.value * ratioReward))
+        setKsmReward((value * ratioReward))
     }
     const changeERC20 = (event: any) => {
         if (WAValidator.validate(event.target.value, 'ETH')) {
@@ -212,11 +214,16 @@ const JoinPolkaSmith = (props: any) => {
 
         const api = await ApiPromise.create({provider})
         const crowdloanEntrinsic = api.tx.crowdloan.contribute(parachanID, val.toString(), null)
-        const memoEntrinsic = api.tx.crowdloan.addMemo(parachanID, erc20Wallet.value)
+
         // @ts-ignore
         const injector = await web3FromSource(selectedAccount.data.meta.source);
         // @ts-ignore
-        const txs = [crowdloanEntrinsic, memoEntrinsic]
+        const txs = [crowdloanEntrinsic]
+
+        if (oldWallet.toLowerCase() !== erc20Wallet.value.toLocaleLowerCase()) {
+            const memoEntrinsic = api.tx.crowdloan.addMemo(parachanID, erc20Wallet.value)
+            txs.push(memoEntrinsic)
+        }
         // @ts-ignore
         api.tx.utility.batchAll(txs).signAndSend(currentWallet, {signer: injector.signer}, ({status}) => {
             if (status.isInBlock) {
@@ -278,22 +285,13 @@ const JoinPolkaSmith = (props: any) => {
         let buffList: any[] = []
         const addr = convertToKSM(address)
         contributions.map(val => {
-            let ex = false
             totalK += val.data[0]
-            const check = whiteListContribute.find(item => item.includes(val.from))
-            if (check) {
-                return
-            }
-            buffList.map((ele, index) => {
-                if (val.from === ele.from) {
-                    ex = true
-                    buffList[index].total += val.data[0]
-                }
-            })
-            if (!ex) {
-                buffList.push({from: val.from, total: val.data[0]})
-            }
+            buffList.push({from: val.from, total: val.data[0]})
             if (currentWallet && addr === val.from) {
+                if (WAValidator.validate(val.data[1], 'ETH')) {
+                    setErc20Wallet({value: val.data[1], isValid: true})
+                    setOldWallet(val.data[1])
+                }
                 total += val.data[0]
             }
         })
@@ -343,7 +341,7 @@ const JoinPolkaSmith = (props: any) => {
             //this.listenBalanceChanged(this.state.currentWallet)
             web3Enable('Polkafoundry Crowdloan').then((extensions) => {
                 if (extensions.length === 0) {
-                    dispatch(alertFailure('Polkadot.js Extension not installed or denied access. Please install or accept access to Polkadot.js Extension at "Manage Website Access" then reload this page.'))
+                    dispatch(alertFailure('Polkadot.js Extension not installed or denied access.'))
                     return
                 }
                 web3Accounts().then((allAccounts) => {
@@ -383,7 +381,7 @@ const JoinPolkaSmith = (props: any) => {
                     <div className={styles.headerContainer}>
                         <div className={styles.headerText}>
                             <p><span className={styles.headerText1}>
-                              <b>Join <img width={40} height={40} src={polkaLogo}/> Polka</b>Smith<b> on Kusama Parachain Auction</b>
+                                <b>Join</b> <span style={{display: isMobile ? "block" : "inline"}}> <img src={polkaLogo}/><b> Polka</b>Smith</span><b> on Kusama Parachain Auction</b>
                             </span></p>
                             <p className={styles.headerContent}>
                                 PolkaSmith is the canary network of PolkaFoundry on Kusama.  It is more suitable for early-stage startups that need to grow quickly and easily experiment with bold new ideas. Once Kusama is bridged to Polkadot, PolkaSmith and PolkaFoundry will also be fully interoperable.
@@ -679,6 +677,7 @@ const JoinPolkaSmith = (props: any) => {
                                                         className={styles.input}
                                                         name="ERC20 Wallet"
                                                         type={"text"}
+                                                        value={erc20Wallet.value}
                                                         placeholder={"Wallet to receive rewards"}
                                                         style={{borderColor: erc20Wallet.value && !erc20Wallet.isValid ? "red" : "#fff"}}
                                                         onChange={changeERC20}

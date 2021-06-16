@@ -18,7 +18,7 @@ const HeaderDefaultLayout = () => {
             <a href="#/dashboard"><span>&nbsp;&nbsp;Pool</span></a>
           </div>
           <div className="logo">
-            <img src={logo} alt=""/>
+            <a href={"#/"}><img src={logo} alt="" /></a>
           </div>
           <div className="connects">
             <a href="https://t.me/polkafoundry/" target="_blank"><i className="custom-icon-telegram"></i></a>
