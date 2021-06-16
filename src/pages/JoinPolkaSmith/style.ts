@@ -77,11 +77,15 @@ const useStyles = makeStyles((theme: any) => {
       borderRadius: 10,
       textAlign: "center",
       padding: isMobile ? 10 : 20,
+      "& h3" :{
+        fontSize: isMobile ? "14px !important" : "16px",
+      },
     },
     introContainer: {
       display: "flex",
       width: "100%",
       flexWrap: "wrap",
+
     },
     introCounting: {
       marginTop: 50,

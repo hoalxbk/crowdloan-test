@@ -101,7 +101,7 @@ const Dashboard = (props: any) => {
                     <Fade bottom delay={500}>
                       <h1>Token Sale Launchpad</h1>
                       <h3>Access public & special rounds for high-quality crypto projects</h3>
-                      <a className={"btn"} href="#/dashboard">
+                      <a className={"btn"} href="/#/dashboard">
                         <button className={styles.btn}>View all project</button>
                       </a>
                     </Fade>
@@ -117,12 +117,12 @@ const Dashboard = (props: any) => {
                     <Fade bottom delay={500}>
                       <h1>PolkaSmith Parachain Crowdloan</h1>
                       <h3>Support PolkaSmith by locking KSM & earn tokens as rewards</h3>
-                      <a className={"btn"} href="#/join-polkasmith">
+                      <a className={"btn"} href="/#/join-polkasmith">
                         <button className={styles.btn}>Join PolkaSmith</button>
                       </a>
                     </Fade>
                     <Fade bottom delay={500}>
-                      <a href="#/join-polkasmith"><img width={"75%"} src={contributeBg}/></a>
+                      <a href="/#/join-polkasmith"><img width={"75%"} src={contributeBg}/></a>
                     </Fade>
                   </div>
                 </Fade>
