@@ -1,0 +1,254 @@
+/***********************Konnect*************************/
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectBlack.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectBlackItalic.otf") format("opentype");
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectBold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectBoldItalic.otf") format("opentype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectExtraBold.otf") format("opentype");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectExtraBoldItalic.otf") format("opentype");
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectHairline.otf") format("opentype");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectHairlineItalic.otf") format("opentype");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectLight.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectLightItalic.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectMedium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectMediumItalic.otf") format("opentype");
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectRegular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectItalic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectSemiBold.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectSemiBoldItalic.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectThin.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Konnect';
+    src: url("./konnect/KonnectThinItalic.otf") format("opentype");
+    font-weight: 100;
+    font-style: italic;
+}
+
+
+/***************************Graphik***************************/
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikBlack.otf") format("opentype");
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikBlackItalic.otf") format("opentype");
+    font-weight: 900;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikBold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikBoldItalic.otf") format("opentype");
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikSuper.otf") format("opentype");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikSuperItalic.otf") format("opentype");
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikExtralight.otf") format("opentype");
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikExtralightItalic.otf") format("opentype");
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikLight.otf") format("opentype");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikLightItalic.otf") format("opentype");
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikMedium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikMediumItalic.otf") format("opentype");
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikRegular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikRegularItalic.otf") format("opentype");
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikSemibold.otf") format("opentype");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikSemiboldItalic.otf") format("opentype");
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikThin.otf") format("opentype");
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url("./graphik/GraphikThinItalic.otf") format("opentype");
+    font-weight: 100;
+    font-style: italic;
+}
