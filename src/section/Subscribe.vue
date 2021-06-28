@@ -10,7 +10,7 @@
             <img style="margin-left: 4px" alt src="../assets/arrow_right.svg"/>
           </div>
         </div>
-        <div class="message">{{ message }}</div>
+        <div :class="`message ${message.ok ? 'success' : 'error'}`">{{ message.info }}</div>
       </div>
       <img alt src="../assets/message.png"/>
     </div>
@@ -32,20 +32,48 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: "Subscribe",
   data() {
     return {
       email: '',
-      message: ''
+      message: {
+        ok: false,
+        info: ''
+      }
     }
   },
   methods: {
     sendEmail() {
-      this.message = 'Thank you for subscribing!';
-      setTimeout(() => {
-        this.message = ''
-      }, 3000)
+      const url = 'https://icetea.us3.list-manage.com/subscribe/post-json?u=0fbb6304481fc398e41b28f09&id=5968f8dfbe&c=?'
+      axios.post(url, {email: this.email})
+      .then(() => {
+        this.message = {
+          ok: true,
+          info: 'Thank you for subscribing!'
+        };
+        setTimeout(() => {
+          this.message = {
+            ok: false,
+            info: ''
+          }
+        }, 3000)
+      })
+      .catch((e) => {
+        console.error(e)
+        this.message = {
+          ok: false,
+          info: 'Something wrong was happened. Please try again later!'
+        };
+        setTimeout(() => {
+          this.message = {
+            ok: false,
+            info: ''
+          }
+        }, 3000)
+      })
     }
   }
 }
@@ -129,8 +157,15 @@ input {
 
 .message {
   margin-top: 12px;
-  color: limegreen;
   font-style: italic;
+}
+
+.success {
+  color: limegreen;
+}
+
+.error {
+  color: #ff4452
 }
 
 .email {
