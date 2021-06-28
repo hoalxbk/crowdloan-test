@@ -21,10 +21,10 @@
       <a href="https://t.me/polkafoundry" target="_blank">
         <img alt src="../assets/telegram.svg"/>
       </a>
-      <a href="/" target="_blank">
+      <a href="https://www.linkedin.com/company/polkafoundry/" target="_blank">
         <img alt src="../assets/twitter.svg"/>
       </a>
-      <a href="/" target="_blank">
+      <a href="https://twitter.com/PolkaFoundry" target="_blank">
         <img alt src="../assets/linkedin.svg"/>
       </a>
     </div>
@@ -57,14 +57,33 @@ export default {
 }
 
 .subscribe {
-  background: #0D114350;
-  box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16), -2px -2px 0 rgba(255, 255, 255, 0.24);
+  background: #0D1143;
+  box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16);
+  position: relative;
   border-radius: 32px;
   padding: var(--padding-article);
   display: flex;
   align-items: center;
   justify-content: center;
   width: 980px;
+}
+
+.subscribe:before {
+  content: '';
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16);
+  border-radius: 32px;
+}
+
+.subscribe > * {
+  position: relative;
+  z-index: 2;
 }
 
 .subscribe > img {

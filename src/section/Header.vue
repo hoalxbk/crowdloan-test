@@ -11,29 +11,30 @@
         </a>
         <img class="navbar-toggler" @click="toggleMenu" alt src="../assets/close.svg"/>
       </div>
-      <ul class="navbar-list">
-        <li class="navbar-list_item">
-          <a href="developer.html">Developer Hub</a>
-        </li>
-        <li class="navbar-list_item">
-          <a href="https://docs.polkafoundry.com/" target="_blank">Documentation</a>
-        </li>
-        <li class="navbar-list_item">
-          <a href="/" target="_blank">One pagers</a>
-        </li>
-        <li class="navbar-list_item">
-          <a href="/" target="_blank">Token metrics</a>
-        </li>
-      </ul>
+      <div style="flex: 1"></div>
+<!--      <ul class="navbar-list">-->
+<!--        <li class="navbar-list_item">-->
+<!--          <a href="/">Developer Hub</a>-->
+<!--        </li>-->
+<!--        <li class="navbar-list_item">-->
+<!--          <a href="https://docs.polkafoundry.com/" target="_blank">Documentation</a>-->
+<!--        </li>-->
+<!--        <li class="navbar-list_item">-->
+<!--          <a href="/" target="_blank">One pagers</a>-->
+<!--        </li>-->
+<!--        <li class="navbar-list_item">-->
+<!--          <a href="/" target="_blank">Token metrics</a>-->
+<!--        </li>-->
+<!--      </ul>-->
       <a class="navbar-btn" href="https://t.me/polkafoundry" target="_blank">Let's chat now</a>
       <div class="navbar-social">
         <a href="https://t.me/polkafoundry" target="_blank">
           <img alt src="../assets/telegram.svg"/>
         </a>
-        <a href="/" target="_blank">
+        <a href="https://www.linkedin.com/company/polkafoundry/" target="_blank">
           <img alt src="../assets/twitter.svg"/>
         </a>
-        <a href="/" target="_blank">
+        <a href="https://twitter.com/PolkaFoundry" target="_blank">
           <img alt src="../assets/linkedin.svg"/>
         </a>
       </div>
@@ -106,6 +107,7 @@ export default {
     font-weight: 500;
     line-height: 24px;
     padding: 6px 18px;
+    width: 160px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -2,8 +2,7 @@
   <div class="dialog-wrapper">
     <div v-show="value" class="overlay" @click="close"></div>
     <transition name="fade">
-      <div v-show="value" class="main">
-        <img class="close" alt src="../assets/close2.svg" @click="close"/>
+      <div v-show="value" class="main" ref="main">
         <img class="image" alt :src="image"/>
         <div class="content">
           <div class="header">
@@ -20,6 +19,7 @@
           <div class="detail">
             <p v-for="(desc, i) in descriptions" :key="i">{{desc}}</p>
           </div>
+          <img class="close" alt src="../assets/close2.svg" @click="close"/>
         </div>
       </div>
     </transition>
@@ -55,6 +55,9 @@ export default {
   watch: {
     value(v) {
       document.querySelector('body').style.overflow =  (v ? 'hidden' : '')
+      if(!v && this.$refs && this.$refs.main) {
+        this.$refs.main.scrollTop = 0
+      }
     }
   },
   methods: {
@@ -138,5 +141,29 @@ export default {
   .detail p{
     margin: 12px 0;
     color: #D9DAF2;
+  }
+
+  @media screen and (max-width: 600px) {
+    .main {
+      flex-direction: column;
+      width: calc(100% - 24px);
+      align-items: center;
+      max-height: calc(100% - 24px);
+      overflow: scroll;
+    }
+
+    .close {
+      position: relative;
+      bottom: 0;
+    }
+
+    .image {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+
+    h4.title {
+      text-align: left;
+    }
   }
 </style>

@@ -30,7 +30,7 @@ export default {
 .item-wrapper {
   padding: 20px 32px;
   background: rgba(255, 255, 255, 0.024);
-  box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16), -2px -2px 0 rgba(255, 255, 255, 0.24);
+  box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16), -1px -1px 0 rgba(255, 255, 255, 0.16);
   border-radius: 12px;
   max-width: 780px;
   margin: 12px auto;

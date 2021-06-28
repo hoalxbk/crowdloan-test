@@ -19,7 +19,7 @@
           PolkaFoundry like NFTify and Swaperry also don’t have to wait for Polkadot to create a runnable application;
           instead, they can work and experiment on our canary environment.
         </p>
-        <dot column="4" row="3" color="#2CC5F4" :position="{bottom: '-48px', left: '12px'}" gap="24"/>
+        <dot column="4" row="3" color="#2CC5F4" :position="{bottom: '-48px', left: '-48px'}" gap="24"/>
       </div>
     </div>
     <div class="pie">
@@ -130,19 +130,19 @@
       <div class="crowdloan">
         <h2 class="title">Join PolkaSmith Crowdloan</h2>
         <div class="crowdloan-grid">
-          <a href="" target="_blank">
+          <a href="https://redkite.polkafoundry.com/" target="_blank">
             <img alt src="../assets/redkite.png"/>
           </a>
-          <a href="" target="_blank">
+          <a href="https://kusama.network/auctions/" target="_blank">
             <img alt src="../assets/kusama.png"/>
           </a>
-          <a href="" target="_blank">
+          <a href="https://www.okex.com/earn/slotauction" target="_blank">
             <img alt src="../assets/okex.png"/>
           </a>
-          <a href="" target="_blank">
+          <a href="https://fearlesswallet.io/" target="_blank">
             <img alt src="../assets/fearless.png"/>
           </a>
-          <a href="" target="_blank">
+          <a href="https://newland.finance/en/pc/KSM-auction" target="_blank">
             <img alt src="../assets/newland.png"/>
           </a>
         </div>
@@ -485,6 +485,10 @@ h3.title {
   .plan-grid {
     grid-template-columns: 1fr;
     grid-gap: 12px;
+  }
+
+  .plan-item {
+    box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16);
   }
 
   .link {

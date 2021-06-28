@@ -109,12 +109,13 @@ export default {
 
 .detail {
   position: absolute;
-  top: 90px;
+  top: 60px;
   left: 100px;
   width: 515px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  font-weight: 300;
 }
 
 .detail .title {
@@ -126,6 +127,8 @@ export default {
 }
 
 .detail p {
+  font-size: 16px;
+  line-height: 26px;
   margin: 12px 0 0;
   text-align: left;
   color: #D9DAF2;

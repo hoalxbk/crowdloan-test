@@ -71,6 +71,7 @@ export default {
 }
 
 .content {
+  background: #0D1143;
   margin-top: 40px;
   position: relative;
   z-index: 2;

@@ -4,13 +4,13 @@
     <h3 class="title">Our Team</h3>
     <div class="grid">
       <div v-for="(member, i) in members" :key="i"
-           class="member">
+           class="member" @click.stop="openDialog(member)">
         <img alt :src="`members/${member.image}`"/>
         <div class="info">
           <div class="info-name">{{ member.name }}</div>
           <div class="info-title">{{ member.title }}</div>
           <div class="info-shortcut">
-            {{ member.shortcut }}<span @click.stop="openDialog(member)">[See more]</span>
+            {{ member.shortcut }}<span>[See more]</span>
           </div>
           <div class="info-link">
             <a v-for="(link, i) in member.links" target="_blank" :key="i" :href="link.href">
@@ -27,13 +27,13 @@
     <h3 class="title">Advisors</h3>
     <div class="grid">
       <div v-for="(member, i) in advisors" :key="i"
-           class="member">
+           class="member" @click.stop="openDialog(member)">
         <img alt :src="`members/${member.image}`"/>
         <div class="info">
           <div class="info-name">{{ member.name }}</div>
           <div class="info-title">{{ member.title }}</div>
           <div class="info-shortcut">
-            {{ member.shortcut }}<span @click.stop="openDialog(member)">[See more]</span>
+            {{ member.shortcut }}<span>[See more]</span>
           </div>
           <div class="info-link">
             <a v-for="(link, i) in member.links" target="_blank" :key="i" :href="link.href">
@@ -319,9 +319,9 @@ h3.title {
   left: 0;
   right: 0;
   bottom: 100%;
-  background: rgba(0, 0, 0, 0.42);
+  background: linear-gradient(180deg, rgba(15, 12, 62, 0.6) 0%, #0F0C3E 99.88%);
   transition: bottom 0.5s;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 .member:hover:after {
@@ -415,7 +415,7 @@ h3.title {
   .partner-item {
     filter: none;
     background: rgba(255, 255, 255, 0.048);
-    box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16), -2px -2px 0 rgba(255, 255, 255, 0.24);
+    box-shadow: 0px 8px 16px rgba(27, 27, 27, 0.16), -1px -1px 0 rgba(255, 255, 255, 0.16);
     border-radius: 16px;
   }
 
