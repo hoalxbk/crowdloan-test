@@ -21,10 +21,10 @@
       <a href="https://t.me/polkafoundry" target="_blank">
         <img alt src="../assets/telegram.svg"/>
       </a>
-      <a href="https://www.linkedin.com/company/polkafoundry/" target="_blank">
+      <a href="https://twitter.com/PolkaFoundry" target="_blank">
         <img alt src="../assets/twitter.svg"/>
       </a>
-      <a href="https://twitter.com/PolkaFoundry" target="_blank">
+      <a href="https://www.linkedin.com/company/polkafoundry/" target="_blank">
         <img alt src="../assets/linkedin.svg"/>
       </a>
     </div>
