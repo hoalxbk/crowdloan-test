@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="pie">
-      <div class="card" style="display: flex; flex-direction: column; justify-content: space-between">
+      <div class="card" style="display: flex; flex-direction: column">
         <h3 class="title">PKS - PolkaSmith Native Token</h3>
         <div class="chart">
           <div id="chartdiv"></div>
@@ -45,31 +45,31 @@
         <div class="utility">
           <div class="utility-title">
             <img alt src="../assets/tick.svg"/>
-            <span class="konnect fw-600">Ecosystem</span>
+            <span class="konnect fw-600">Transaction Fees Payment</span>
           </div>
           <div class="utility-detail">
-            To support Dapps on Polkasmith (pay fees, governance, etc.) and expand PKS ecosystem;
+            PolkaSmith users need to pay PKS to proceed on-chain transactions, for example computation, storage.
           </div>
           <div class="utility-title">
             <img alt src="../assets/tick.svg"/>
-            <span class="konnect fw-600">Parachain auction</span>
+            <span class="konnect fw-600">Network Staking</span>
           </div>
           <div class="utility-detail">
-            To bid for Kusama auction;
+            Collators, who collect transactions and produce blocks, and nominators, who nominate specific collators, can stake PKS on the network to earn rewards.
           </div>
           <div class="utility-title">
             <img alt src="../assets/tick.svg"/>
-            <span class="konnect fw-600">Parachain auction reserve</span>
+            <span class="konnect fw-600">On-Chain Governance</span>
           </div>
           <div class="utility-detail">
-            To bid for Kusama auction when the parachain auction fund runs out;
+            Any PKS token holder can participate in the on-chain governance process, for example voting on proposals, and earn rewards.
           </div>
           <div class="utility-title">
             <img alt src="../assets/tick.svg"/>
-            <span class="konnect fw-600">Treasury</span>
+            <span class="konnect fw-600">Launchpad Staking</span>
           </div>
           <div class="utility-detail">
-            To buy and hold enough KSM to constantly renew the parachain slot.
+            Any PKS token holder can stake PKS to join token launches on the Red Kite launchpad - PolkaSmith version.
           </div>
         </div>
       </div>
@@ -356,8 +356,8 @@ h3.title {
 }
 
 .utility-detail {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 14px;
+  line-height: 22px;
   font-weight: 300;
   margin: 2px 0 12px 26px;
 }
@@ -385,8 +385,8 @@ h3.title {
 }
 
 .plan-detail {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 14px;
+  line-height: 22px;
   font-weight: 300;
   margin: 12px 0 0;
 }
