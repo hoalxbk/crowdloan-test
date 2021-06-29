@@ -13,7 +13,7 @@
       <div class="info">
         <p>PolkaSmith is great for early-stage startups that need to grow quickly and easily experiment with bold new
           ideas. Meanwhile, PolkaFoundry is implemented on the Polkadot Network to serve enterprises and B2B
-          applications that require high stability and dependability
+          applications that require high stability and dependability.
         </p>
         <p>PolkaSmith will be the canary environment to try out all PolkaFoundry features. Other dapps built on
           PolkaFoundry like NFTify and Swaperry also don’t have to wait for Polkadot to create a runnable application;
@@ -81,15 +81,15 @@
           <div class="plan-item">
             <h4 class="title">8-Lease Period<br/>Parachain Duration</h4>
             <p class="plan-detail">
-              PolkaSmith will participate in 1st-8th slot auctions to win. In other words, we aim to lease a parachain
-              slot for 48 weeks (each lease period is six weeks).
+              We bid for an 8-lease period which lasts for 48 weeks. If PolkaSmith doesn't win the first auction, we
+              will continue to bid in the subsequent auctions.
             </p>
           </div>
           <div class="plan-item">
             <h4 class="title">350+ PKS/KSM<br/>Winning Rewards</h4>
             <p class="plan-detail">
-              We bid for an 8-lease period which lasts for 48 weeks. If PolkaSmith doesn't win the first auction, we
-              will continue to bid in the subsequent auctions.
+              If PolkaSmith wins, every KSM contributed to PolkaSmith in the Kusama Parachain auction through the
+              crowdloan will be entitled to at least 350 $PKS as a reward.
             </p>
           </div>
           <div class="plan-item">
@@ -130,10 +130,10 @@
       <div class="crowdloan">
         <h2 class="title">Join PolkaSmith Crowdloan</h2>
         <div class="crowdloan-grid">
-          <a href="https://redkite.polkafoundry.com/" target="_blank">
+          <a href="https://redkite.polkafoundry.com/#/join-polkasmith" target="_blank">
             <img alt src="../assets/redkite.png"/>
           </a>
-          <a href="https://kusama.network/auctions/" target="_blank">
+          <a href="https://polkadot.js.org/apps/#/parachains/crowdloan" target="_blank">
             <img alt src="../assets/kusama.png"/>
           </a>
           <a href="https://www.okex.com/earn/slotauction" target="_blank">
@@ -468,7 +468,7 @@ h3.title {
     align-items: center;
   }
 
-  .pie > .card:first-child{
+  .pie > .card:first-child {
     margin-right: 0;
     margin-bottom: 12px;
   }
