@@ -145,6 +145,24 @@
           <a href="https://newland.finance/en/pc/KSM-auction" target="_blank">
             <img alt src="../assets/newland.png"/>
           </a>
+          <a href="https://www.gate.io/hodl/607" target="_blank">
+            <img alt src="../assets/gate.jpg"/>
+          </a>
+          <a href="https://www.mexc.io/slot/assessment" target="_blank">
+            <img alt src="../assets/mexc.jpg"/>
+          </a>
+          <div class="upcoming">
+            <img alt src="../assets/kraken.jpg"/>
+            <div class="hover">
+              <p>Upcomming</p>
+            </div>
+          </div>
+          <div class="upcoming">
+            <img alt src="../assets/kucoin.jpg"/>
+            <div class="hover">
+              <p>Upcomming</p>
+            </div>
+          </div>
         </div>
         <div class="link">
           Get to know more about How to join PolkaSmith Crowdloan
@@ -438,6 +456,42 @@ h3.title {
 
 .crowdloan-grid img {
   width: 100%;
+  border-radius: 24px;
+}
+
+.upcoming {
+  position: relative;
+}
+
+.upcoming:hover .hover {
+  visibility: visible;
+}
+
+.hover {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(15, 19, 62, 0.54) 0%, #0F133E 99.88%);
+  border-radius: 24px;
+}
+
+.hover p {
+  padding: 6px 24px;
+  background: #2CC5F4;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 24px;
+  font-family: Konnect;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 26px;
+  color: #050940;
+  user-select: none;
 }
 
 @media screen and (max-width: 600px) {
@@ -498,6 +552,12 @@ h3.title {
   .crowdloan-grid {
     grid-template-columns: 1fr 1fr;
     grid-gap: 12px;
+  }
+
+  .hover p {
+    font-size: 10px;
+    line-height: 16px;
+    padding: 2px 8px;
   }
 }
 </style>
