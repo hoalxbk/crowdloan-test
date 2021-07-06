@@ -15,7 +15,7 @@
       <img alt src="../assets/message.png"/>
     </div>
     <img alt style="width: 220px; margin-top: 60px" src="../assets/logo.png"/>
-    <a href="mailto:info@polkafoundry.com" class="email">info@polkasmith.com</a>
+    <a href="mailto:info@polkafoundry.com" class="email">info@polkafoundry.com</a>
     <div class="address">68 Circular Road, #02-01, Singapore 049422</div>
     <div class="social">
       <a href="https://t.me/polkafoundry" target="_blank">
