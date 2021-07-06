@@ -133,7 +133,7 @@
           <a href="https://redkite.polkafoundry.com/#/join-polkasmith" target="_blank">
             <img alt src="../assets/redkite.png"/>
           </a>
-          <a href="https://polkadot.js.org/apps/#/parachains/crowdloan" target="_blank">
+          <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-rpc.polkadot.io#/parachains/crowdloan" target="_blank">
             <img alt src="../assets/kusama.png"/>
           </a>
           <a href="https://www.okex.com/earn/slotauction" target="_blank">
