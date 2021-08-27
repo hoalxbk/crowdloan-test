@@ -10,9 +10,14 @@
         features, services, integrations, and tools for Defi and NFT experiments, innovations, and real-world solutions.
         PolkaSmith is no newcomer but a canary network of PolkaFoundry on Kusama.
       </div>
-      <a href="https://polkafoundry.com/" target="_blank" class="btn">
-        Learn more about PolkaFoundry
-      </a>
+      <div style="display: flex">
+        <a class="btn btn-join" @click="scrollToContribute" style="display: inline; background: #D01F36; margin-right: 20px; color: white; cursor: pointer">
+          Join Now
+        </a>
+        <a href="https://polkafoundry.com/" target="_blank" class="btn" style="display: inline">
+          Learn more about PolkaFoundry
+        </a>
+      </div>
     </div>
     <div class="information">
       <img class="desktop" alt src="../assets/introduction.png"/>
@@ -38,7 +43,14 @@ import Dot from "@/components/Dot";
 
 export default {
   name: "Introduction",
-  components: {Dot}
+  components: {Dot},
+  methods: {
+    scrollToContribute() {
+      const contribute = document.getElementById("contribute");
+      console.log(contribute)
+      contribute.scrollIntoView({behavior: "smooth"})
+    }
+  }
 }
 </script>
 
@@ -98,7 +110,7 @@ export default {
 .btn:hover {
   color: white;
   font-weight: 700;
-  box-shadow: -5px 5px 10px #1c7c9a, 5px -5px 10px #3cffff;
+  box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
 }
 
 .information {

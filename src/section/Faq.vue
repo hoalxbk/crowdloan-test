@@ -44,18 +44,6 @@ export default {
         {
           q: 'Is PKS listed yet?',
           a: '<li>PKS isn\'t listed yet. But we will list PKS as soon as we win the parachain slot on Kusama.</li>'
-        },
-        {
-          q: 'If I contribute KSM to PolkaSmith crowdloan in another platform (not Red Kite), can I get the same rewards?',
-          a: '<li>You can obtain the same PKS rewards no matter what platform you use to contribute. But you need to use the Polkadot.js Browser Extension if you want to claim the Red Kite\'s Point rewards.</li>'
-        },
-        {
-          q: 'What is Red Kite Point?',
-          a: '<ul>' +
-              '<li>Red Kite Point is not a token; it is just a unique point on our launchpad, Red Kite.</li>' +
-              '<li>Each Red Kite point is equivalent to 1 PKF staked on Red Kite. Even if you don\'t stake any PKF on Red Kite, you can get the same tier benefits.</li>' +
-              '<li class="note">Note: Red Kite point is only meaningful in red kite, it no longer exists when KSM gets unlocked.</li>' +
-              '</ul>'
         }
       ]
     }

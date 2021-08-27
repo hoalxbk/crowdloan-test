@@ -93,17 +93,15 @@
             </p>
           </div>
           <div class="plan-item">
-            <h4 class="title">500 Red Kite points/KSM<br/>Whether Win or Lose</h4>
+            <h4 class="title">Referral Program</h4>
             <p class="plan-detail">
-              Contributors joining the crowdloan via Polkadot.js.org and Red Kite will receive 500 Red Kite points for
-              each KSM. The benefits will apply during the time their KSM is locked.
+              The contributors who refer others to the crowdloan using their unique code will be rewarded with 10% of the amount of PKS of those referents.
             </p>
           </div>
           <div class="plan-item">
-            <h4 class="title">10% Early bird</h4>
+            <h4 class="title">Early bird</h4>
             <p class="plan-detail">
-              Contributors who contribute their KSM for PolkaSmith’s crowdloan regardless of the platform for the first
-              seven days since the crowdloan starts will receive an additional 10% of their reward PKS.
+              Before 5:00 PM UTC, August 29, the top 100 contributors who lock the largest number of KSM will each receive one ticket to join the Kaby Arena ($KABY) public sale on GameFi Launchpad. Each ticket will be equivalent to a 500$ worth allocation of $KABY token.
             </p>
           </div>
           <div class="plan-item">
@@ -130,9 +128,6 @@
       <div class="crowdloan">
         <h2 class="title">Join PolkaSmith Crowdloan</h2>
         <div class="crowdloan-grid">
-          <a href="https://redkite.polkafoundry.com/#/join-polkasmith" target="_blank">
-            <img alt src="../assets/redkite.png"/>
-          </a>
           <a href="https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fkusama-rpc.polkadot.io#/parachains/crowdloan" target="_blank">
             <img alt src="../assets/kusama.png"/>
           </a>

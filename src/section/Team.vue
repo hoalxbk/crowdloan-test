@@ -173,17 +173,6 @@ export default {
           shortcut: 'Former senior manager at Kyber Network, a blockchain solder with hands-on in-dept experience for many years...'
         },
         {
-          name: 'Ron Nguyen',
-          title: 'Head of Partnerships',
-          image: 'ron.png',
-          links: [{href: 'https://www.linkedin.com/in/duyhn/', img: 'linkedin.svg'}],
-          descriptions: [
-            'A graduate of RMIT in Melbourne, Australia, armed with 10 years of experience in marketing, Ron has gained experience working with small to large companies in management positions, including Line Vietnam, NHG, and Enterprise Rent-a-Car.',
-            'He is proficient in liaising with influencers and brand partners to forge strategic alliances, and building partnerships to deliver branding solutions.'
-          ],
-          shortcut: 'A graduate of RMIT in Melbourne, Australia, armed with 10 years of experience in marketing...'
-        },
-        {
           name: 'Trang Mai',
           title: 'Head of R&D',
           image: 'trang.png',

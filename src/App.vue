@@ -2,11 +2,14 @@
   <div id="app">
     <Header/>
     <Introduction/>
+    <Contribute/>
+    <TopContributor/>
     <Infomation/>
     <Team/>
     <Faq/>
     <Subscribe/>
     <Footer/>
+    <notifications position="top right" />
   </div>
 </template>
 
@@ -14,6 +17,8 @@
 
 import Footer from "@/section/Footer";
 import Header from "@/section/Header";
+import Contribute from "@/section/Contribute";
+import TopContributor from "@/section/TopContributor";
 import Introduction from "@/section/Introduction";
 import Infomation from "@/section/Infomation";
 import Team from "@/section/Team";
@@ -25,8 +30,10 @@ export default {
     Subscribe,
     Faq,
     Team,
+    Contribute,
     Infomation,
     Introduction,
+    TopContributor,
     Header,
     Footer,
   },
@@ -67,5 +74,8 @@ export default {
 nav.border {
   background: #0D0B32;
 }
-
+.vue-notification {
+  padding: 10px !important;
+  margin: 20px 10px 0 0  !important;
+}
 </style>
