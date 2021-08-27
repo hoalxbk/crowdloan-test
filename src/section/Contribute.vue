@@ -166,7 +166,7 @@
                     v-else
                     class="input"
                     type="text"
-                    :disabled="haveReferral"
+                    :readonly="haveReferral"
                     v-model="referral"
                     placeholder="Referral Code"
                 />
