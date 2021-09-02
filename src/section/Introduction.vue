@@ -1,5 +1,21 @@
 <template>
   <div class="wrapper">
+    <div class="banner-landing" style="display: none">
+      <img src="../assets/polkasmith/banner-landing.png"/>
+      <div class="banner-content">
+        <div class="left">
+          <div style="margin: auto 50px">
+          <h3>Contribute KSM to Earn $500 ticket of KABY IDO!</h3>
+        </div>
+        </div>
+        <div class="right">
+          <div style="margin: auto; display: flex">
+            <a @click="scrollToContribute" class="btn join-btn" >Join Now <img style="width: 20px; fill: black" src="../assets/polkasmith/black-arrow.png"/></a>
+            <a href="https://medium.com/polkafoundry/polkasmith-crowdloan-for-kusama-parachain-auction-batch-2-is-open-7b11d8b9e724" target="_blank" class="learn-btn">Learn more <img style="width: 20px;" src="../assets/polkasmith/learn-more.png"/></a>
+          </div>
+      </div>
+      </div>
+    </div>
     <div class="hero">
       <h1 class="title">
         <img alt src="../assets/logo.png"/>
@@ -11,30 +27,13 @@
         PolkaSmith is no newcomer but a canary network of PolkaFoundry on Kusama.
       </div>
       <div style="display: flex">
-        <a class="btn btn-join" @click="scrollToContribute" style="display: inline; background: #D01F36; margin-right: 20px; color: white; cursor: pointer">
-          Join Now
-        </a>
         <a href="https://polkafoundry.com/" target="_blank" class="btn" style="display: inline">
           Learn more about PolkaFoundry
         </a>
       </div>
     </div>
-    <div class="information">
-      <img class="desktop" alt src="../assets/introduction.png"/>
-      <img class="mobile" alt src="../assets/introduction_mb.png"/>
-      <div class="detail">
-        <img alt src="../assets/bird.svg">
-        <h2 class="title">Why built on Kusama?</h2>
-        <p>Kusama and Polkadot are independent, standalone networks built on very similar codebases, but Kusama has
-          faster governance parameters and lower barriers to entry.</p>
-        <p>Kusama offers an early, adventurous version of Polkadot to allow teams and developers to build parachains and
-          deploy applications in an environment with economic incentives that will mirror those on Polkadot. In
-          addition, Kusama will organize its parachain auction in advance starting from 15 June 2021.</p>
-      </div>
-    </div>
     <dot color="#2CC5F4" column="3" row="5" :position="{top: '260px', right: '36px'}"/>
     <dot column="3" row="5" :position="{top: '580px', left: '36px'}"/>
-    <dot color="#FFFFFF66" column="7" row="5" :position="{bottom: 0, right: '12px'}"/>
   </div>
 </template>
 
@@ -43,7 +42,7 @@ import Dot from "@/components/Dot";
 
 export default {
   name: "Introduction",
-  components: {Dot},
+  components: { Dot},
   methods: {
     scrollToContribute() {
       const contribute = document.getElementById("contribute");
@@ -57,8 +56,6 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
-  background: url("../assets/background.png") no-repeat 50%;
-  background-size: cover;
   padding: 160px var(--padding-section) 60px;
   display: flex;
   flex-direction: column;
@@ -113,21 +110,37 @@ export default {
   box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
 }
 
-.information {
-  margin-top: 160px;
-  position: relative;
-  z-index: 2;
+.join-btn {
+  cursor: pointer;
+  padding: 18px 20px 12px 20px;
+  color: black;
 }
 
-.detail {
+.join-btn:hover {
+  color: black;
+  font-weight: 700;
+  box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
+}
+
+.learn-btn {
+  padding: 16px 40px 14px 20px;
+  margin-left: 20px;
+  background: transparent;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 60px;
+  border: 1px solid #fff;
+  color: #fff;
+  font-weight: 500;
+}
+.learn-btn img {
   position: absolute;
-  top: 60px;
-  left: 100px;
-  width: 515px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  font-weight: 300;
+  margin-left: 5px;
+  margin-top: -2px;
+}
+.learn-btn:hover {
+  color: white;
+  font-weight: 700;
+  box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
 }
 
 .detail .title {
@@ -144,6 +157,51 @@ export default {
   margin: 12px 0 0;
   text-align: left;
   color: #D9DAF2;
+}
+
+.banner-landing {
+  position: absolute;
+  top: 100px;
+  width: 80%;
+  opacity: 1;
+  transition: opacity 1s;
+  max-width: 1000px;
+  z-index: 9;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+}
+.banner-landing img {
+  width: 100%;
+}
+
+.banner-landing.hide {
+  opacity: 0;
+}
+.banner-content {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  top: 50%;
+  margin-top: -3px;
+  transform: translateY(-50%);
+}
+.left {
+  width: 60%;
+  display: block;
+}
+.left h3 {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+}
+.left h2 {
+  color: white;
+  font-size: 22px;
+}
+.right {
+  width: 40%;
+  display: contents
 }
 
 @media screen and (max-width: 600px) {
@@ -190,23 +248,16 @@ export default {
     font-weight: 300;
   }
 
-  .information {
-    margin-top: 100px;
-  }
-
-  .detail {
-    top: 0;
-    left: 0;
-    right: 0;
-    width: auto;
-    align-items: center;
-    padding: 28px;
-  }
 
   .detail p {
     font-size: 14px;
     line-height: 22px;
     text-align: center;
   }
+
+  .banner-landing {
+    display: none;
+  }
+
 }
 </style>

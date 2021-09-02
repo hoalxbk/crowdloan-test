@@ -1,6 +1,4 @@
 <template>
-  <div style="padding-top: 50px">
-    <img src="../assets/polkasmith/banner.png" width="100%"/>
     <div class="introCounting">
       <div class="time-main" >
         <div class="timeContainer">
@@ -8,29 +6,28 @@
         </div>
         <span style="color: #aeaeae; font-size: 16px}">Days</span>
       </div>
-      <h1 style="margin-right: 10px; margin-left: 10px">:</h1>
+      <h1 class="time-space">:</h1>
       <div class="time-main" >
         <div class="timeContainer">
           <h1>{{ countHours }}</h1>
         </div>
         <span style="color: #aeaeae; font-size: 16px">Hours</span>
       </div>
-      <h1 style="margin-right: 10px; margin-left: 10px">:</h1>
+      <h1 class="time-space">:</h1>
       <div class="time-main" >
         <div class="timeContainer">
           <h1 >{{ countMinutes }}</h1>
         </div>
         <span style="color: #aeaeae; font-size: 16px">Minutes</span>
       </div>
-      <h1 style="margin-right: 10px; margin-left: 10px">:</h1>
+      <h1 class="time-space">:</h1>
       <div class="time-main" >
         <div class="timeContainer">
           <h1>{{ countSeconds }}</h1>
         </div>
-        <span style="color: #aeaeae; font-size: 16px">Seconds</span>
+        <span style="color: #aeaeae; font-size: 16px;">Seconds</span>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -76,8 +73,11 @@ export default {
   margin-bottom: 50px;
   display: flex;
   justify-content: center;
+  text-align: center;
 }
-
+.time-space {
+  margin: auto 10px;
+}
 .introCounting h1 {
    font-size: 36px;
  }
@@ -85,25 +85,21 @@ export default {
 .introCounting span {
    font-size: 16px;
  }
-.introBlock {
-  display: inline-block;
-  width: 50%;
-  align-content: center;
-  text-align: center;
-  line-height: 2;
-}
+
 .timeContainer {
   border-radius: 10px;
   width: 70px;
   height: 70px;
   line-height: 2;
-  background-color: #ffffff16;
+  background-color: #ffffff60;
   text-align: center;
+  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 680px) {
   .timeContainer {
     width: 60px;
+    margin-bottom: 5px;
     height: 60px;
   }
   .introCounting h1 {

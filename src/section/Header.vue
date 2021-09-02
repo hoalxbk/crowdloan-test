@@ -26,6 +26,10 @@
 <!--          <a href="/" target="_blank">Token metrics</a>-->
 <!--        </li>-->
 <!--      </ul>-->
+      <a href="/#/events" class="event-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11 12H17V18H11V12Z" fill="white"/>
+        <path d="M19 4H17V2H15V4H9V2H7V4H5C3.897 4 3 4.897 3 6V20C3 21.103 3.897 22 5 22H19C20.103 22 21 21.103 21 20V6C21 4.897 20.103 4 19 4ZM19.001 20H5V8H19L19.001 20Z" fill="white"/>
+      </svg>Event List</a>
       <a class="navbar-btn" href="https://t.me/polkafoundry" target="_blank">Let's chat now</a>
       <div class="navbar-social">
         <a href="https://t.me/polkafoundry" target="_blank">
@@ -62,6 +66,14 @@ export default {
 </script>
 
 <style scoped>
+  .event-btn {
+    font-weight: bold;
+    margin-right: 20px;
+  }
+  .event-btn svg {
+    margin-bottom: -5px;
+    margin-right: 5px;
+  }
   .navbar {
     display: flex;
     align-items: center;

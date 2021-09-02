@@ -2,9 +2,134 @@
   <div id="contribute" class="polkaSmithMain">
     <div ref="contribute" class="polkaSmithContainer">
       <div class="introMain">
+        <div class="about-event">
+          <span >ABOUT THE EVENT</span>
+          <p v-for="(note, i) in event.notes" :key="i">{{ note }}</p>
+        </div>
         <div class="introContainer">
-          <div class="introBlock">
-            <Countdown :endDate="endEarlyBird"/>
+          <div class="contribute-block">
+            <div class="contributeForm">
+              <h1 v-if="successStatus"><img src="../assets/polkasmith/success.png" width="30" height="30"/> You have successfully contributed
+              </h1>
+              <h1 v-else>Contribute KSM</h1>
+              <div class="contributeInputGroup">
+                <div class="contributeInputLabel">
+                  <h4>{{ successStatus ? "KSM Contributed" : "KSM to Contribute" }}</h4>
+                </div>
+                <div v-if="successStatus" class="contributeInput">
+                  <h2 style="display: inline-block; width: 100%; text-align: left">{{ formatNumber(ksmAmount, 2, false) }}
+                    KSM</h2>
+                </div>
+                <div v-else class="contributeInput">
+                  <input
+                      class="input"
+                      type="number"
+                      :style="{'border-color': ksmAmount > ksmBalance.unlocked ? 'red' : '#fff'}"
+                      placeholder="KSM Amount"
+                      autoComplete="off"
+                      v-model="ksmAmount"
+                      ref="amountKsmInput"
+                      step=0.01
+                  />
+                  <button class="maxBtn" @click="setMax">
+                    MAX
+                  </button>
+                </div>
+              </div>
+              <div v-if="!successStatus" class="errorMessage">
+                <span v-if="ksmReward > 0 && ksmAmount < 0.1">the contribution amount can not be less than 0.1 KSM</span>
+                <span v-else>{{
+                    ksmReward > 0 && ksmAmount > ksmBalance.unlocked ? 'the maximum contribution is no more than unlocked balance' : ""
+                  }}</span>
+              </div>
+              <div class="contributeInputGroup">
+                <div class="contributeInputLabel">
+                  <h4>Estimated Reward</h4>
+                </div>
+                <div class="contributeInput">
+                  <h2 style="display: inline-block; width: 50%; text-align: left">
+                    <img v-if="ksmAmount > 0 && isLoadingContributed" src="../assets/polkasmith/Loading.gif" width="20" height="20"/>
+                    <span v-else>{{ formatNumber(ksmAmount * ratioReward, 2, false) }} PKS</span></h2>
+                  <div style="display: inline-block; width: 50%; text-align: right">
+                    <h4>(1 KSM :
+                      <img v-if="isLoadingContributed" src="../assets/polkasmith/Loading.gif" width="20" height="20"/>
+                      <span v-else>{{ formatNumber(ratioReward, 0, false) }}</span> PKS)</h4></div>
+                </div>
+              </div>
+              <div class="contributeInputGroup">
+                <div class="contributeInputLabel">
+                  <h4>Your ERC20 Wallet</h4>
+                </div>
+                <div class="contributeInput">
+                  <h3 v-if="successStatus"> {{ erc20Wallet.value }}</h3>
+                  <input
+                      v-else
+                      class="input"
+                      type="text"
+                      v-model="erc20Wallet.value"
+                      placeholder="Wallet to receive rewards"
+                      :style="{'border-color': erc20Wallet.value && !erc20Wallet.isValid ? 'red' : '#fff'}"
+                      @change="changeERC20"
+                  />
+                </div>
+              </div>
+              <div class="contributeInputGroup">
+                <div class="contributeInputLabel">
+                  <h4>Referral Code (Optional)</h4>
+                </div>
+                <div class="contributeInput">
+                  <h3 v-if="successStatus"> {{ referral }}</h3>
+                  <input
+                      v-else
+                      class="input"
+                      type="text"
+                      :readonly="haveReferral"
+                      v-model="referral"
+                      placeholder="Referral Code"
+                  />
+                </div>
+              </div>
+              <div v-show="contributionHash">
+                <div class="contributeInputGroup">
+                  <div class="contributeInputLabel">
+                    <h4>Contribution Hash:</h4>
+                  </div>
+                  <div class="contributeInput">
+                    <h3><a target="_blank" :href="'https://kusama.subscan.io/block/' + contributionHash"
+                           style="color: #6398FF"> {{ truncateAddress(contributionHash, 13) }} </a>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div v-if="!contributionHash">
+                <div class="policyConfirm">
+                  <input
+                      name="approvePolicy"
+                      type="checkbox"
+                      style="width: 50px; height: 50px"
+                      :checked="agreePolicy"
+                      @change="agreePolicyChange"
+                  />
+                  <div style="display: inline-block; marginLeft: 20px">
+      <span>I have read and accepted the <a href="/#/polkasmith-privacy" target="_blank"
+                                            style="color: #6398FF"><b>Term and Conditions</b></a> as well as the <a
+          href="https://redkite.polkafoundry.com/#/privacy" target="_blank" style="color: #6398FF">Privacy Policy</a>.
+                            I agree to receive email communications about PolkaSmith and PolkaFoundry, including exclusive launch updates and liquidity provider programs.</span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="isSubmitting" class="statusMessage">
+                <div class="statusTitle"><span>{{ statusMessage }}</span></div>
+                <div class="statusTime"><span>{{ executeTime }}</span></div>
+              </div>
+              <button v-if="successStatus" class="connectWallet" @click="contributeMore">CONTRIBUTE
+                MORE <img src="../assets/polkasmith/arrow-right.svg" style="margin-left: 5px"/></button>
+              <button v-else class="connectWallet" @click="submitContribution"
+                      :disabled="isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > ksmBalance.unlocked || !agreePolicy">
+                <span v-if="!isSubmitting">{{ !currentWallet ? "Please connect wallet to contribute" : "Submit Contribution" }}</span>
+                <img v-else src="../assets/polkasmith/Loading.gif" width="30" height="30"/>
+              </button>
+            </div>
           </div>
           <div class="introBlock">
             <div class="introContribute">
@@ -40,27 +165,14 @@
                   </div>
                 </template>
               </v-select>
-              <button v-else class="connectWallet" @click="requestExtension">
+              <a v-else class="connectWallet" @click="requestExtension">
                 <span v-if="!currentWallet">Connect Polkadot.js Extension</span>
                 <img v-else src="../assets/polkasmith/Loading.gif" width="30" height="30"/>
-              </button>
-              <a style="float: right; color: #6398FF; font-size: 16px"
+              </a>
+              <a style="float: right; color: #6398FF; font-size: 16px; margin-top: 10px"
                  href="https://polkadot.js.org/extension/" target="_blank">Get Polkadot.js
                 extension?</a>
-              <div v-if="!currentWallet" style="margin-top: 50px; text-align: left">
-                <h4 style="color: #aeaeae">KSM to Contribute</h4>
-                <input
-                    class="input"
-                    placeholder="KSM Amount"
-                    type="number"
-                    step=0.01
-                    @input="calculatorKSMChange"
-                />
-                <h4 style="margin-top: 20px; color: #aeaeae">Estimated Rewards</h4>
-                <h3>{{ formatNumber(ksmAmountCal * ratioReward, 2, false) }} PKS</h3>
-              </div>
-
-              <div v-else style="margin-top: 50px; text-align: left; display: flex; flex-wrap: wrap">
+              <div v-if="currentWallet" style="margin-top: 50px; text-align: left; display: flex; flex-wrap: wrap">
                 <div class="detailInfo">
                   <h3 style="color: #aeaeae">Your Referral Code</h3>
                   <h2>
@@ -91,139 +203,15 @@
           </div>
         </div>
         <div>
-          <div class="contributeForm" v-show="!!currentWallet">
-            <h1 v-if="successStatus"><img src="../assets/polkasmith/success.png" width="30" height="30"/> You have successfully contributed
-            </h1>
-            <h1 v-else>Contribute KSM</h1>
-            <div class="contributeInputGroup">
-              <div class="contributeInputLabel">
-                <h4>{{ successStatus ? "KSM Contributed" : "KSM to Contribute" }}</h4>
-              </div>
-              <div v-if="successStatus" class="contributeInput">
-                <h2 style="display: inline-block; width: 100%; text-align: left">{{ formatNumber(ksmAmount, 2, false) }}
-                  KSM</h2>
-              </div>
-              <div v-else class="contributeInput">
-                <input
-                    class="input"
-                    type="number"
-                    :style="{'border-color': ksmAmount > ksmBalance.unlocked ? 'red' : '#fff'}"
-                    placeholder="KSM Amount"
-                    autoComplete="off"
-                    v-model="ksmAmount"
-                    ref="amountKsmInput"
-                    step=0.01
-                />
-                <button class="maxBtn" @click="setMax">
-                  MAX
-                </button>
-              </div>
-            </div>
-            <div v-if="!successStatus" class="errorMessage">
-              <span v-if="ksmReward > 0 && ksmAmount < 0.1">the contribution amount can not be less than 0.1 KSM</span>
-              <span v-else>{{
-                  ksmReward > 0 && ksmAmount > ksmBalance.unlocked ? 'the maximum contribution is no more than unlocked balance' : ""
-                }}</span>
-            </div>
-            <div class="contributeInputGroup">
-              <div class="contributeInputLabel">
-                <h4>Estimated Reward</h4>
-              </div>
-              <div class="contributeInput">
-                <h2 style="display: inline-block; width: 50%; text-align: left">
-                  <img v-if="ksmAmount > 0 && isLoadingContributed" src="../assets/polkasmith/Loading.gif" width="20" height="20"/>
-                  <span v-else>{{ formatNumber(ksmAmount * ratioReward, 2, false) }} PKS</span></h2>
-                <div style="display: inline-block; width: 50%; text-align: right">
-                  <h4>(1 KSM :
-                    <img v-if="isLoadingContributed" src="../assets/polkasmith/Loading.gif" width="20" height="20"/>
-                    <span v-else>{{ formatNumber(ratioReward, 0, false) }}</span> PKS)</h4></div>
-              </div>
-            </div>
-            <div class="contributeInputGroup">
-              <div class="contributeInputLabel">
-                <h4>Your ERC20 Wallet</h4>
-              </div>
-              <div class="contributeInput">
-                <h3 v-if="successStatus"> {{ erc20Wallet.value }}</h3>
-                <input
-                    v-else
-                    class="input"
-                    type="text"
-                    v-model="erc20Wallet.value"
-                    placeholder="Wallet to receive rewards"
-                    :style="{'border-color': erc20Wallet.value && !erc20Wallet.isValid ? 'red' : '#fff'}"
-                    @change="changeERC20"
-                />
-              </div>
-            </div>
-            <div class="contributeInputGroup">
-              <div class="contributeInputLabel">
-                <h4>Referral Code (Optional)</h4>
-              </div>
-              <div class="contributeInput">
-                <h3 v-if="successStatus"> {{ referral }}</h3>
-                <input
-                    v-else
-                    class="input"
-                    type="text"
-                    :readonly="haveReferral"
-                    v-model="referral"
-                    placeholder="Referral Code"
-                />
-              </div>
-            </div>
-            <div v-show="contributionHash">
-              <div class="contributeInputGroup">
-                <div class="contributeInputLabel">
-                  <h4>Contribution Hash:</h4>
-                </div>
-                <div class="contributeInput">
-                  <h3><a target="_blank" :href="'https://kusama.subscan.io/block/' + contributionHash"
-                         style="color: #6398FF"> {{ truncateAddress(contributionHash, 13) }} </a>
-                  </h3>
-                </div>
-              </div>
-            </div>
-            <div v-if="!contributionHash">
-              <div class="policyConfirm">
-                <input
-                    name="approvePolicy"
-                    type="checkbox"
-                    style="width: 50px; height: 50px"
-                    :checked="agreePolicy"
-                    @change="agreePolicyChange"
-                />
-                <div style="display: inline-block; marginLeft: 20px">
-      <span>I have read and accepted the <a href="/#/polkasmith-privacy" target="_blank"
-                                            style="color: #6398FF"><b>Term and Conditions</b></a> as well as the <a
-          href="https://redkite.polkafoundry.com/#/privacy" target="_blank" style="color: #6398FF">Privacy Policy</a>.
-                            I agree to receive email communications about PolkaSmith and PolkaFoundry, including exclusive launch updates and liquidity provider programs.</span>
-                </div>
-              </div>
-            </div>
-            <div v-if="isSubmitting" class="statusMessage">
-              <div class="statusTitle"><span>{{ statusMessage }}</span></div>
-              <div class="statusTime"><span>{{ executeTime }}</span></div>
-            </div>
-            <button v-if="successStatus" class="connectWallet" @click="contributeMore">CONTRIBUTE
-              MORE <img src="../assets/polkasmith/arrow-right.svg" style="margin-left: 5px"/></button>
-            <button v-else class="connectWallet" @click="submitContribution"
-                    :disabled="isSubmitting || !erc20Wallet.isValid || ksmAmount < 0.1 || ksmAmount > ksmBalance.unlocked || !agreePolicy">
-              <span v-if="!isSubmitting">Submit Contribution</span>
-              <img v-else src="../assets/polkasmith/Loading.gif" width="30" height="30"/>
-            </button>
-          </div>
         </div>
-        <h3>📌 After PolkaSmith wins, 35% of PKS delivered immediately and 65% PKS vested over 10 months</h3>
-        <h3>📌 Top 100 contributors joining the crowdloan via Polkasmith will receive a ticket to buy KABY tokens on the GameFI platform</h3>
-        <h3>📌 The contributors who refer others to the crowdloan using their unique code will be rewarded with 10% of the amount of PKS of those referents</h3>
       </div>
     </div>
+    <TopContributor :isKYC="isKYC" :userRanking="userRanking" :isLoadingProfile="isLoadingProfile" :event="event"/>
   </div>
 </template>
 
 <script>
-import Countdown from "@/components/Countdown";
+import TopContributor from "@/section/TopContributor";
 import vSelect from 'vue-select'
 import {ApiPromise, WsProvider} from '@polkadot/api'
 import {web3Accounts, web3Enable, web3FromSource} from '@polkadot/extension-dapp'
@@ -234,11 +222,14 @@ import 'vue-select/dist/vue-select.css';
 
 export default {
   name: "Contribute",
-  components: {Countdown, vSelect},
+  props: ['event'],
+  components: {vSelect, TopContributor},
   data() {
     return {
       currentWallet: localStorage.getItem('SELECTED_KSM_WALLET'),
       isWalletLoading: false,
+      isKYC: false,
+      userRanking: 0,
       selectedAccount: {data: null},
       selectOptions: [],
       ksmBalance: {free: null, total: 0, unlocked: 0},
@@ -259,7 +250,7 @@ export default {
       polkaAPI: null,
       statusMessage: "",
       refcode: "",
-      referral: "",
+      referral: new URL(location.href).searchParams.get('ref') ? new URL(location.href).searchParams.get('ref') : "",
       haveReferral: false,
       executeTime: "00:00",
       headerImg: '../assets/polkasmith/header_img.png',
@@ -432,7 +423,7 @@ export default {
       });
     },
     setMax() {
-      let max = Math.floor(this.ksmBalance.unlocked * 100) / 100
+      let max = Math.floor((this.ksmBalance.unlocked > 0.0001 ? this.ksmBalance.unlocked - 0.0001 : 0) * 100) / 100
       if (max < 0.1) {
         max = 0.1
       }
@@ -495,6 +486,8 @@ export default {
               this.haveReferral = true
               this.referral = data.data.parent
             }
+            this.isKYC = data.data.kyc
+            this.userRanking = data.data.rank
             this.contributed = parseInt(data.data.amount)
             this.erc20Wallet = {value: data.data.erc20_address, isValid: true}
             this.oldWallet = data.data.erc20_address
@@ -521,13 +514,14 @@ export default {
           })
     },
     copyRefcode() {
-      navigator.clipboard.writeText(this.refcode)
-      this.alertSuccess(`Copied "${this.refcode}"`)
+      navigator.clipboard.writeText(`https://polkasmith.polkafoundry.com/?ref=${this.refcode}`)
+      this.alertSuccess(`Copied refcode URL`)
     }
   },
   mounted() {
-    this.getContribution(this.currentWallet).then()
+    this.getContribution()
     if (this.currentWallet) {
+      this.getBalance()
       this.isWalletLoading = true
       this.getProfile()
       web3Enable('Polkafoundry Crowdloan').then((extensions) => {
@@ -561,11 +555,21 @@ export default {
 </script>
 
 <style>
+.about-event {
+  text-align: left;
+  margin: 0 20px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #FFFFFF32;
+}
+.about-event span {
+  font-weight: 300;
+}
 .polkaSmithMain {
   width: 100%;
   height: auto;
   font-size: 16px;
   padding: 0;
+  margin-bottom: 100px;
 }
 
 .polkaSmithContainer {
@@ -591,17 +595,17 @@ export default {
 }
 
 .introMain {
-  background: linear-gradient(180deg, #1e225d 0%, #030925 100%);
-  margin-top: 100px;
+  background: linear-gradient(180deg, #0DDDFB48 0%, #3232DC48 0%, #0F0D3548 35.97%);
   height: max-content;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 40px;
   text-align: center;
-  padding: 20px;
+  padding: 40px;
 }
 
 .introMain h3 {
   font-size: 16px;
+  font-weight: normal;
 }
 
 .introContainer {
@@ -610,10 +614,16 @@ export default {
   flex-wrap: wrap;
 
 }
-
+.contribute-block {
+  display: inline-block;
+  width: 55%;
+  align-content: center;
+  text-align: center;
+  line-height: 2
+}
 .introBlock {
   display: inline-block;
-  width: 50%;
+  width: 45%;
   align-content: center;
   text-align: center;
   line-height: 2
@@ -626,31 +636,33 @@ export default {
   border-style: solid;
   border-radius: 5px;
   border-color: #6398FF;
+  padding-bottom: 50px;
 }
 
 .connectWallet {
-  height: 42px;
+  background: #2CC5F4;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 60px;
+  color: #050940;
+  padding: 16px 36px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
   width: 100%;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 14px;
-  line-height: 18px;
-  color: #FFFFFF;
-  border: none;
-  outline: none;
-  padding: 0 27px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-  background-color: #3232DC;
-  margin: 10px auto 0;
-  cursor: pointer
+}
+
+.connectWallet:hover {
+  color: white;
+  font-weight: 800;
+  box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
 }
 
 button:disabled {
   background-color: grey !important;
   cursor: not-allowed;
+  box-shadow: unset !important;
+  color: initial !important;
+  font-weight: 600;
 }
 
 .input {
@@ -686,11 +698,10 @@ button:disabled {
 
 .contributeInputGroup {
   display: flex;
-  margin: 20px 0px;
 }
 
 .contributeInputGroup h2 {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .errorMessage {
@@ -720,6 +731,7 @@ button:disabled {
   display: flex;
   text-align: left;
   margin: 20px 0;
+  font-size: 14px;
 }
 
 .maxBtn {
@@ -782,6 +794,7 @@ button:disabled {
   }
   .introBlock {
     width: 100%;
+    height: 100%;
   }
   .introContribute {
     margin: 0;

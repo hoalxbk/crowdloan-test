@@ -1,5 +1,19 @@
 <template>
   <div class="wrapper col-flex">
+    <div class="information">
+      <img class="desktop" alt src="../assets/introduction.png"/>
+      <img class="mobile" alt src="../assets/introduction_mb.png"/>
+      <div class="detail">
+        <img alt src="../assets/bird.svg">
+        <h2 class="title">Why built on Kusama?</h2>
+        <p>Kusama and Polkadot are independent, standalone networks built on very similar codebases, but Kusama has
+          faster governance parameters and lower barriers to entry.</p>
+        <p>Kusama offers an early, adventurous version of Polkadot to allow teams and developers to build parachains and
+          deploy applications in an environment with economic incentives that will mirror those on Polkadot. In
+          addition, Kusama will organize its parachain auction in advance starting from 15 June 2021.</p>
+      </div>
+      <dot color="#FFFFFF66" column="7" row="5" :position="{bottom: 0, right: '-100px'}"/>
+    </div>
     <div class="bg-radial col-flex">
       <h1 class="title gradient">
         Like Polkadot and Kusama, PolkaFoundry and PolkaSmith are a pair of Mainnet - Canary.
@@ -489,7 +503,36 @@ h3.title {
   user-select: none;
 }
 
+.information {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 100px;
+}
+
+.detail {
+  position: absolute;
+  top: 60px;
+  left: 100px;
+  width: 515px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-weight: 300;
+}
+
 @media screen and (max-width: 600px) {
+  .information {
+    margin-top: 100px;
+  }
+
+  .detail {
+    top: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    align-items: center;
+    padding: 28px;
+  }
   .subtitle {
     font-size: 16px;
     line-height: 26px;

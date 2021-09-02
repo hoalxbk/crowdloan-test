@@ -1,13 +1,7 @@
 <template>
   <div id="app">
     <Header/>
-    <Introduction/>
-    <Contribute/>
-    <TopContributor/>
-    <Infomation/>
-    <Team/>
-    <Faq/>
-    <Subscribe/>
+    <router-view></router-view>
     <Footer/>
     <notifications position="top right" />
   </div>
@@ -17,23 +11,10 @@
 
 import Footer from "@/section/Footer";
 import Header from "@/section/Header";
-import Contribute from "@/section/Contribute";
-import TopContributor from "@/section/TopContributor";
-import Introduction from "@/section/Introduction";
-import Infomation from "@/section/Infomation";
-import Team from "@/section/Team";
-import Faq from "@/section/Faq";
-import Subscribe from "@/section/Subscribe";
+
 export default {
   name: 'App',
   components: {
-    Subscribe,
-    Faq,
-    Team,
-    Contribute,
-    Infomation,
-    Introduction,
-    TopContributor,
     Header,
     Footer,
   },
@@ -61,14 +42,19 @@ export default {
 <style>
 @import "css/font/font.css";
 @import 'css/style.css';
+body {
+  background: #0D1143;
+}
 #app {
   font-family: 'Graphik';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #0D1143;
   color: #fff;
   overflow-x: hidden;
   min-height: 100vh;
+  background-image: url("./assets/background.png");
+  background-repeat: no-repeat;
+  background-size: 100% 1300px;
 }
 
 nav.border {
