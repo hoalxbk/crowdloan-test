@@ -204,6 +204,8 @@ export default {
 .kyc-notice svg {
   display: inline;
   width: 40px;
+  height: 100%;
+  margin: auto;
   margin-right: 20px;
 }
 .notice-content {
