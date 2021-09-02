@@ -6,12 +6,12 @@
       <div class="banner-container">
         <div class="banner-title-container">
           <div class="banner-title">{{ event.title }}</div>
-          <div class="banner-time">Due in {{ event.end_time.toLocaleDateString() }}</div>
+          <div class="banner-time">Due in {{ new Date(event.end_time).toLocaleDateString() }}</div>
         </div>
       </div>
       <div class="countdown-main">
         <div class="countdown-container">
-          <Countdown :end-date="event.end_time"></Countdown>
+          <Countdown :endDate="event.end_time"></Countdown>
           <a class="btn-join" :href="`/#/event/${event.id}`" >Join Now <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M8.33396 1.40657L9.26675 0.33902C9.66171 -0.113007 10.3004 -0.113007 10.6911 0.33902L18.8593 9.68251C19.2543 10.1345 19.2543 10.8655 18.8593 11.3127L10.6911 20.661C10.2962 21.113 9.65751 21.113 9.26675 20.661L8.33396 19.5934C7.9348 19.1366 7.9432 18.3912 8.35077 17.944L13.4139 12.4235H1.33805C0.779223 12.4235 0.329636 11.909 0.329636 11.2694V9.73059C0.329636 9.09102 0.779223 8.57648 1.33805 8.57648H13.4139L8.35077 3.05599C7.939 2.60877 7.9306 1.86341 8.33396 1.40657Z" fill="white"/>
           </svg>
@@ -33,7 +33,8 @@ export default {
   components: {Countdown},
   data() {
     return {
-      events: [{
+      events: [],
+      events_mock: [{
         title: 'EXCLUSIVE 10% PKS FOR EARLY BIRD',
         id: 1,
         end_time: new Date(1630593203511),
@@ -42,6 +43,32 @@ export default {
         id: 1,
         end_time: new Date(1630593203511),
       }]
+    }
+  },
+  mounted() {
+    this.getEvents()
+  },
+  methods: {
+    getEvents() {
+      fetch(`https://polkasmith.polkafoundry.com/api/v1/events`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data || !data.data) {
+              return
+            }
+            console.log(data)
+            if (data.code === 200) {
+              this.events = data.data
+              if (data.data.length > 3) {
+                this.events = data.data.slice(0, 3)
+              }
+            } else {
+              this.$notify({
+                type: 'error',
+                title: data.message
+              });
+            }
+          })
     }
   }
 }
@@ -68,6 +95,7 @@ export default {
   }
   .event-container {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 50px;
     width: 100%;
     background-color: #FFFFFF32;
@@ -185,5 +213,26 @@ export default {
     font-weight: 700;
     box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
   }
-
+  @media screen and (max-width: 680px) {
+    .event-main {
+      padding: 20px;
+    }
+    .banner-container {
+      min-height: 180px;
+      width: 100%;
+    }
+    .banner-title {
+      font-size: 20px;
+    }
+    .banner-time {
+      font-size: 14px;
+    }
+    .btn-join {
+      float: none;
+    }
+    .countdown-main {
+      margin-top: -30px;
+      width: 100%;
+    }
+  }
 </style>

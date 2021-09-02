@@ -38,22 +38,22 @@
         <div v-for="(event, i) in events" :key="i" class="events-item">
           <div class="ev-time">
             <div class="ev-time-month">
-              <div style="width: 47%">{{ event.start_time.toLocaleString('default', { month: 'short' }) }}</div>
-              <div v-if="event.end_time.getTime() < new Date().getTime()" style="width: 6%">-</div>
-              <div v-if="event.end_time.getTime() < new Date().getTime()" style="width: 47%; text-align: right"> {{ event.end_time.toLocaleString('default', { month: 'short' }) }}</div>
+              <div style="width: 47%">{{ new Date(event.start_time).toLocaleString('default', { month: 'short' }) }}</div>
+              <div v-if="event.end_time < new Date().getTime()" style="width: 6%">-</div>
+              <div v-if="event.end_time < new Date().getTime()" style="width: 47%; text-align: right"> {{ new Date(event.end_time).toLocaleString('default', { month: 'short' }) }}</div>
             </div>
             <div class="ev-time-date">
-              <div style="width: 50%">{{ event.start_time.getDate() }}</div>
-              <div v-if="event.end_time.getTime() < new Date().getTime()" style="width: 50%; text-align: right"> {{ event.end_time.getDate() }}</div>
+              <div style="width: 50%">{{ new Date(event.start_time).getDate() }}</div>
+              <div v-if="event.end_time < new Date().getTime()" style="width: 50%; text-align: right"> {{ new Date(event.end_time).getDate() }}</div>
             </div>
-            <div class="ev-ended" v-if="event.end_time.getTime() < new Date().getTime()">Ended</div>
+            <div class="ev-ended" v-if="event.end_time < new Date().getTime()">Ended</div>
             <div class="ev-time-time" v-else><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M10.9892 0.166748C5.00925 0.166748 0.166748 5.02008 0.166748 11.0001C0.166748 16.9801 5.00925 21.8334 10.9892 21.8334C16.9801 21.8334 21.8334 16.9801 21.8334 11.0001C21.8334 5.02008 16.9801 0.166748 10.9892 0.166748ZM11.0001 19.6667C6.21175 19.6667 2.33341 15.7884 2.33341 11.0001C2.33341 6.21175 6.21175 2.33341 11.0001 2.33341C15.7884 2.33341 19.6667 6.21175 19.6667 11.0001C19.6667 15.7884 15.7884 19.6667 11.0001 19.6667ZM11.5417 5.58342H9.91675V12.0834L15.6042 15.4959L16.4167 14.1634L11.5417 11.2709V5.58342Z" fill="#696786"/>
             </svg>
-              {{ event.start_time.toLocaleTimeString() }} ({{ new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1] }})</div>
+              {{ new Date(event.start_time).toLocaleTimeString() }} ({{ new Date().toString().match(/([A-Z]+[\+-][0-9]+)/)[1] }})</div>
           </div>
           <div class="ev-detail">
-            <h2>{{ event.title }}</h2>
+            <a :href="`/#/event/${event.id}`"><h2>{{ event.title }}</h2></a>
             <span>{{ event.detail }}</span>
             <div class="ev-raised">
               <svg width="44" height="42" viewBox="0 0 44 42" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,7 +84,8 @@ name: "Events",
   components: {Subscribe, OngoingEvents},
   data() {
   return {
-    events: [{
+    events: [],
+    events_mock: [{
       id: 1,
       title: 'EXCLUSIVE 10% PKS FOR EARLY BIRD',
       start_time: new Date(),
@@ -107,6 +108,29 @@ name: "Events",
       raised: 30000
     }]
   }
+  },
+  mounted() {
+    this.getEvents()
+  },
+  methods: {
+    getEvents() {
+      fetch(`https://polkasmith.polkafoundry.com/api/v1/events`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data || !data.data) {
+              return
+            }
+            console.log(data)
+            if (data.code === 200) {
+              this.events = data.data
+            } else {
+              this.$notify({
+                type: 'error',
+                title: data.message
+              });
+            }
+          })
+    }
   }
 
 }
@@ -282,5 +306,51 @@ name: "Events",
   margin-top: 20px;
   border-radius: 10px;
   background-color: #636363;
+}
+@media screen and (max-width: 680px) {
+  .events-container {
+    padding: 0;
+  }
+  .hero {
+    margin-top: 100px;
+    text-align: center;
+  }
+  .hero .title {
+    flex-wrap: wrap;
+  }
+  .hero .title img {
+    margin: 0 auto;
+  }
+  .events-header {
+    flex-wrap: wrap;
+    max-height: unset;
+  }
+  .events-title {
+    text-align: center;
+    width: 100%;
+  }
+  .events-filter {
+    width: 100%;
+    height: 50px;
+  }
+  .events-item {
+    flex-wrap: wrap;
+    border-bottom: 1px solid #FFFFFF90;
+  }
+  .ev-time {
+    width: 100%;
+    margin-bottom: 20px;
+    border-right: unset;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #FFFFFF10;
+  }
+  .ev-detail {
+    width: 100%;
+  }
+
+  .events-list {
+    margin: 20px;
+  }
+
 }
 </style>

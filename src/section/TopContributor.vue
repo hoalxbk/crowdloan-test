@@ -89,10 +89,10 @@ export default {
       }
     }
   },
-  mounted() {
-    this.loadTopContrubute()
-  },
   watch: {
+    event() {
+      this.loadTopContrubute()
+    },
     currentPage() {
       if (!this.currentPage) {
         return;
@@ -110,7 +110,10 @@ export default {
       return  (parseInt(value)/100).toLocaleString("us-US", {minimumFractionDigits: 2})
     },
     loadTopContrubute() {
-      fetch(`https://polkasmith.polkafoundry.com/api/v1/top-100`)
+      if (!this.event || !this.event.id) {
+        return
+      }
+      fetch(`https://polkasmith.polkafoundry.com/api/v1/event/${this.event.id}/top-100`)
           .then(response => response.json())
           .then(data => {
             console.log(data.data)
@@ -184,6 +187,7 @@ export default {
   border: 2px solid #989898 !important;
   background-color: transparent !important;
   border: unset !important;
+  color: gray !important;
 }
 .kyc-notice {
   margin-top: 20px;

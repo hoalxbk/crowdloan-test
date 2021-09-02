@@ -5,7 +5,7 @@
           <div class="banner-title">{{ event.title }}</div>
       </div>
       <div class="countdown-main">
-          <Countdown :end-date="event.end_time"></Countdown>
+          <Countdown v-if="event && event.end_time && event.end_time > 0" :end-date="event.end_time"></Countdown>
       </div>
     </div>
     <contribute :event="event"/>
@@ -22,7 +22,8 @@ name: "EventDetail",
   components: { Contribute, Countdown, Subscribe},
   data() {
     return {
-      event: {
+      event: {},
+      event_mock: {
         id: 1,
         title: 'EXCLUSIVE 10% PKS FOR EARLY BIRD',
         end_time: new Date(1630577690424),
@@ -30,12 +31,36 @@ name: "EventDetail",
         detail: 'We are also running a referral program that lets you earn bonuses on any contributions made to our crowdloan via your personalized referral link.',
         raised: 30000,
         notes: [
-            "📌 After PolkaSmith wins, 35% of PKS delivered immediately and 65% PKS vested over 10 months",
-            "📌 Top 100 contributors joining the crowdloan via Polkasmith will receive a ticket to buy KABY tokens on the GameFI platform",
+            "After PolkaSmith wins, 35% of PKS delivered immediately and 65% PKS vested over 10 months",
+            "Top 100 contributors joining the crowdloan via Polkasmith will receive a ticket to buy KABY tokens on the GameFI platform",
         ],
         snapshot_time: 1630256408000
       },
-      eventID: this.$route.params.id
+    }
+  },
+  mounted() {
+    if (this.$route.params.id) {
+      this.getEvent(this.$route.params.id)
+    }
+  },
+  methods: {
+    getEvent(id) {
+      fetch(`https://polkasmith.polkafoundry.com/api/v1/event/${id}`)
+          .then(response => response.json())
+          .then(data => {
+            if (!data || !data.data) {
+              return
+            }
+            console.log(data)
+            if (data.code === 200) {
+              this.event = data.data
+            } else {
+              this.$notify({
+                type: 'error',
+                title: data.message
+              });
+            }
+          })
     }
   }
 }

@@ -144,6 +144,9 @@ export default {
     .navbar-toggler {
       display: block;
     }
+    .event-btn {
+      margin-bottom: 20px;
+    }
 
     .collapse {
       display: none;

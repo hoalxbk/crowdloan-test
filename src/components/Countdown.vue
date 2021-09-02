@@ -44,13 +44,16 @@ export default {
     }
   },
   mounted() {
+    if (!this.endDate || this.endDate === 0) {
+      return
+    }
     this.countDown(this.endDate)
   },
   methods: {
     countDown(time) {
       const countDownInterval = setInterval(() => {
         let now = new Date()
-        let offset = Math.floor((time.getTime() - now.getTime()) / 1000)
+        let offset = Math.floor((time - now.getTime()) / 1000)
         if (offset <= 0) {
           clearInterval(countDownInterval)
           return

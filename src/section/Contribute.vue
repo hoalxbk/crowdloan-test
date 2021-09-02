@@ -4,7 +4,7 @@
       <div class="introMain">
         <div class="about-event">
           <span >ABOUT THE EVENT</span>
-          <p v-for="(note, i) in event.notes" :key="i">{{ note }}</p>
+          <p v-for="(note, i) in event.notes" :key="i">📌 {{ note }}</p>
         </div>
         <div class="introContainer">
           <div class="contribute-block">
@@ -172,31 +172,38 @@
               <a style="float: right; color: #6398FF; font-size: 16px; margin-top: 10px"
                  href="https://polkadot.js.org/extension/" target="_blank">Get Polkadot.js
                 extension?</a>
-              <div v-if="currentWallet" style="margin-top: 50px; text-align: left; display: flex; flex-wrap: wrap">
-                <div class="detailInfo">
-                  <h3 style="color: #aeaeae">Your Referral Code</h3>
-                  <h2>
+              <div style="margin-top: 50px; text-align: left; display: flex; flex-wrap: wrap">
+                <div style="display: block; width: 100%">
+                  <h3 style="color: #aeaeae">Your Referral Link</h3>
+                  <h2 v-if="currentWallet">
                     <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
-                    <span v-else>{{ refcode }} <a @click="copyRefcode"><img src="../assets/polkasmith/copy.png" width="20" height="20"/></a></span>
+                    <div class="refcode-value" v-else>{{ `https://polkasmith.polkafoundry.com/#/event/${this.event.id}?ref=${this.refcode}` }}<a @click="copyRefcode"><img src="../assets/polkasmith/copy.png" width="25" height="25" style="margin-bottom: -8px; margin-left: 5px"/></a></div>
                   </h2>
+                  <h2 v-else>_</h2>
+                </div>
+                <div class="detailInfo">
                   <h3 style="color: #aeaeae">Your KSM Balance</h3>
-                  <h2>
+                  <h2 v-if="currentWallet">
                     <img v-if="isLoadingBalance" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
                     <span v-else>{{ formatNumber(ksmBalance.total, 2, false) }} KSM</span></h2>
+                  <h2 v-else>_</h2>
                   <h3 style="color: #aeaeae; margin-top: 20px">Unlocked KSM Balance</h3>
-                  <h2>
+                  <h2 v-if="currentWallet">
                     <img v-if="isLoadingBalance" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
                     <span v-else>{{ formatNumber(ksmBalance.unlocked, 2, false) }} KSM</span></h2>
+                  <h2 v-else>_</h2>
                 </div>
                 <div class="detailInfo" style="padding-left: 20px">
                   <h3 style="color: #aeaeae">KSM contributed</h3>
-                  <h2>
+                  <h2 v-if="currentWallet">
                     <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
                     <span v-else>{{ formatNumber(contributed / ksmDecimals, 2, false) }} KSM</span></h2>
+                  <h2 v-else>_</h2>
                   <h3 style="margin-top: 20px; color: #aeaeae">Estimated Rewards</h3>
-                  <h2>
+                  <h2 v-if="currentWallet">
                     <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
                     <span v-else> {{ formatNumber(contributed * ratioReward / ksmDecimals, 0, false) }} PKS</span></h2>
+                  <h2 v-else>_</h2>
                 </div>
               </div>
             </div>
@@ -514,7 +521,7 @@ export default {
           })
     },
     copyRefcode() {
-      navigator.clipboard.writeText(`https://polkasmith.polkafoundry.com/?ref=${this.refcode}`)
+      navigator.clipboard.writeText(`https://polkasmith.polkafoundry.com/#/event/${this.event.id}?ref=${this.refcode}`)
       this.alertSuccess(`Copied refcode URL`)
     }
   },
@@ -555,10 +562,28 @@ export default {
 </script>
 
 <style>
+.refcode-value {
+  word-break: break-word;
+  font-size: 12px;
+  font-weight: normal;
+  background-color: #ffffff10;
+  border: 1px solid #ffffff60;
+  border-radius: 5px;
+  padding: 10px;
+  padding-right: 40px;
+  color: #ffffffbb;
+  position: relative;
+}
+.refcode-value a{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+}
 .about-event {
   text-align: left;
   margin: 0 20px;
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   border-bottom: 1px solid #FFFFFF32;
 }
 .about-event span {
@@ -575,7 +600,6 @@ export default {
 .polkaSmithContainer {
   max-width: 1280px;
   align-items: center;
-  padding: 60px;
   margin: auto;
   color: white;
 }
@@ -753,7 +777,7 @@ button:disabled {
   position: absolute;
   top: 15px;
   right: 5px;
-  z-index: 9999;
+  z-index: 9;
   margin: auto
 }
 
@@ -783,22 +807,54 @@ button:disabled {
   border-radius: 10px;
   background-color: #f0f0f0 !important;
 }
-
-@media screen and (max-width: 680px) {
-  .polkaSmithContainer {
-    padding: 20px;
-    display: block;
-  }
+@media screen and (max-width: 1200px) {
   .introContainer {
-    display: block;
+    flex-wrap: wrap-reverse;
+  }
+  .contribute-block {
+    width: 100%;
   }
   .introBlock {
     width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .detailInfo {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 680px) {
+  .refcode-value {
+    font-size: 11px;
+  }
+  .polkaSmithContainer {
+    display: block;
+    width: auto;
+    margin: 0 -15px;
+  }
+  .introMain {
+    padding: 50px 10px;
+  }
+  .introContainer {
+    display: flex;
+    flex-wrap: wrap-reverse;
+  }
+  .contribute-block {
+    width: 100%;
+  }
+  .table-container {
+    padding: 0;
+  }
+  .introBlock {
     height: 100%;
+    width: 100%;
+    margin-top: 10px;
   }
   .introContribute {
     margin: 0;
     padding: 10px;
+    border-width: 0;
+    border-bottom: 1px solid #ffffff32;
   }
   .vs__actions {
     display: none !important;
