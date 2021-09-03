@@ -56,7 +56,7 @@ export default {
 <style scoped>
 .wrapper {
   position: relative;
-  padding: 160px var(--padding-section) 60px;
+  padding: 120px var(--padding-section) 60px;
   display: flex;
   flex-direction: column;
   align-items: center;

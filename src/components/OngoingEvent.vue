@@ -94,7 +94,7 @@ export default {
   .event-main {
     display: block;
     max-width: 1280px;
-    margin: 50px auto;
+    margin: 0 auto;
     margin-bottom: 0;
     padding: 60px;
     width: 100%;
