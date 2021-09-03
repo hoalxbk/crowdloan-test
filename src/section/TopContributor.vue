@@ -98,8 +98,17 @@ export default {
       }
     }
   },
+  mounted() {
+    if (!this.event) {
+      return
+    }
+    this.loadTopContrubute()
+  },
   watch: {
     event() {
+      if (!this.event) {
+        return
+      }
       this.loadTopContrubute()
     },
     currentPage() {
