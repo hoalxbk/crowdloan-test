@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="events-list">
-        <div v-for="(event, i) in events_mock" :key="i" class="events-item">
+        <div v-for="(event, i) in events" :key="i" class="events-item">
           <div class="ev-time">
             <div class="ev-time-month">
               <div style="width: 47%">{{ new Date(event.start_time).toLocaleString('default', { month: 'short' }) }}</div>
