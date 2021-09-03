@@ -18,7 +18,7 @@
             </div>
             <div class="event-details">
               <div class="event-details-label">DUE IN</div>
-              <div class="event-details-value">{{ new Date(event.end_time).toLocaleDateString() }}</div>
+              <div class="event-details-value">{{ new Date(event.end_time).getDate() }} {{ new Date(event.end_time).toLocaleString('default', { month: 'short' }) }}</div>
             </div>
           </div>
           <Countdown :endDate="event.end_time"></Countdown>
