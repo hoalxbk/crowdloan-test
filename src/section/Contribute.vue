@@ -3,8 +3,9 @@
     <div ref="contribute" class="polkaSmithContainer">
       <div class="introMain">
         <div class="about-event">
-          <span >ABOUT THE EVENT</span>
-          <p v-for="(note, i) in event.notes" :key="i">📌 {{ note }}</p>
+          <span >About the event</span>
+          <p>{{ !event || !event.about ? "" : event.about }}</p>
+          <a v-if="event && event.guide" :href="event.guide" target="_blank">Read more</a>
         </div>
         <div class="introContainer">
           <div class="contribute-block">
@@ -37,10 +38,8 @@
                 </div>
               </div>
               <div v-if="!successStatus" class="errorMessage">
-                <span v-if="ksmReward > 0 && ksmAmount < 0.1">the contribution amount can not be less than 0.1 KSM</span>
-                <span v-else>{{
-                    ksmReward > 0 && ksmAmount > ksmBalance.unlocked ? 'the maximum contribution is no more than unlocked balance' : ""
-                  }}</span>
+                <span v-if="ksmAmount > 0 && ksmAmount < 0.1">the contribution amount can not be less than 0.1 KSM</span>
+                <span v-else>{{  ksmAmount > ksmBalance.unlocked ? 'the maximum contribution is no more than unlocked balance' : "" }}</span>
               </div>
               <div class="contributeInputGroup">
                 <div class="contributeInputLabel">
@@ -173,14 +172,6 @@
                  href="https://polkadot.js.org/extension/" target="_blank">Get Polkadot.js
                 extension?</a>
               <div style="margin-top: 50px; text-align: left; display: flex; flex-wrap: wrap">
-                <div style="display: block; width: 100%">
-                  <h3 style="color: #aeaeae">Your Referral Link</h3>
-                  <h2 v-if="currentWallet">
-                    <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
-                    <div class="refcode-value" v-else>{{ `https://polkasmith.polkafoundry.com/#/event/${this.event.id}?ref=${this.refcode}` }}<a @click="copyRefcode"><img src="../assets/polkasmith/copy.png" width="25" height="25" style="margin-bottom: -8px; margin-left: 5px"/></a></div>
-                  </h2>
-                  <h2 v-else>_</h2>
-                </div>
                 <div class="detailInfo">
                   <h3 style="color: #aeaeae">Your KSM Balance</h3>
                   <h2 v-if="currentWallet">
@@ -209,11 +200,26 @@
             </div>
           </div>
         </div>
+        <div v-if="currentWallet" class="affiliate">
+          <div class="affiliate-title">Your affiliate code</div>
+          <div style="display: block;">
+            <h3 style="color: #eee; text-align: left">Your Referral Link</h3>
+            <h2 v-if="currentWallet">
+              <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
+              <div class="refcode-value" v-else>{{ `https://polkasmith.polkafoundry.com/#/event/${this.event.id}?ref=${this.refcode}` }}<a @click="copyRefcode"><svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.8568 3.85706H1.92852C0.863427 3.85706 0 4.89317 0 6.17128V19.2852C0 20.5633 0.863427 21.5994 1.92852 21.5994H12.8568C13.9219 21.5994 14.7853 20.5633 14.7853 19.2852V6.17128C14.7853 4.89317 13.9219 3.85706 12.8568 3.85706Z" fill="#2CC5F4"/>
+                <path d="M16.0709 1.49431e-09H4.49981C3.44048 -4.51982e-05 2.57943 1.02531 2.57129 2.29646C2.57129 2.30265 2.57129 2.30803 2.57129 2.31422H12.8567C14.631 2.31676 16.0688 4.04212 16.0709 6.17125V18.5138C16.0761 18.5138 16.0806 18.5138 16.0857 18.5138C17.1451 18.504 17.9995 17.4708 17.9995 16.1996V2.31422C17.9995 1.03611 17.136 1.49431e-09 16.0709 1.49431e-09Z" fill="#2CC5F4"/>
+              </svg>
+              </a></div>
+            </h2>
+            <h2 v-else>_</h2>
+          </div>
+        </div>
         <div>
         </div>
       </div>
     </div>
-    <TopContributor :isKYC="isKYC" :userRanking="userRanking" :isLoadingProfile="isLoadingProfile" :event="event"/>
+    <TopContributor :isKYC="isKYC" :userRanking="userRanking" :isLoadingProfile="isLoadingProfile" :event="event" :walletAddress="currentWallet"/>
   </div>
 </template>
 
@@ -245,7 +251,6 @@ export default {
       erc20Wallet: {value: "", isValid: false},
       oldWallet: "",
       agreePolicy: false,
-      ksmReward: 0,
       isSubmitting: false,
       contributionHash: "",
       contributed: 0,
@@ -257,7 +262,7 @@ export default {
       polkaAPI: null,
       statusMessage: "",
       refcode: "",
-      referral: new URL(location.href).searchParams.get('ref') ? new URL(location.href).searchParams.get('ref') : "",
+      referral: this.$route.query.ref ? this.$route.query.ref : "",
       haveReferral: false,
       executeTime: "00:00",
       headerImg: '../assets/polkasmith/header_img.png',
@@ -436,7 +441,6 @@ export default {
       }
       //  this.$refs.amountKsmInput.current.value = max
       this.ksmAmount = max
-      this.ksmReward = (max * this.ratioReward)
     },
     agreePolicyChange() {
       this.agreePolicy = !this.agreePolicy
@@ -467,18 +471,6 @@ export default {
     },
     contributeMore() {
       window.location.reload();
-    },
-    calculatorKSMChange(event) {
-      let value = event.target.value
-      if (!value) {
-        value = 0
-      }
-      if (parseFloat(value) < 0) {
-        event.target.value = 0
-        value = 0
-      }
-      event.target.value = Math.floor(parseFloat(value) * 100) / 100
-      this.ksmAmountCal(parseFloat(event.target.value))
     },
     getProfile() {
       this.isLoadingProfile = true
@@ -555,23 +547,29 @@ export default {
         })
       })
     }
-
     this.isWalletLoading = false
   }
 }
 </script>
 
 <style>
+.affiliate-title {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+  padding: 20px 0 10px 0;
+}
 .refcode-value {
   word-break: break-word;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: normal;
-  background-color: #ffffff10;
+  background-color: #FFFFFF;
   border: 1px solid #ffffff60;
   border-radius: 5px;
   padding: 10px;
   padding-right: 40px;
-  color: #ffffffbb;
+  color: #000;
+  text-align: left;
   position: relative;
 }
 .refcode-value a{
@@ -583,11 +581,17 @@ export default {
 .about-event {
   text-align: left;
   margin: 0 20px;
+  font-size: 26px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #FFFFFF32;
+  border-bottom: 2px solid #FFFFFF32;
 }
-.about-event span {
-  font-weight: 300;
+.about-event p {
+  font-size: 16px;
+  font-weight: 400;
+}
+.about-event a {
+  font-size: 16px;
+  color: #00C7F4;
 }
 .polkaSmithMain {
   width: 100%;
@@ -636,7 +640,9 @@ export default {
   display: flex;
   width: 100%;
   flex-wrap: wrap;
-
+  border-bottom: 2px solid #FFFFFF32;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
 }
 .contribute-block {
   display: inline-block;
@@ -709,23 +715,29 @@ button:disabled {
 }
 
 .contributeForm h1 {
-  font-size: 36px;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
 }
 
 .contributeForm h2 {
   font-size: 24px;
+  font-weight: 500;
 }
 
 .contributeForm h4 {
   font-size: 16px;
+  font-weight: 500;
 }
 
 .contributeInputGroup {
   display: flex;
+  margin-top: -15px;
 }
 
 .contributeInputGroup h2 {
   font-size: 20px;
+  font-weight: 500;
 }
 
 .errorMessage {
@@ -734,7 +746,7 @@ button:disabled {
   min-height: 20px;
   margin-top: -15px;
   color: #ff5151;
-  font-size: 15px
+  font-size: 13px
 }
 
 .contributeInputLabel {
@@ -807,6 +819,10 @@ button:disabled {
   border-radius: 10px;
   background-color: #f0f0f0 !important;
 }
+
+.refcode-value {
+  width: 50%;
+}
 @media screen and (max-width: 1200px) {
   .introContainer {
     flex-wrap: wrap-reverse;
@@ -825,7 +841,8 @@ button:disabled {
 }
 @media screen and (max-width: 680px) {
   .refcode-value {
-    font-size: 11px;
+    width: 100%;
+    font-size: 10px;
   }
   .polkaSmithContainer {
     display: block;

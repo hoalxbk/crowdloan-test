@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="events-list">
-        <div v-for="(event, i) in events" :key="i" class="events-item">
+        <div v-for="(event, i) in events_mock" :key="i" class="events-item">
           <div class="ev-time">
             <div class="ev-time-month">
               <div style="width: 47%">{{ new Date(event.start_time).toLocaleString('default', { month: 'short' }) }}</div>
@@ -56,15 +56,15 @@
             <a :href="`/#/event/${event.id}`"><h2>{{ event.title }}</h2></a>
             <span>{{ event.detail }}</span>
             <div class="ev-raised">
-              <svg width="44" height="42" viewBox="0 0 44 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 12C17.5228 12 22 9.76142 22 7C22 4.23858 17.5228 2 12 2C6.47715 2 2 4.23858 2 7C2 9.76142 6.47715 12 12 12Z" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 7V14C2 16.761 6.477 19 12 19C17.523 19 22 16.761 22 14V7" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 14V21C2 23.761 6.477 26 12 26C17.523 26 22 23.761 22 21V14" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 21V28C2 30.761 6.477 33 12 33C17.523 33 22 30.761 22 28V21" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M2 28V35C2 37.761 6.477 40 12 40C17.523 40 22 37.761 22 35V28" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M32 26C37.5228 26 42 23.7614 42 21C42 18.2386 37.5228 16 32 16C26.4772 16 22 18.2386 22 21C22 23.7614 26.4772 26 32 26Z" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M22 21V28C22 30.761 26.477 33 32 33C37.523 33 42 30.761 42 28V21" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M22 28V35C22 37.761 26.477 40 32 40C37.523 40 42 37.761 42 35V28" stroke="#7B7A95" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.81079 10.3062C6.37284 10.3062 6.91612 10.2699 7.43021 10.2024V4.56746C6.91617 4.49993 6.37284 4.46362 5.81079 4.46362C2.60159 4.46362 0 5.64355 0 7.09912V7.67069C0 9.12621 2.60159 10.3062 5.81079 10.3062Z" fill="#2CC5F4"/>
+                <path d="M5.81079 13.2486C6.37284 13.2486 6.91612 13.2123 7.43021 13.1448V11.4931C6.91602 11.5606 6.37299 11.5974 5.81079 11.5974C3.0095 11.5974 0.671413 10.6983 0.122211 9.50171C0.042231 9.67601 0 9.85649 0 10.0415V10.6131C0 12.0686 2.60159 13.2486 5.81079 13.2486Z" fill="#2CC5F4"/>
+                <path d="M7.43021 14.5639V14.4355C6.91602 14.503 6.37299 14.5398 5.81079 14.5398C3.0095 14.5398 0.671413 13.6407 0.122211 12.4441C0.042231 12.6183 0 12.7988 0 12.9838V13.5554C0 15.011 2.60159 16.1909 5.81079 16.1909C6.45257 16.1909 7.06985 16.1436 7.64709 16.0565C7.50401 15.7638 7.43021 15.4551 7.43021 15.1354V14.5639Z" fill="#2CC5F4"/>
+                <path d="M14.1897 0C10.9805 0 8.37891 1.17993 8.37891 2.6355V3.20706C8.37891 4.66264 10.9805 5.84257 14.1897 5.84257C17.3989 5.84257 20.0005 4.66264 20.0005 3.20706V2.6355C20.0005 1.17993 17.3989 0 14.1897 0Z" fill="#2CC5F4"/>
+                <path d="M14.1897 7.1338C11.3884 7.1338 9.05032 6.23475 8.50112 5.03809C8.42114 5.21234 8.37891 5.39282 8.37891 5.57788V6.14944C8.37891 7.60501 10.9805 8.78494 14.1897 8.78494C17.3989 8.78494 20.0005 7.60501 20.0005 6.14944V5.57788C20.0005 5.39282 19.9583 5.21234 19.8783 5.03809C19.3291 6.23475 16.991 7.1338 14.1897 7.1338Z" fill="#2CC5F4"/>
+                <path d="M14.1897 10.0762C11.3884 10.0762 9.05032 9.17708 8.50112 7.98047C8.42114 8.15472 8.37891 8.3352 8.37891 8.52026V9.09182C8.37891 10.5474 10.9805 11.7274 14.1897 11.7274C17.3989 11.7274 20.0005 10.5474 20.0005 9.09182V8.52026C20.0005 8.3352 19.9583 8.15472 19.8783 7.98047C19.3291 9.17713 16.991 10.0762 14.1897 10.0762Z" fill="#2CC5F4"/>
+                <path d="M14.1897 13.1775C11.3884 13.1775 9.05032 12.2784 8.50112 11.0818C8.42114 11.2561 8.37891 11.4365 8.37891 11.6215V12.1931C8.37891 13.6487 10.9805 14.8286 14.1897 14.8286C17.3989 14.8286 20.0005 13.6487 20.0005 12.1931V11.6215C20.0005 11.4365 19.9583 11.256 19.8783 11.0818C19.3291 12.2783 16.991 13.1775 14.1897 13.1775Z" fill="#2CC5F4"/>
+                <path d="M14.1897 16.1199C11.3884 16.1199 9.05032 15.2208 8.50112 14.0242C8.42114 14.1985 8.37891 14.379 8.37891 14.564V15.1355C8.37891 16.5911 10.9805 17.771 14.1897 17.771C17.3989 17.771 20.0005 16.5911 20.0005 15.1355V14.5639C20.0005 14.3789 19.9583 14.1984 19.8783 14.0242C19.3291 15.2208 16.991 16.1199 14.1897 16.1199Z" fill="#2CC5F4"/>
               </svg>
               <span>Up to {{ event.raised.toLocaleString() }} PKS Bonus</span>
             </div>
@@ -266,7 +266,7 @@ name: "Events",
 .ev-time-month {
   font-size: 36px;
   display: flex;
-  font-weight: lighter;
+  font-weight: normal;
 }
 
 .ev-time-date {
@@ -286,7 +286,7 @@ name: "Events",
 }
 
 .ev-detail h2 {
-  size: 36px;
+  size: 32px;
   font-weight: 600;
   margin-top: 5px;
   padding-bottom: 10px;
@@ -295,17 +295,23 @@ name: "Events",
 .ev-detail .ev-raised {
   margin-top: 20px;
 }
+.ev-raised span {
+  color: #2CC5F4;
+  font-weight: 600;
+}
 .ev-detail .ev-raised svg{
   margin-bottom: -3px;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 .ev-ended {
   width: 100%;
+  max-width: 100px;
   text-align: center;
   padding: 5px;
+  margin: 0 auto;
   margin-top: 20px;
   border-radius: 10px;
-  background-color: #636363;
+  background-color: #D52D6F;
 }
 @media screen and (max-width: 680px) {
   .events-container {

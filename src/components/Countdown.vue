@@ -1,33 +1,33 @@
 <template>
-    <div class="introCounting">
-      <div class="time-main" >
-        <div class="timeContainer">
-          <h1>{{ countDays }}</h1>
-        </div>
-        <span style="color: #aeaeae; font-size: 16px}">Days</span>
+  <div class="introCounting">
+    <div class="time-main">
+      <div class="timeContainer">
+        <div class="number">{{ countDays }}</div>
       </div>
-      <h1 class="time-space">:</h1>
-      <div class="time-main" >
-        <div class="timeContainer">
-          <h1>{{ countHours }}</h1>
-        </div>
-        <span style="color: #aeaeae; font-size: 16px">Hours</span>
-      </div>
-      <h1 class="time-space">:</h1>
-      <div class="time-main" >
-        <div class="timeContainer">
-          <h1 >{{ countMinutes }}</h1>
-        </div>
-        <span style="color: #aeaeae; font-size: 16px">Minutes</span>
-      </div>
-      <h1 class="time-space">:</h1>
-      <div class="time-main" >
-        <div class="timeContainer">
-          <h1>{{ countSeconds }}</h1>
-        </div>
-        <span style="color: #aeaeae; font-size: 16px;">Seconds</span>
-      </div>
+      <span style="color: #aeaeae;}">Days</span>
     </div>
+    <div class="time-space">:</div>
+    <div class="time-main">
+      <div class="timeContainer">
+        <div class="number">{{ countHours }}</div>
+      </div>
+      <span style="color: #aeaeae;">Hours</span>
+    </div>
+    <div class="time-space">:</div>
+    <div class="time-main">
+      <div class="timeContainer">
+        <div class="number">{{ countMinutes }}</div>
+      </div>
+      <span style="color: #aeaeae;">Minutes</span>
+    </div>
+    <div class="time-space">:</div>
+    <div class="time-main">
+      <div class="timeContainer">
+        <div class="number">{{ countSeconds }}</div>
+      </div>
+      <span style="color: #aeaeae;">Seconds</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -72,31 +72,36 @@ export default {
 </script>
 <style scoped>
 .introCounting {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
   text-align: center;
+  border-top: 2px solid #FFFFFF32;
+  border-bottom: 2px solid #FFFFFF32;
+
 }
+
 .time-space {
-  margin: auto 10px;
+  font-size: 36px;
+  margin: 15px 10px;
 }
-.introCounting h1 {
-   font-size: 36px;
- }
+
+.introCounting .number {
+  font-size: 36px;
+  font-weight: 500;
+}
 
 .introCounting span {
-   font-size: 16px;
- }
+  font-size: 14px;
+}
 
 .timeContainer {
   border-radius: 10px;
   width: 70px;
-  height: 70px;
+  height: 60px;
   line-height: 2;
-  background-color: #ffffff60;
   text-align: center;
-  margin-bottom: 10px;
 }
 
 @media screen and (max-width: 680px) {
@@ -105,9 +110,11 @@ export default {
     margin-bottom: 5px;
     height: 60px;
   }
+
   .introCounting h1 {
     font-size: 28px;
   }
+
   .timeContainer h1 {
     line-height: 2.5;
     font-size: 24px;

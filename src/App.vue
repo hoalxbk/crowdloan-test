@@ -52,9 +52,6 @@ body {
   color: #fff;
   overflow-x: hidden;
   min-height: 100vh;
-  background-image: url("./assets/background.png");
-  background-repeat: no-repeat;
-  background-size: 100% 1300px;
 }
 
 nav.border {

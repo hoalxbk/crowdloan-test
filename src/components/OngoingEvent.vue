@@ -3,26 +3,31 @@
   <div class="event-main">
     <div class="event-title" v-if="!hiddenTitle">Ongoing Events</div>
     <div v-for="(event, i) in events" :key="i" class="event-container">
+      <div class="dot" style="top: -12px;"></div>
+      <div class="dot" style="bottom: -12px;"></div>
       <div class="banner-container">
-        <div class="banner-title-container">
-          <div class="banner-title">{{ event.title }}</div>
-          <div class="banner-time">Due in {{ new Date(event.end_time).toLocaleDateString() }}</div>
-        </div>
+        <img class="banner-img" :src="`${!event || !event.banner_url ? 'template-banner.png' : event.banner_url}`"/>
       </div>
       <div class="countdown-main">
-        <div class="countdown-container">
+        <div class="details-container">
+          <div class="banner-title-container">
+            <div class="banner-title">{{ event.title }}</div>
+            <div class="event-details">
+              <div class="event-details-label">TOTAL</div>
+              <div class="event-details-value">${{ !event || !event.raised ? 0 : event.raised }}</div>
+            </div>
+            <div class="event-details">
+              <div class="event-details-label">DUE IN</div>
+              <div class="event-details-value">{{ new Date(event.end_time).toLocaleDateString() }}</div>
+            </div>
+          </div>
           <Countdown :endDate="event.end_time"></Countdown>
-          <a class="btn-join" :href="`/#/event/${event.id}`" >Join Now <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8.33396 1.40657L9.26675 0.33902C9.66171 -0.113007 10.3004 -0.113007 10.6911 0.33902L18.8593 9.68251C19.2543 10.1345 19.2543 10.8655 18.8593 11.3127L10.6911 20.661C10.2962 21.113 9.65751 21.113 9.26675 20.661L8.33396 19.5934C7.9348 19.1366 7.9432 18.3912 8.35077 17.944L13.4139 12.4235H1.33805C0.779223 12.4235 0.329636 11.909 0.329636 11.2694V9.73059C0.329636 9.09102 0.779223 8.57648 1.33805 8.57648H13.4139L8.35077 3.05599C7.939 2.60877 7.9306 1.86341 8.33396 1.40657Z" fill="white"/>
-          </svg>
-          </a>
+          <a class="btn-join" :href="`/#/event/${event.id}`" >Join Now</a>
         </div>
       </div>
     </div>
-    <div class="explore-events" v-if="!hiddenTitle"><a class="btn" href="/#/events">Explore Events</a></div>
+    <div class="explore-events" v-if="!hiddenTitle"><a class="btn" href="/#/events">View all events</a></div>
   </div>
-    <div v-if="!hiddenTitle" class="background-1"></div>
-    <div v-if="!hiddenTitle" class="background-2"></div>
   </div>
 </template>
 <script>
@@ -74,6 +79,14 @@ export default {
 }
 </script>
 <style scoped>
+.dot {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  right: 22.5%;
+  border-radius: 24px;
+  background-color: #0d1143;
+}
   .event {
     position: relative;
     width: 100%;
@@ -98,74 +111,80 @@ export default {
     flex-wrap: wrap;
     margin-top: 50px;
     width: 100%;
-    background-color: #FFFFFF32;
+    background-color: #FFFFFF16;
     border-radius: 40px;
-    padding: 30px;
+    padding: 20px;
     z-index: 2;
+    border: 1px solid;
+    border-image-source: linear-gradient(96.86deg, rgba(255, 255, 255, 0.17) 1.18%, rgba(255, 255, 255, 0.08) 103.85%);
+    position: relative;
+  }
+  .banner-img {
+    width: 100%;
+    height: auto;
+    border-radius: 40px;
   }
   .banner-container {
     display: inline;
-    width: 50%;
-    background-image:  url("../assets/polkasmith/banner-bg.png");
-    background-size: 100% 100%;
+    width: 55%;
     position: relative;
   }
   .banner-title-container {
-    font-size: 34px;
-    font-weight: bold;
-    position: absolute;
-    width: 95%;
-    height: 50%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-53%, -60%);
-    background-image: url("../assets/polkasmith/banner-title-bg.png");
-    background-size: 100% 100%;
-    padding: 0 15%;
-    display: flex;
-    justify-content: center;
+    padding: 10px 0;
   }
   .banner-title {
-    height: fit-content;
     margin: auto;
+    font-size: 24px;
+    padding-bottom: 10px;
+    text-align: center;
+    font-weight: 500;
   }
-  .banner-time {
-    position: absolute;
-    bottom: -15%;
-    right: 4%;
-    background-image: url("../assets/polkasmith/banner-time-bg.png");
-    background-size: 100% 100%;
-    padding: 5px 20px;
-    font-weight: 600;
-    font-size: 20px;
-    color: #00051E;
+  .event-details {
+    display: flex;
+    width: 100%;
+    padding: 10px 0;
+  }
+  .event-details-label {
+    font-size: 14px;
+    display: inline;
+    text-align: left;
+    width: 50%;
+  }
+  .event-details-value {
+    font-size: 16px;
+    display: inline;
+    font-weight: bold;
+    width: 50%;
+    text-align: right;
   }
   .countdown-main {
     display: inline;
-    width: 50%;
+    margin: auto;
+    width: 45%;
   }
-  .countdown-container {
+  .details-container {
     width: fit-content;
     margin: 0 auto;
+    padding: 0 20px;
     text-align: center;
   }
   .btn-join {
+    margin-top: 10px;
     float: right;
     cursor: pointer;
-    background: #D01F36;
+    width: 100%;
+    background: transparent;
     font-size: 16px;
-    box-shadow: inset 0px 4px 4px #D01F36;
     border-radius: 60px;
-    color: white;
+    border: 2px solid #2CC5F4;
+    color: #2CC5F4;
     padding: 15px 36px;
     font-weight: 600;
-    border-width: 0px;
   }
 
   .btn-join:hover {
     color: white;
-    font-weight: 700;
-    box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
+    background: #2CC5F4;
   }
   .btn-join svg {
     margin-bottom: -5px;
@@ -214,6 +233,9 @@ export default {
     box-shadow: -5px 5px 10px #ffffff40, 5px -5px 10px #ffffff;
   }
   @media screen and (max-width: 680px) {
+    .dot {
+      display: none;
+    }
     .event-main {
       padding: 20px;
     }
@@ -228,11 +250,17 @@ export default {
       font-size: 14px;
     }
     .btn-join {
-      float: none;
+      width: 100%;
     }
     .countdown-main {
-      margin-top: -30px;
       width: 100%;
+    }
+    .details-container {
+      margin-top: 10px;
+      padding: 10px 0 ;
+    }
+    .introCounting {
+      margin-bottom: 10px;
     }
   }
 </style>

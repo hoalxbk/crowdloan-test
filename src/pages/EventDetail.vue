@@ -1,12 +1,25 @@
 <template>
   <div class="wrapper col-flex event-detail-main">
     <div class="event-container">
-      <div class="banner-container">
-          <div class="banner-title">{{ event.title }}</div>
-      </div>
-      <div class="countdown-main">
-          <Countdown v-if="event && event.end_time && event.end_time > 0" :end-date="event.end_time"></Countdown>
-      </div>
+        <div class="banner-container">
+          <img class="banner-img" :src="`${!event || !event.banner_url ? 'template-banner.png' : event.banner_url}`"/>
+        </div>
+        <div class="countdown-main">
+          <div class="details-container">
+            <div class="banner-title-container">
+              <div class="banner-title">{{ event.title }}</div>
+              <div class="event-details">
+                <div class="event-details-label">TOTAL</div>
+                <div class="event-details-value">${{ !event || !event.total ? 0 : event.total }}</div>
+              </div>
+              <div class="event-details">
+                <div class="event-details-label">DUE IN</div>
+                <div class="event-details-value">{{ new Date(event.end_time).getDate() }} {{ new Date(event.end_time).toLocaleString('default', { month: 'short' }) }}</div>
+              </div>
+            </div>
+            <Countdown :endDate="event.end_time"></Countdown>
+          </div>
+        </div>
     </div>
     <contribute :event="event"/>
     <subscribe/>
@@ -72,21 +85,66 @@ name: "EventDetail",
   width: 100%;
 }
 .event-container {
-  display: block;
+  max-width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
-  padding: 30px;
+  margin-bottom: 50px;
+  border-radius: 40px;
+  padding: 20px;
   z-index: 2;
+  border: 1px solid;
+  border-image-source: linear-gradient(96.86deg, rgba(255, 255, 255, 0.17) 1.18%, rgba(255, 255, 255, 0.08) 103.85%);
+  position: relative;
 }
-
+.banner-img {
+  width: 100%;
+  height: auto;
+  border-radius: 40px;
+}
+.banner-container {
+  display: inline;
+  width: 55%;
+  position: relative;
+}
+.banner-title-container {
+  padding: 10px 0;
+}
 .banner-title {
-  height: fit-content;
   margin: auto;
-  font-size: 48px;
-  font-weight: bold;
+  font-size: 24px;
+  padding-bottom: 10px;
+  text-align: center;
+  font-weight: 500;
 }
-
+.event-details {
+  display: flex;
+  width: 100%;
+  padding: 10px 0;
+}
+.event-details-label {
+  font-size: 14px;
+  display: inline;
+  text-align: left;
+  width: 50%;
+}
+.event-details-value {
+  font-size: 16px;
+  display: inline;
+  font-weight: bold;
+  width: 50%;
+  text-align: right;
+}
 .countdown-main {
-  margin-top: -30px;
+  display: inline;
+  margin: auto;
+  width: 45%;
+}
+.details-container {
+  width: fit-content;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
 }
 
 .btn-join {
@@ -109,5 +167,36 @@ name: "EventDetail",
 }
 .btn-join svg {
   margin-bottom: -5px;
+}
+@media screen and (max-width: 680px) {
+  .dot {
+    display: none;
+  }
+  .event-main {
+    padding: 20px;
+  }
+  .banner-container {
+    min-height: 180px;
+    width: 100%;
+  }
+  .banner-title {
+    font-size: 20px;
+  }
+  .banner-time {
+    font-size: 14px;
+  }
+  .btn-join {
+    width: 100%;
+  }
+  .countdown-main {
+    width: 100%;
+  }
+  .details-container {
+    margin-top: 10px;
+    padding: 10px 0 ;
+  }
+  .introCounting {
+    margin-bottom: 10px;
+  }
 }
 </style>
