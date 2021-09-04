@@ -127,7 +127,10 @@ export default {
               return
             }
             this.topContribute = data.data
-            this.currentDataPage = this.topContribute.slice(0, this.currentPage * 20 < this.topContribute.length ? 20 : -1)
+            this.currentDataPage = this.topContribute
+            if (this.currentPage * 20 < this.topContribute.length) {
+              this.currentDataPage = this.topContribute.slice(0,  20)
+            }
             this.totalPage = Math.ceil(this.topContribute.length / 20)
           })
     },

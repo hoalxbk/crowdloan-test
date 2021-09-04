@@ -10,7 +10,7 @@
               <div class="banner-title">{{ event.title }}</div>
               <div class="event-details">
                 <div class="event-details-label">TOTAL</div>
-                <div class="event-details-value">{{ event.raised.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0}) }}</div>
+                <div class="event-details-value">{{ !event.raised ? '$0' : event.raised.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0}) }}</div>
               </div>
               <div class="event-details">
                 <div class="event-details-label">DUE IN</div>

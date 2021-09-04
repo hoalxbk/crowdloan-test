@@ -201,18 +201,28 @@
           </div>
         </div>
         <div v-if="currentWallet" class="affiliate">
-          <div class="affiliate-title">Your affiliate code</div>
-          <div style="display: block;">
-            <h3 style="color: #eee; text-align: left">Your Referral Link</h3>
-            <h2 v-if="currentWallet">
-              <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
-              <div class="refcode-value" v-else>{{ `https://polkasmith.polkafoundry.com/#/event/${this.event.id}?ref=${this.refcode}` }}<a @click="copyRefcode"><svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.8568 3.85706H1.92852C0.863427 3.85706 0 4.89317 0 6.17128V19.2852C0 20.5633 0.863427 21.5994 1.92852 21.5994H12.8568C13.9219 21.5994 14.7853 20.5633 14.7853 19.2852V6.17128C14.7853 4.89317 13.9219 3.85706 12.8568 3.85706Z" fill="#2CC5F4"/>
-                <path d="M16.0709 1.49431e-09H4.49981C3.44048 -4.51982e-05 2.57943 1.02531 2.57129 2.29646C2.57129 2.30265 2.57129 2.30803 2.57129 2.31422H12.8567C14.631 2.31676 16.0688 4.04212 16.0709 6.17125V18.5138C16.0761 18.5138 16.0806 18.5138 16.0857 18.5138C17.1451 18.504 17.9995 17.4708 17.9995 16.1996V2.31422C17.9995 1.03611 17.136 1.49431e-09 16.0709 1.49431e-09Z" fill="#2CC5F4"/>
-              </svg>
-              </a></div>
-            </h2>
-            <h2 v-else>_</h2>
+          <div class="affiliate-title">Affiliation</div>
+          <div class="affiliate-block">
+            <div class="affiliate-item">
+              <h3 style="color: #eee; text-align: left">Total Referrals</h3>
+              <h2 v-if="currentWallet" style="text-align: left">
+                <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
+                <span v-else>{{ refs }} Referrals</span>
+              </h2>
+              <h2 v-else>_</h2>
+            </div>
+            <div class="affiliate-item">
+              <h3 style="color: #eee; text-align: left">Your Referral Link</h3>
+              <h2 v-if="currentWallet">
+                <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
+                <div class="refcode-value" v-else>{{ `https://polkasmith.polkafoundry.com/#/event/${event.id}?ref=${refcode}` }}<a @click="copyRefcode"><svg width="18" height="22" viewBox="0 0 18 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12.8568 3.85706H1.92852C0.863427 3.85706 0 4.89317 0 6.17128V19.2852C0 20.5633 0.863427 21.5994 1.92852 21.5994H12.8568C13.9219 21.5994 14.7853 20.5633 14.7853 19.2852V6.17128C14.7853 4.89317 13.9219 3.85706 12.8568 3.85706Z" fill="#2CC5F4"/>
+                  <path d="M16.0709 1.49431e-09H4.49981C3.44048 -4.51982e-05 2.57943 1.02531 2.57129 2.29646C2.57129 2.30265 2.57129 2.30803 2.57129 2.31422H12.8567C14.631 2.31676 16.0688 4.04212 16.0709 6.17125V18.5138C16.0761 18.5138 16.0806 18.5138 16.0857 18.5138C17.1451 18.504 17.9995 17.4708 17.9995 16.1996V2.31422C17.9995 1.03611 17.136 1.49431e-09 16.0709 1.49431e-09Z" fill="#2CC5F4"/>
+                </svg>
+                </a></div>
+              </h2>
+              <h2 v-else>_</h2>
+            </div>
           </div>
         </div>
         <div>
@@ -261,6 +271,7 @@ export default {
       isLoadingBalance: true,
       polkaAPI: null,
       statusMessage: "",
+      refs: 0,
       refcode: "",
       referral: this.$route.query.ref ? this.$route.query.ref : "",
       haveReferral: false,
@@ -290,6 +301,9 @@ export default {
   },
   methods: {
     formatNumber(value, faction, isRound) {
+      if (!value) {
+        return 0
+      }
       if (isRound) {
         return parseFloat(value.toFixed(faction)).toLocaleString("us-US", {minimumFractionDigits: faction})
       }
@@ -485,6 +499,7 @@ export default {
               this.haveReferral = true
               this.referral = data.data.parent
             }
+            this.refs = data.data.refs
             this.isKYC = data.data.kyc
             this.userRanking = data.data.rank
             this.contributed = parseInt(data.data.amount)
@@ -558,6 +573,15 @@ export default {
   font-weight: 600;
   text-align: left;
   padding: 20px 0 10px 0;
+}
+.affiliate-block {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.affiliate-item {
+  display: inline-block;
+  width: 50%;
 }
 .refcode-value {
   word-break: break-word;
@@ -825,9 +849,6 @@ button:disabled {
   background-color: #f0f0f0 !important;
 }
 
-.refcode-value {
-  width: 50%;
-}
 @media screen and (max-width: 1200px) {
   .introContainer {
     flex-wrap: wrap-reverse;
@@ -845,6 +866,10 @@ button:disabled {
   }
 }
 @media screen and (max-width: 680px) {
+  .affiliate-item {
+    width: 100%;
+  }
+
   .refcode-value {
     width: 100%;
     font-size: 10px;
