@@ -490,7 +490,7 @@ export default {
     getProfile() {
       this.isLoadingProfile = true
       const ksmAddr = this.convertToKSM(this.currentWallet)
-      fetch(`https://polkasmith.polkafoundry.com/api/v1/profile?kusama=${ksmAddr}`)
+      fetch(`https://polkasmith.polkafoundry.com/api/v1/event/1/profile?kusama=${ksmAddr}`)
           .then(response => response.json())
           .then(data => {
             if (!data || !data.data) {
