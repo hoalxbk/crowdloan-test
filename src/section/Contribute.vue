@@ -679,6 +679,11 @@ export default {
   font-size: 16px;
   cursor: pointer;
   width: 100%;
+  max-height: 50px;
+}
+
+.connectWallet img {
+  margin-top: -10px;
 }
 
 .connectWallet:hover {
