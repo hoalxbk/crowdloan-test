@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="ranking-container">
-      <div class="ranking-item border-right border-bottom"><h3 class="info-title">Total point:</h3>
+      <div class="ranking-item border-right border-bottom"><h3 class="info-title">Total Point:</h3>
         <h3 class="info-value">
           <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
           <span v-else>
