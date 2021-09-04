@@ -2,19 +2,7 @@
   <div class="bg-linear col-flex top-contribute">
     <h1 class="top-title">Top Contributors</h1>
     <div class="kyc-notice">
-      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-           x="0px" y="0px"
-           viewBox="0 0 28.461 28.461" style="enable-background:new 0 0 28.461 28.461;" xml:space="preserve">
-      <g>
-        <path class="notice-icon" d="M7.883,7.198H3.977c0,0-3.087,0.134-3.087,3.121v4.113c0,0-0.064,3.446,2.962,3.446c0,0,1.071,0.666,1.071,1.928v7.432
-          c0,0-0.189,1.193,1.007,1.193c0,0,3.493,0.544,1.762-3.028c1.309-1.349,0.148-2.731,0.148-2.731s1.178-1.126,0.043-2.667
-          c0,0,1.009-1.394,1.009-2.191l0.062-9.488C8.954,8.325,9.144,7.198,7.883,7.198z M3.336,14.642c0,0.495-0.4,0.897-0.898,0.897
-          c-0.496,0-0.896-0.402-0.896-0.897v-4.331c0-0.495,0.4-0.896,0.896-0.896c0.498,0,0.898,0.401,0.898,0.896V14.642z"/>
-        <path class="notice-icon" d="M25.777,9.144v-8.67c0-1.135-0.961,0.124-0.961,0.124C20.272,7.656,10.895,7.09,10.895,7.09
-          c-1.108,0-0.932,0.944-0.932,0.944v8.189c0,0.944,0.988,0.944,0.988,0.944c10.485,0,14.057,6.626,14.057,6.626
-          s0.826,1.028,0.769-0.043v-8.654c1.061-0.572,1.794-1.683,1.794-2.977C27.571,10.826,26.837,9.716,25.777,9.144z"/>
-      </g>
-      </svg>
+      <img src="../assets/polkasmith/lighting-icon.png" width="50" height="50">
       <div class="notice-content">
         <span style="color: #fcd664; font-weight: bold" v-if="event.snapshot_time || event.snapshot_time > 0">Top Contributors snapshot at {{
             new Date(event.snapshot_time).toLocaleString()
@@ -231,12 +219,12 @@ export default {
   animation-direction: alternate;
 }
 
-.kyc-notice svg {
+.kyc-notice img {
   display: inline;
-  width: 40px;
+  width: 50px;
   height: 100%;
   margin: auto;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .notice-content {
@@ -258,8 +246,9 @@ export default {
 }
 
 .notice-content span a {
-  color: #fcd664;
+  color: #2CC5F4;
   font-weight: 500;
+  text-decoration-line: underline;
 }
 
 .ranking-container {
