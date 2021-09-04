@@ -360,9 +360,15 @@ export default {
     font-size: 14px;
     text-align: left;
   }
-
+  .ranking-container {
+    background: transparent;
+  }
   .ranking-item {
     width: 100%;
+    border-radius: 20px;
+    background: #ffffff32;
+    margin-bottom: 10px;
+    border-width: 0;
   }
 
   .notice-content {

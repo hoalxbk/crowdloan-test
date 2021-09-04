@@ -113,4 +113,23 @@ name: "CommitAddress",
   min-width: 400px;
 }
 
+@media screen and (max-width: 680px) {
+  .commit-address-container {
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .commit-input{
+    width: 100%;
+  }
+  .commit-input input{
+    min-width: 100%;
+    width: 100%;
+  }
+  .commit-btn {
+    width: 100%;
+    margin-top: 20px;
+    margin-left: 0;
+  }
+}
+
 </style>
