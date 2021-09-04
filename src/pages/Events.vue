@@ -54,7 +54,7 @@
           </div>
           <div class="ev-detail">
             <a :href="`/#/event/${event.id}`"><h2>{{ event.title }}</h2></a>
-            <span>{{ event.detail }}</span>
+            <span>{{ event.about }}</span>
             <div class="ev-raised">
               <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M5.81079 10.3062C6.37284 10.3062 6.91612 10.2699 7.43021 10.2024V4.56746C6.91617 4.49993 6.37284 4.46362 5.81079 4.46362C2.60159 4.46362 0 5.64355 0 7.09912V7.67069C0 9.12621 2.60159 10.3062 5.81079 10.3062Z" fill="#2CC5F4"/>
