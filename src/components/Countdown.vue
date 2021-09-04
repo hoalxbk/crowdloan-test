@@ -41,6 +41,7 @@ export default {
       countHours: '00',
       countMinutes: '00',
       countSeconds: '00',
+      countDownInterval: null,
     }
   },
   mounted() {
@@ -49,13 +50,24 @@ export default {
     }
     this.countDown(this.endDate)
   },
+  watch:{
+    endDate() {
+      if (!this.endDate || this.endDate === 0) {
+        return
+      }
+      if (this.countDownInterval) {
+        clearInterval(this.countDownInterval)
+      }
+      this.countDown(this.endDate)
+    }
+  },
   methods: {
     countDown(time) {
-      const countDownInterval = setInterval(() => {
+      this.countDownInterval = setInterval(() => {
         let now = new Date()
         let offset = Math.floor((time - now.getTime()) / 1000)
         if (offset <= 0) {
-          clearInterval(countDownInterval)
+          clearInterval(this.countDownInterval)
           return
         }
         let minutesCal = Math.floor(offset / 60) % 60
