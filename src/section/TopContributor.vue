@@ -1,6 +1,6 @@
 <template>
   <div class="bg-linear col-flex top-contribute">
-    <h1 class="top-title">Top 100</h1>
+    <h1 class="top-title">Top Contributors</h1>
     <div class="kyc-notice">
       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
            x="0px" y="0px"
@@ -16,10 +16,10 @@
       </g>
       </svg>
       <div class="notice-content">
-        <span style="color: #fcd664; font-weight: bold" v-if="event.snapshot_time || event.snapshot_time > 0">Top 100 snapshot at {{
+        <span style="color: #fcd664; font-weight: bold" v-if="event.snapshot_time || event.snapshot_time > 0">Top Contributors snapshot at {{
             new Date(event.snapshot_time).toLocaleString()
           }}. Later contributions will not affect this list.</span>
-        <span>If you are in top 100, please proceed <a href="https://hub.gamefi.org/#/account" target="_blank">KYC immediately.</a></span>
+        <span>If you are in top contributors, please proceed <a href="https://hub.gamefi.org/#/account" target="_blank">KYC immediately.</a></span>
         <span>If you are also a member of Red Kite, we recommend you to use the same wallet address.</span>
       </div>
     </div>
