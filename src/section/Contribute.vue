@@ -200,7 +200,7 @@
             </div>
           </div>
         </div>
-        <div v-if="currentWallet" class="affiliate">
+        <div v-if="currentWallet" class="affiliate" style="display: none">
           <div class="affiliate-title">Affiliation</div>
           <div class="affiliate-block">
             <div class="affiliate-item">
@@ -229,7 +229,7 @@
         </div>
       </div>
     </div>
-    <TopContributor :isKYC="isKYC" :userRanking="userRanking" :isLoadingProfile="isLoadingProfile" :event="event" :walletAddress="currentWallet"/>
+    <TopContributor :profile="profile" :isLoadingProfile="isLoadingProfile" :event="event" :walletAddress="currentWallet"/>
   </div>
 </template>
 
@@ -257,6 +257,7 @@ export default {
       selectOptions: [],
       ksmBalance: {free: null, total: 0, unlocked: 0},
       ksmAmount: "",
+      profile: {},
       ksmAmountCal: 0,
       erc20Wallet: {value: "", isValid: false},
       oldWallet: "",
@@ -495,6 +496,7 @@ export default {
             if (!data || !data.data) {
               return
             }
+            this.profile = data.data
             if (data.data.parent) {
               this.haveReferral = true
               this.referral = data.data.parent

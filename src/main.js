@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Home from "@/pages/Home";
 import Events from "@/pages/Events";
 import EventDetail from "@/pages/EventDetail";
+import CommitAddress from "@/pages/CommitAddress";
 
 Vue.use(VueRouter)
 Vue.use(Notifications)
@@ -13,7 +14,8 @@ Vue.config.productionTip = false
 const routes = [
   { path: '/', component: Home },
   { path: '/events', component: Events },
-  { path: '/event/:id', component: EventDetail }
+  { path: '/event/:id', component: EventDetail },
+  { path: '/gleam-event/:id', component: CommitAddress }
 ]
 const router = new VueRouter({
   routes // short for `routes: routes`
