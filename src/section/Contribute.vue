@@ -3,8 +3,9 @@
     <div ref="contribute" class="polkaSmithContainer">
       <div class="introMain">
         <div class="about-event">
-          <span >About the event</span>
+          <span>About the event</span>
           <p>{{ !event || !event.about ? "" : event.about }}</p>
+          <p v-for="(note, i) in event.notes" :key="i" style="font-size: 16px; font-weight: normal">📌 {{ note }}</p>
           <a v-if="event && event.guide" :href="event.guide" target="_blank">Read more</a>
         </div>
         <div class="introContainer">
@@ -176,19 +177,19 @@
                   <h3 style="color: #aeaeae">Your KSM Balance</h3>
                   <h2 v-if="currentWallet">
                     <img v-if="isLoadingBalance" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
-                    <span v-else>{{ formatNumber(ksmBalance.total, 2, false) }} KSM</span></h2>
-                  <h2 v-else>_</h2>
-                  <h3 style="color: #aeaeae; margin-top: 20px">Unlocked KSM Balance</h3>
-                  <h2 v-if="currentWallet">
-                    <img v-if="isLoadingBalance" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
                     <span v-else>{{ formatNumber(ksmBalance.unlocked, 2, false) }} KSM</span></h2>
+                  <h2 v-else>_</h2>
+                  <h3 style="color: #aeaeae; margin-top: 20px">Total KSM contributed</h3>
+                  <h2 v-if="currentWallet">
+                    <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
+                    <span v-else>{{ formatNumber(parseInt(profile.amount) / ksmDecimals, 2, false) }} KSM</span></h2>
                   <h2 v-else>_</h2>
                 </div>
                 <div class="detailInfo" style="padding-left: 20px">
                   <h3 style="color: #aeaeae">KSM contributed</h3>
                   <h2 v-if="currentWallet">
                     <img v-if="isLoadingProfile" src="../assets/polkasmith/Loading.gif" width="25" height="25"/>
-                    <span v-else>{{ formatNumber(contributed / ksmDecimals, 2, false) }} KSM</span></h2>
+                    <span v-else>{{ formatNumber(parseInt(profile.event_amount) / ksmDecimals, 2, false) }} KSM</span></h2>
                   <h2 v-else>_</h2>
                   <h3 style="margin-top: 20px; color: #aeaeae">Estimated Rewards</h3>
                   <h2 v-if="currentWallet">

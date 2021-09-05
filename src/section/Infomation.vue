@@ -160,14 +160,11 @@
           <a href="https://www.mexc.io/slot/assessment" target="_blank">
             <img alt src="../assets/mexc.jpg"/>
           </a>
+          <a href="https://pool-x.io/polkadot?currency=KSM&round=1" target="_blank">
+            <img alt src="../assets/kucoin.jpg"/>
+          </a>
           <div class="upcoming">
             <img alt src="../assets/kraken.jpg"/>
-            <div class="hover">
-              <p>Upcomming</p>
-            </div>
-          </div>
-          <div class="upcoming">
-            <img alt src="../assets/kucoin.jpg"/>
             <div class="hover">
               <p>Upcomming</p>
             </div>

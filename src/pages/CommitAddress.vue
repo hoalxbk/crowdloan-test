@@ -1,8 +1,9 @@
 <template>
   <div class="wrapper">
     <Header/>
-    <div class="commit-address-main">
+    <div v-if="!success" class="commit-address-main">
       <h2>Submit your ERC20 Address</h2>
+      <span><i>*You must to use the same erc20 address that linked to Kusama  address</i></span>
       <div class="commit-address-container">
         <div class="commit-input">
           <input v-model="address" name="address" type="text" placeholder="ERC20 Address" autocomplete="off" />
@@ -12,6 +13,10 @@
           <a class="btn" @click="submit" >Submit</a>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <h2><img src="../assets/polkasmith/success.png" width="30" height="30" style="margin-bottom: -5px"/> You have submitted successfully.</h2>
+      <h4>Your points will be updated in a few minutes.</h4>
     </div>
     <subscribe />
   </div>
@@ -26,7 +31,8 @@ name: "CommitAddress",
   components: {Subscribe, Header},
   data() {
   return {
-    address: ''
+    address: '',
+    success: false
   }
   },
   methods: {
@@ -59,11 +65,9 @@ name: "CommitAddress",
               })
               return;
             }
+
             if (data.data) {
-              this.$notify({
-                type:'success',
-                title: data.message
-              })
+              this.success = data.data
             } else {
               this.$notify({
                 type:'error',
@@ -78,6 +82,7 @@ name: "CommitAddress",
 <style scoped>
 .commit-address-container {
   display: flex;
+  margin-top: 10px;
   width: 100%;
   margin-bottom: 200px;
 }
